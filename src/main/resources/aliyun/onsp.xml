@@ -9,7 +9,6 @@
         <constructor-arg name="producerId" value="${ons.producerid}"/>
         <constructor-arg name="accessKey" value="${ons.accesskey}"/>
         <constructor-arg name="secretKey" value="${ons.secretkey}"/>
-        <constructor-arg name="topicId" value="${ons.topicid}"/>
     </bean>
     
 </beans>

@@ -3,6 +3,7 @@ package org.jocean.aliyun.ons;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+import org.jocean.idiom.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,14 +15,13 @@ import com.aliyun.openservices.ons.api.SendResult;
 
 public class ONSProducer {
 
+    private static final byte[] EMPTY_BYTES = new byte[0];
+
     private static final Logger LOG = LoggerFactory.getLogger(ONSProducer.class);
 
     private Producer _producer = null;
-    
-    private final String _topicId;
 
-    public ONSProducer(String producerId, String accessKey, String secretKey, String topicId){
-        this._topicId = topicId;
+    public ONSProducer(final String producerId, final String accessKey, final String secretKey) {
         Properties properties = new Properties();
         properties.put(PropertyKeyConst.ProducerId, producerId);
         properties.put(PropertyKeyConst.AccessKey, accessKey);
@@ -39,16 +39,17 @@ public class ONSProducer {
         }
     }
     
-    public void send(final String stringJson){
-        byte[] body = new byte[0];
+    public void send(final String topicId, final String content) {
+        byte[] body = ONSProducer.EMPTY_BYTES;
         try {
-            body = stringJson.getBytes("utf-8");
+            body = content.getBytes("utf-8");
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }    
+            LOG.warn("exception when content.getBytes, content:{}, detail: {}", 
+                    content, ExceptionUtils.exception2detail(e));
+        }
         Message msg = new Message(
                 //Message Topic
-                _topicId,
+                topicId,
                 //Message Tag,
                 //可理解为Gmail中的标签，对消息进行再归类，方便Consumer指定过滤条件在ONS服务器过滤       
                 "ONSProducer",
@@ -59,7 +60,9 @@ public class ONSProducer {
                 );
             
         //发送消息，只要不抛异常就是成功
-        SendResult sendResult = _producer.send(msg);
-        LOG.info("{}", sendResult);
+        final SendResult sendResult = this._producer.send(msg);
+        if (LOG.isInfoEnabled()) {
+            LOG.info("{}", sendResult);
+        }
     }
 }

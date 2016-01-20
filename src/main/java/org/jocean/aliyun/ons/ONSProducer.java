@@ -22,7 +22,7 @@ public class ONSProducer {
     private Producer _producer = null;
 
     public ONSProducer(final String producerId, final String accessKey, final String secretKey) {
-        Properties properties = new Properties();
+        final Properties properties = new Properties();
         properties.put(PropertyKeyConst.ProducerId, producerId);
         properties.put(PropertyKeyConst.AccessKey, accessKey);
         properties.put(PropertyKeyConst.SecretKey, secretKey);

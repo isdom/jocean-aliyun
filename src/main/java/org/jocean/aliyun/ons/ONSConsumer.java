@@ -51,20 +51,7 @@ public class ONSConsumer implements BeanHolderAware{
         _consumer = ONSFactory.createConsumer(properties);
         _consumer.subscribe(_topicId, "*", new MessageListener() {
             public Action consume(Message message, ConsumeContext context) {
-                final Object flow = _beanHolder.getBean(_flowCls);
-                try {
-                    final EventReceiver _receiver = _engine.create(
-                            flow.getClass().getSimpleName(),
-                            (EventHandler)flow.getClass().getField(_initState).get(flow),
-                            flow);
-                    _receiver.acceptEvent(_event, message);
-                    if (LOG.isDebugEnabled()) {
-                        LOG.debug("Receive: {}", message);
-                    }
-                } catch (Exception e) {
-                    LOG.warn("exception when get field({}) for {}", _initState, flow);
-                }
-                return Action.CommitMessage;
+                return invokeFlow(message);
             }
         });
         _consumer.start();
@@ -104,5 +91,22 @@ public class ONSConsumer implements BeanHolderAware{
     @Override
     public void setBeanHolder(final BeanHolder beanHolder) {
         this._beanHolder = beanHolder;
+    }
+
+    private Action invokeFlow(final Message message) {
+        final Object flow = this._beanHolder.getBean(this._flowCls);
+        try {
+            final EventReceiver receiver = this._engine.create(
+                    flow.getClass().getSimpleName(),
+                    (EventHandler)flow.getClass().getField(_initState).get(flow),
+                    flow);
+            receiver.acceptEvent(this._event, message);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Receive: {}", message);
+            }
+        } catch (Exception e) {
+            LOG.warn("exception when get field({}) for {}", _initState, flow);
+        }
+        return Action.CommitMessage;
     }
 }

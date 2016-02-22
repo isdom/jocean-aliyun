@@ -13,7 +13,7 @@ import org.jocean.event.api.internal.EventHandler;
 import org.jocean.idiom.BeanHolder;
 import org.jocean.idiom.BeanHolderAware;
 import org.jocean.idiom.StopWatch;
-import org.jocean.j2se.stats.FlowStats;
+import org.jocean.j2se.stats.ApiStats;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +47,6 @@ public class ONSConsumer implements BeanHolderAware{
         this._topicId = topicId;
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     public void start(){
         final Properties properties = new Properties();
         properties.put(PropertyKeyConst.ConsumerId, _consumerId);
@@ -61,7 +60,7 @@ public class ONSConsumer implements BeanHolderAware{
             }
         });
         this._consumer.start();
-        this._stats.addFlows(this._topicId, "SUBSCRIBE", (Class)this._flowCls);
+        this._stats.addApi(this._topicId, "SUBSCRIBE");
         LOG.info("Consumer Started");
     }
     
@@ -123,8 +122,8 @@ public class ONSConsumer implements BeanHolderAware{
 
                             @Override
                             public void afterFlowDestroy() throws Exception {
-                                final int count = _stats.incExecutedCount(_flowCls);
-                                _stats.recordExecutedInterval(_flowCls, endReasonRef.get(), clock.stopAndRestart());
+                                final int count = _stats.incExecutedCount(_topicId);
+                                _stats.recordExecutedInterval(_topicId, endReasonRef.get(), clock.stopAndRestart());
                                 if (LOG.isDebugEnabled()) {
                                     LOG.debug("{}'s afterFlowDestroy, so record biz count: {}", 
                                             flow, count);
@@ -146,5 +145,5 @@ public class ONSConsumer implements BeanHolderAware{
     }
     
     @Inject
-    private FlowStats _stats;
+    private ApiStats _stats;
 }

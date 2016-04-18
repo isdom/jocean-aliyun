@@ -2,7 +2,6 @@ package org.jocean.aliyun.ons;
 
 import java.io.UnsupportedEncodingException;
 
-import org.jocean.aliyun.ons.ONSProducer;
 import org.jocean.idiom.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,15 +12,19 @@ import com.aliyun.openservices.ons.api.SendResult;
 
 public class ONSProducerUtil {
     
-    private static final Logger LOG = LoggerFactory.getLogger(ONSProducer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ONSProducerUtil.class);
     
     private static final byte[] EMPTY_BYTES = new byte[0];
     
     public static void send (final String topicId,final Producer producer,final String content) {
+        send(topicId, producer, content, -1);
+    }
+
+    public static void send(final String topicId, final Producer producer, final String content,final long sendTimeStamp) {
         byte[] body = EMPTY_BYTES;
         try {
             body = content.getBytes("utf-8");
-            Message msg = new Message(
+            final Message msg = new Message(
                     //Message Topic
                     topicId,
                     //Message Tag,
@@ -32,6 +35,10 @@ public class ONSProducerUtil {
                     topicId + System.currentTimeMillis(),
                     body
                     );
+            if (sendTimeStamp > 0) {
+                msg.setStartDeliverTime(sendTimeStamp);
+            }
+            
             //发送消息，只要不抛异常就是成功
             final SendResult sendResult = producer.send(msg);
             if (LOG.isInfoEnabled()) {
@@ -42,5 +49,4 @@ public class ONSProducerUtil {
                     content, ExceptionUtils.exception2detail(e));
         }
     }
-
 }

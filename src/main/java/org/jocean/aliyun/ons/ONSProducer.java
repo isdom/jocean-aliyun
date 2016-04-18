@@ -40,6 +40,10 @@ public class ONSProducer {
     }
     
     public void send(final String topicId, final String content) {
+        send(topicId, content, -1);
+    }
+    
+    public void send(final String topicId, final String content,final long sendTimeStamp) {
         byte[] body = ONSProducer.EMPTY_BYTES;
         try {
             body = content.getBytes("utf-8");
@@ -47,17 +51,20 @@ public class ONSProducer {
             LOG.warn("exception when content.getBytes, content:{}, detail: {}", 
                     content, ExceptionUtils.exception2detail(e));
         }
-        Message msg = new Message(
+        final Message msg = new Message(
                 //Message Topic
                 topicId,
                 //Message Tag,
                 //可理解为Gmail中的标签，对消息进行再归类，方便Consumer指定过滤条件在ONS服务器过滤       
-                "ONSProducer",
+                topicId,
                 //Message Body
                 //任何二进制形式的数据，ONS不做任何干预，需要Producer与Consumer协商好一致的序列化和反序列化方式
-                "ONSProducer" + System.currentTimeMillis(),
+                topicId + System.currentTimeMillis(),
                 body
                 );
+        if (sendTimeStamp > 0) {
+            msg.setStartDeliverTime(sendTimeStamp);
+        }
             
         //发送消息，只要不抛异常就是成功
         final SendResult sendResult = this._producer.send(msg);

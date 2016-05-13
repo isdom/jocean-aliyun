@@ -18,11 +18,11 @@ public class ONSProducerUtil {
     private static final byte[] EMPTY_BYTES = new byte[0];
     
     public static void send (final String topicId,final Producer producer,final String content) {
-        send(topicId, producer, content, -1);
+        send(topicId, producer, content, -1, null);
     }
 
     public static void send(final String topicId, final Producer producer, final String content,final long sendTimeStamp) {
-        send(topicId, producer, content, sendTimeStamp);
+        send(topicId, producer, content, sendTimeStamp, null);
     }
     
     public static void send(final String topicId, final Producer producer,

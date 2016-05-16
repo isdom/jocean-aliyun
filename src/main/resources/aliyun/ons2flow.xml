@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <bean class="org.jocean.idiom.rx.RxActions"
+        factory-method="doPut"
+        destroy-method="call">
+        <constructor-arg ref="handlers"/>
+        <constructor-arg value="${message.type}"/>
+        <constructor-arg>
+             <bean class="org.jocean.aliyun.ons.MessageToFlow" init-method="start">
+                <property name="messageType" value="${message.type}"/>
+		        <property name="flowCls" value="${flow.type}"/>
+		        <property name="initState" value="${flow.initstate}"/>
+		        <property name="event" value="${flow.initevent}"/>
+             </bean>
+        </constructor-arg>
+    </bean>
+    
+</beans>

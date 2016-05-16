@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <bean id="handlers" class="java.util.concurrent.ConcurrentHashMap"/>
+    
+    <bean class="org.jocean.aliyun.ons.ONSDispatcher" 
+        init-method="start" destroy-method="stop">
+        <constructor-arg name="handlers" ref="handlers"/>
+        <constructor-arg name="consumerId" value="${ons.consumerid}"/>
+        <constructor-arg name="accessKey" value="${ons.accesskey}"/>
+        <constructor-arg name="secretKey" value="${ons.secretkey}"/>
+        <constructor-arg name="topicId" value="${ons.topicid}"/>
+    </bean>
+</beans>

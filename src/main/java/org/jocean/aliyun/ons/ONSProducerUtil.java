@@ -58,7 +58,7 @@ public class ONSProducerUtil {
             //发送消息，只要不抛异常就是成功
             final SendResult sendResult = producer.send(msg);
             if (LOG.isInfoEnabled()) {
-                LOG.info("{}", sendResult);
+                LOG.info("send Message ({})/ result: {}", msg, sendResult);
             }
         } catch (UnsupportedEncodingException e) {
             LOG.warn("exception when content.getBytes, content:{}, detail: {}", 

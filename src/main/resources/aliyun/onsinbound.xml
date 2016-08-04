@@ -13,5 +13,6 @@
         <constructor-arg name="accessKey" value="${ons.accesskey}"/>
         <constructor-arg name="secretKey" value="${ons.secretkey}"/>
         <constructor-arg name="topicId" value="${ons.topicid}"/>
+        <constructor-arg name="tag" value="${ons.tag:*}"/>
     </bean>
 </beans>

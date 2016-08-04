@@ -17,22 +17,22 @@ public class ONSProducerUtil {
     
     private static final byte[] EMPTY_BYTES = new byte[0];
     
-    public static void send (final String topicId,final Producer producer,final String content) {
-        send(topicId, producer, content, -1, null);
+    public static void send (final String topicId,final Producer producer,final String content,final String tag) {
+        send(topicId, producer, content, -1, null,tag);
     }
 
-    public static void send(final String topicId, final Producer producer, final String content,final long sendTimeStamp) {
-        send(topicId, producer, content, sendTimeStamp, null);
+    public static void send(final String topicId, final Producer producer, final String content,final long sendTimeStamp,final String tag) {
+        send(topicId, producer, content, sendTimeStamp, null,tag);
     }
     
     public static void send(final String topicId, final Producer producer,
-            final String content,final Properties userProperties) {
-        send(topicId, producer, content, -1, userProperties);
+            final String content,final Properties userProperties,final String tag) {
+        send(topicId, producer, content, -1, userProperties,tag);
     }
     
     public static void send(final String topicId, final Producer producer,
             final String content,final long sendTimeStamp,
-            final Properties userProperties) {
+            final Properties userProperties,final String tag) {
         byte[] body = EMPTY_BYTES;
         try {
             body = content.getBytes("utf-8");
@@ -41,7 +41,7 @@ public class ONSProducerUtil {
                     topicId,
                     //Message Tag,
                     //可理解为Gmail中的标签，对消息进行再归类，方便Consumer指定过滤条件在ONS服务器过滤       
-                    topicId,
+                    tag,
                     //Message Body
                     //任何二进制形式的数据，ONS不做任何干预，需要Producer与Consumer协商好一致的序列化和反序列化方式
                     topicId + System.currentTimeMillis(),

@@ -17,19 +17,97 @@ public class ONSProducerUtil {
     
     private static final byte[] EMPTY_BYTES = new byte[0];
     
+    /**
+     * @param topicId
+     * @param producer
+     * @param content
+     */
+    public static void send (final String topicId,final Producer producer,final String content) {
+        send(topicId, producer, content, -1, null,null);
+    }
+
+    /**
+     * 
+     * @param topicId
+     * @param producer
+     * @param content
+     * @param sendTimeStamp
+     */
+    public static void send(final String topicId, final Producer producer, final String content,final long sendTimeStamp) {
+        send(topicId, producer, content, sendTimeStamp, null,null);
+    }
+    
+    /**
+     * 
+     * @param topicId
+     * @param producer
+     * @param content
+     * @param userProperties
+     */
+    public static void send(final String topicId, final Producer producer,
+            final String content,final Properties userProperties) {
+        send(topicId, producer, content, -1, userProperties,null);
+    }
+    
+    /**
+     * 
+     * @param topicId
+     * @param producer
+     * @param content
+     * @param sendTimeStamp
+     * @param userProperties
+     */
+    public static void send(final String topicId, final Producer producer,
+            final String content,final long sendTimeStamp,
+            final Properties userProperties) {
+    	send(topicId, producer, content, sendTimeStamp, userProperties, null);
+    }
+    
+    /**
+     * 
+     * @param topicId
+     * @param producer
+     * @param content
+     * @param tag
+     */
     public static void send (final String topicId,final Producer producer,final String content,final String tag) {
         send(topicId, producer, content, -1, null,tag);
     }
 
+    /**
+     * 
+     * @param topicId
+     * @param producer
+     * @param content
+     * @param sendTimeStamp
+     * @param tag
+     */
     public static void send(final String topicId, final Producer producer, final String content,final long sendTimeStamp,final String tag) {
         send(topicId, producer, content, sendTimeStamp, null,tag);
     }
     
+    /**
+     * 
+     * @param topicId
+     * @param producer
+     * @param content
+     * @param userProperties
+     * @param tag
+     */
     public static void send(final String topicId, final Producer producer,
             final String content,final Properties userProperties,final String tag) {
         send(topicId, producer, content, -1, userProperties,tag);
     }
     
+    /**
+     * 
+     * @param topicId
+     * @param producer
+     * @param content
+     * @param sendTimeStamp
+     * @param userProperties
+     * @param tag
+     */
     public static void send(final String topicId, final Producer producer,
             final String content,final long sendTimeStamp,
             final Properties userProperties,final String tag) {

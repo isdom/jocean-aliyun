@@ -1,9 +1,8 @@
 package org.jocean.aliyun.ons;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
-import org.jocean.idiom.ExceptionUtils;
+import org.apache.commons.codec.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -112,8 +111,7 @@ public class ONSProducerUtil {
             final String content,final long sendTimeStamp,
             final Properties userProperties,final String tag) {
         byte[] body = EMPTY_BYTES;
-        try {
-            body = content.getBytes("utf-8");
+            body = content.getBytes(Charsets.UTF_8);
             final Message msg = new Message(
                     //Message Topic
                     topicId,
@@ -138,9 +136,5 @@ public class ONSProducerUtil {
             if (LOG.isInfoEnabled()) {
                 LOG.info("send Message ({})/ result: {}", msg, sendResult);
             }
-        } catch (UnsupportedEncodingException e) {
-            LOG.warn("exception when content.getBytes, content:{}, detail: {}", 
-                    content, ExceptionUtils.exception2detail(e));
-        }
     }
 }

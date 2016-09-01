@@ -52,6 +52,9 @@ public class ONSDispatcher {
         // 消费者如需订阅某Topic下所有类型的消息，Tag用 * 符号表示:consumer.subscribe("MQ_TOPIC", "*", new MessageListener() 
         // 消费者如需订阅某Topic下某一种类型的消息，请明确标明Tag  : consumer.subscribe("MQ_TOPIC", "TagA", new MessageListener() 
         // 消费者如需订阅某Topic下多种类型的消息，请在多个Tag之间用 || 分隔：consumer.subscribe("MQ_TOPIC", "TagA||TagB", new MessageListener() 
+        LOG.info("ONSDispatcher.topicId:"+_topicId);
+        LOG.info("ONSDispatcher.consumerId:"+_consumerId);
+        LOG.info("ONSDispatcher.tag:"+_tag);
         _consumer.subscribe(_topicId, _tag, new MessageListener() {
             public Action consume(Message message, ConsumeContext context) {
                 return dispatchONSMessage(message);

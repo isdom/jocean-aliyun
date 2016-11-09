@@ -16,10 +16,10 @@ dependencies {
     compile 'javax.inject:javax.inject:1'
     
     /*aliyun ons*/
-    compile 'com.aliyun.openservices:ons-client:1.2.5'
+    compile 'com.aliyun.openservices:ons-client:1.2.6'
     
     /* for aliyun-sdk-oss */
-    compile 'com.aliyun.oss:aliyun-sdk-oss:2.0.5'
+    compile 'com.aliyun.oss:aliyun-sdk-oss:2.3.0'
     
     testCompile 'junit:junit:4.12'
 }

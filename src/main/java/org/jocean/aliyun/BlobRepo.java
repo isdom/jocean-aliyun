@@ -7,4 +7,6 @@ public interface BlobRepo {
             final String key,
             final String contentType,
             final byte[] content);
+    
+    public Observable<byte[]> getBlob(final String key);
 }

@@ -27,18 +27,17 @@ public class BlobRepoUsingOSS implements BlobRepo {
     
     @Override
     public Observable<String> putBlob(final String key, 
-            final String contentType,
-            final byte[] content) {
+            final Blob blob) {
         return Observable.create(new OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
                     final ObjectMetadata meta = new ObjectMetadata();
                     // 必须设置ContentLength
-                    meta.setContentLength(content.length);
-                    meta.setContentType(contentType);
+                    meta.setContentLength(blob.content().length);
+                    meta.setContentType(blob.contentType());
                     final PutObjectResult result = _ossclient.putObject(_bucketName, key, 
-                            new ByteArrayInputStream(content), meta);
+                            new ByteArrayInputStream(blob.content()), meta);
                     LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
                     subscriber.onNext(key);
                     subscriber.onCompleted();
@@ -47,24 +46,33 @@ public class BlobRepoUsingOSS implements BlobRepo {
     }
     
     @Override
-    public Observable<byte[]> getBlob(final String key) {
-        return Observable.create(new OnSubscribe<byte[]>() {
+    public Observable<Blob> getBlob(final String key) {
+        return Observable.create(new OnSubscribe<Blob>() {
             @Override
-            public void call(Subscriber<? super byte[]> subscriber) {
+            public void call(Subscriber<? super Blob> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
-                    byte[] blob = null;
-                    
                     final OSSObject ossobj = _ossclient.getObject(_bucketName, key);
                     final ObjectMetadata meta = ossobj.getObjectMetadata();
                     final String contentType = meta.getContentType();
                     try (final InputStream is = ossobj.getObjectContent()) {
-                        blob = ByteStreams.toByteArray(is);
+                        final byte[] blob = ByteStreams.toByteArray(is);
+                        subscriber.onNext(new Blob() {
+                            @Override
+                            public byte[] content() {
+                                return blob;
+                            }
+
+                            @Override
+                            public String contentType() {
+                                return contentType;
+                            }});
+                        subscriber.onCompleted();
                     } catch (Exception e) {
                         LOG.warn("exception when get oss object {}, detail: {}",
                                 key, ExceptionUtils.exception2detail(e));
+                        subscriber.onError(e);
                     }
-                    subscriber.onNext(blob);
-                    subscriber.onCompleted();
+                    
                 }
             }});
     }

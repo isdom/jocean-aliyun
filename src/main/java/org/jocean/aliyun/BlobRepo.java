@@ -3,10 +3,14 @@ package org.jocean.aliyun;
 import rx.Observable;
 
 public interface BlobRepo {
+    public interface Blob {
+        public byte[] content();
+        public String contentType();
+    }
+    
     public Observable<String> putBlob(
             final String key,
-            final String contentType,
-            final byte[] content);
+            final Blob blob);
     
-    public Observable<byte[]> getBlob(final String key);
+    public Observable<Blob> getBlob(final String key);
 }

@@ -5,8 +5,8 @@ import java.io.InputStream;
 
 import javax.inject.Inject;
 
-import org.jocean.aliyun.BlobRepo;
 import org.jocean.idiom.ExceptionUtils;
+import org.jocean.idiom.store.BlobRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

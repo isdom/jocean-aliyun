@@ -20,10 +20,10 @@ import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
 
-public class BlobRepoUsingOSS implements BlobRepo {
+public class BlobRepoOverOSS implements BlobRepo {
     
     private static final Logger LOG = 
-        LoggerFactory.getLogger(BlobRepoUsingOSS.class);
+        LoggerFactory.getLogger(BlobRepoOverOSS.class);
     
     @Override
     public Observable<String> putBlob(final String key, 
@@ -65,6 +65,18 @@ public class BlobRepoUsingOSS implements BlobRepo {
                             @Override
                             public String contentType() {
                                 return contentType;
+                            }
+
+                            @Override
+                            public String name() {
+                                // TODO return actual name from meta.getContentDisposition()
+                                return null;
+                            }
+
+                            @Override
+                            public String filename() {
+                                // TODO return actual name from meta.getContentDisposition()
+                                return null;
                             }});
                         subscriber.onCompleted();
                     } catch (Exception e) {

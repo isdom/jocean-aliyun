@@ -38,6 +38,17 @@ public class OSSImageServiceImpl implements OSSImageService {
                         public ImageInfo call(final GetImageInfoResponse resp) {
                             return new ImageInfo() {
                                 @Override
+                                public String toString() {
+                                    final StringBuilder builder = new StringBuilder();
+                                    builder.append("ImageInfo [fileSize=").append(fileSize())
+                                            .append(", format=").append(format())
+                                            .append(", imageWidth=").append(imageWidth())
+                                            .append(", imageHeight=").append(imageHeight())
+                                            .append("]");
+                                    return builder.toString();
+                                }
+                                
+                                @Override
                                 public long fileSize() {
                                     return resp.getFileSize();
                                 }

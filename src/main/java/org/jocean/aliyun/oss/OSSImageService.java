@@ -1,6 +1,6 @@
 package org.jocean.aliyun.oss;
 
-import rx.Single;
+import rx.Observable;
 
 public interface OSSImageService {
     public interface ImageInfo {
@@ -10,5 +10,5 @@ public interface OSSImageService {
         public int imageHeight();
     }
     
-    public Single<? extends ImageInfo> info(final String pathToImage);
+    public Observable<? extends ImageInfo> info(final String pathToImage);
 }

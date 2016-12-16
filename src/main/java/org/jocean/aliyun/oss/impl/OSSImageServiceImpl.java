@@ -15,7 +15,7 @@ import org.jocean.idiom.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import rx.Single;
+import rx.Observable;
 import rx.functions.Func1;
 
 public class OSSImageServiceImpl implements OSSImageService {
@@ -23,7 +23,7 @@ public class OSSImageServiceImpl implements OSSImageService {
             LoggerFactory.getLogger(OSSImageServiceImpl.class);
 
     @Override
-    public Single<? extends ImageInfo> info(final String pathToImage) {
+    public Observable<? extends ImageInfo> info(final String pathToImage) {
         try {
             final GetImageInfoRequest req = new GetImageInfoRequest();
             req.setPathToImage(pathToImage);
@@ -56,12 +56,11 @@ public class OSSImageServiceImpl implements OSSImageService {
                                 public int imageHeight() {
                                     return resp.getImageHeight();
                                 }};
-                        }})
-                    .toSingle();
+                        }});
         } catch (URISyntaxException e) {
             LOG.warn("exception when signalClient.defineInteraction, detail: {}",
                     ExceptionUtils.exception2detail(e));
-            return Single.error(e);
+            return Observable.error(e);
         }
     }
 

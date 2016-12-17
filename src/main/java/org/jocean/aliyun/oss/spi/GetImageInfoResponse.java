@@ -67,4 +67,45 @@ public class GetImageInfoResponse {
     private Value _format;
     private Value _imageWidth;
     private Value _imageHeight;
+    private Value _exifTag;
+    
+    public String getExifTag() {
+        return null == _exifTag ? null : _exifTag._value;
+    }
+
+    @JSONField(name = "ExifTag")
+    public void setExifTag(Value exifTag) {
+        this._exifTag = exifTag;
+    }
+
+    public String getOrientation() {
+        return null == _orientation ? null : _orientation._value;
+    }
+
+    @JSONField(name = "Orientation")
+    public void setOrientation(Value orientation) {
+        this._orientation = orientation;
+    }
+
+    public int getPixelXDimension() {
+        return null == _pixelXDimension ? 0 : Integer.parseInt(_pixelXDimension._value);
+    }
+
+    @JSONField(name = "PixelXDimension")
+    public void setPixelXDimension(Value pixelXDimension) {
+        this._pixelXDimension = pixelXDimension;
+    }
+
+    public int getPixelYDimension() {
+        return null == _pixelYDimension ? 0 : Integer.parseInt(_pixelYDimension._value);
+    }
+
+    @JSONField(name = "PixelYDimension")
+    public void setPixelYDimension(Value pixelYDimension) {
+        this._pixelYDimension = pixelYDimension;
+    }
+
+    private Value _orientation;
+    private Value _pixelXDimension;
+    private Value _pixelYDimension;
 }

@@ -7,8 +7,9 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 
 import org.jocean.aliyun.oss.OSSImageService;
-import org.jocean.aliyun.oss.spi.GetImageInfoRequest;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
+import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
+import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest.ProcessAction;
 import org.jocean.http.Feature;
 import org.jocean.http.rosa.SignalClient;
 import org.jocean.idiom.ExceptionUtils;
@@ -25,8 +26,10 @@ public class OSSImageServiceImpl implements OSSImageService {
     @Override
     public Observable<? extends ImageInfo> info(final String pathToImage) {
         try {
-            final GetImageInfoRequest req = new GetImageInfoRequest();
+            final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
             req.setPathToImage(pathToImage);
+            req.process().add(ProcessAction.info);
+            
             return _signalClient.<GetImageInfoResponse>defineInteraction(req, 
                     Feature.ENABLE_LOGGING,
                     Feature.ENABLE_COMPRESSOR,

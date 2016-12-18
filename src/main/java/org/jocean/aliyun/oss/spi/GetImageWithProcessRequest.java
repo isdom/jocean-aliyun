@@ -14,10 +14,6 @@ import javax.ws.rs.QueryParam;
  */
 @Path("/{path_to_image}")
 public class GetImageWithProcessRequest {
-    public enum ProcessAction {
-        info,
-    }
-    
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();
@@ -30,26 +26,8 @@ public class GetImageWithProcessRequest {
         this._pathToImage = pathToImage;
     }
 
-    public class ProcessBuilder {
-        public ProcessBuilder add(final ProcessAction action) {
-            return add(action.name(), null);
-        }
-        
-        public ProcessBuilder add(final String action) {
-            return add(action, null);
-        }
-        
-        public ProcessBuilder add(final String action, final String param) {
-            _xOssProcess += "/" + action;
-            if (null != param) {
-                _xOssProcess += "," + param;
-            }
-            return this;
-        }
-    }
-    
-    public ProcessBuilder process() {
-        return new ProcessBuilder();
+    public void setProcessActions(final String actions) {
+        this._xOssProcess = actions;
     }
     
     @PathParam("path_to_image")

@@ -2,6 +2,7 @@ package org.jocean.aliyun.oss.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -9,12 +10,13 @@ import javax.ws.rs.GET;
 import org.jocean.aliyun.oss.OSSImageService;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
-import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest.ProcessAction;
 import org.jocean.http.Feature;
 import org.jocean.http.rosa.SignalClient;
 import org.jocean.idiom.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -23,12 +25,16 @@ public class OSSImageServiceImpl implements OSSImageService {
     private static final Logger LOG = 
             LoggerFactory.getLogger(OSSImageServiceImpl.class);
 
+    public ActionSet actionsBuilder() {
+        return new DefaultActionSet();
+    }
+    
     @Override
     public Observable<? extends ImageInfo> info(final String pathToImage) {
         try {
             final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
             req.setPathToImage(pathToImage);
-            req.process().add(ProcessAction.info);
+            req.setProcessActions(actionsBuilder().info().append().buildActions());
             
             return _signalClient.<GetImageInfoResponse>defineInteraction(req, 
                     Feature.ENABLE_LOGGING,
@@ -92,4 +98,115 @@ public class OSSImageServiceImpl implements OSSImageService {
     private String _endpoint;
     
     private String _bucketName;
+
+    static class DefaultActionSet implements ActionSet {
+
+        @Override
+        public Info info() {
+            return new DefaultInfo(this);
+        }
+        
+        @Override
+        public Crop crop() {
+            return new DefaultCrop(this);
+        }
+
+        @Override
+        public String buildActions() {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("image");
+            for (String actionAndParams : this._actions) {
+                sb.append('/');
+                sb.append(actionAndParams);
+            }
+            return sb.toString();
+        }
+        
+        void addAction(final String actionAndParams) {
+            this._actions.add(actionAndParams);
+        }
+        
+        final List<String> _actions = Lists.newArrayList();
+    }
+    
+    static abstract class BaseAction implements ProcessAction {
+        BaseAction(final DefaultActionSet actionSet) {
+            this._actionSet = actionSet;
+        }
+        
+        public ActionSet addToActionSet(final String actionAndParams) {
+            this._actionSet.addAction(actionAndParams);
+            return this._actionSet;
+        }
+
+        protected void appendParam(final StringBuilder sb, final String name, final String value) {
+            if (null != value) {
+                sb.append(',');
+                sb.append(name);
+                sb.append(value);
+            }
+        }
+        
+        private final DefaultActionSet _actionSet;
+    }
+    
+    static class DefaultInfo extends BaseAction implements Info {
+        DefaultInfo(final DefaultActionSet actionSet) {
+            super(actionSet);
+        }
+        
+        @Override
+        public ActionSet append() {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("info");
+            return addToActionSet(sb.toString());
+        }
+    }
+        
+    static class DefaultCrop extends BaseAction 
+        implements Crop {
+        DefaultCrop(final DefaultActionSet actionSet) {
+            super(actionSet);
+        }
+        
+        @Override
+        public ActionSet append() {
+            final StringBuilder sb = new StringBuilder();
+            sb.append("crop");
+            appendParam(sb, "x_", this._x);
+            appendParam(sb, "y_", this._y);
+            appendParam(sb, "w_", this._w);
+            appendParam(sb, "h_", this._h);
+            return addToActionSet(sb.toString());
+        }
+
+        @Override
+        public Crop x(final int x) {
+            this._x = Integer.toString(x);
+            return this;
+        }
+
+        @Override
+        public Crop y(final int y) {
+            this._y = Integer.toString(y);
+            return this;
+        }
+
+        @Override
+        public Crop w(final int w) {
+            this._w = Integer.toString(w);
+            return this;
+        }
+
+        @Override
+        public Crop h(final int h) {
+            this._h = Integer.toString(h);
+            return this;
+        }
+        
+        private String _x = null;
+        private String _y = null;
+        private String _w = null;
+        private String _h = null;
+    }
 }

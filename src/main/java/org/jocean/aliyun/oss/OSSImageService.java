@@ -13,7 +13,7 @@ public interface OSSImageService {
     public Observable<? extends ImageInfo> info(final String pathToImage);
     
     public interface ProcessAction {
-        public ActionSet append();
+        public ActionSet and();
     }
     
     public interface Info extends ProcessAction {
@@ -30,8 +30,8 @@ public interface OSSImageService {
     public interface ActionSet {
         public Info info();
         public Crop crop();
-        public String buildActions();
+        public String build();
     }
     
-    public ActionSet actionsBuilder();
+    public ActionSet actions();
 }

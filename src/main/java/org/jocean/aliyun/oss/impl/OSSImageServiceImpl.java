@@ -25,7 +25,7 @@ public class OSSImageServiceImpl implements OSSImageService {
     private static final Logger LOG = 
             LoggerFactory.getLogger(OSSImageServiceImpl.class);
 
-    public ActionSet actionsBuilder() {
+    public ActionSet actions() {
         return new DefaultActionSet();
     }
     
@@ -34,7 +34,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         try {
             final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
             req.setPathToImage(pathToImage);
-            req.setProcessActions(actionsBuilder().info().append().buildActions());
+            req.setProcessActions(actions().info().and().build());
             
             return _signalClient.<GetImageInfoResponse>defineInteraction(req, 
                     Feature.ENABLE_LOGGING,
@@ -112,7 +112,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         }
 
         @Override
-        public String buildActions() {
+        public String build() {
             final StringBuilder sb = new StringBuilder();
             sb.append("image");
             for (String actionAndParams : this._actions) {
@@ -156,7 +156,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         }
         
         @Override
-        public ActionSet append() {
+        public ActionSet and() {
             final StringBuilder sb = new StringBuilder();
             sb.append("info");
             return addToActionSet(sb.toString());
@@ -170,7 +170,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         }
         
         @Override
-        public ActionSet append() {
+        public ActionSet and() {
             final StringBuilder sb = new StringBuilder();
             sb.append("crop");
             appendParam(sb, "x_", this._x);

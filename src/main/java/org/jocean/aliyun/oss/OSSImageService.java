@@ -1,5 +1,7 @@
 package org.jocean.aliyun.oss;
 
+import org.jocean.idiom.store.BlobRepo.Blob;
+
 import rx.Observable;
 
 public interface OSSImageService {
@@ -11,6 +13,8 @@ public interface OSSImageService {
     }
     
     public Observable<? extends ImageInfo> info(final String pathToImage);
+    
+    public Observable<? extends Blob> process(final String pathToImage, final String actions);
     
     public interface ProcessAction {
         public ActionSet and();
@@ -34,4 +38,5 @@ public interface OSSImageService {
     }
     
     public ActionSet actions();
+    
 }

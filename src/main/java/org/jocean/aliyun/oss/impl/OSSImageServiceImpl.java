@@ -8,11 +8,13 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 
 import org.jocean.aliyun.oss.OSSImageService;
+import org.jocean.aliyun.oss.spi.GetImageContentResponse;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
 import org.jocean.http.Feature;
 import org.jocean.http.rosa.SignalClient;
 import org.jocean.idiom.ExceptionUtils;
+import org.jocean.idiom.store.BlobRepo.Blob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,10 +27,6 @@ public class OSSImageServiceImpl implements OSSImageService {
     private static final Logger LOG = 
             LoggerFactory.getLogger(OSSImageServiceImpl.class);
 
-    public ActionSet actions() {
-        return new DefaultActionSet();
-    }
-    
     @Override
     public Observable<? extends ImageInfo> info(final String pathToImage) {
         try {
@@ -84,6 +82,58 @@ public class OSSImageServiceImpl implements OSSImageService {
         }
     }
 
+    public Observable<? extends Blob> process(final String pathToImage, final String actions) {
+        try {
+            final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
+            req.setPathToImage(pathToImage);
+            req.setProcessActions(actions);
+            
+            return _signalClient.<GetImageContentResponse>defineInteraction(req, 
+                    Feature.ENABLE_LOGGING,
+                    Feature.ENABLE_COMPRESSOR,
+                    new SignalClient.UsingMethod(GET.class),
+                    new SignalClient.UsingUri(new URI("http://" + _bucketName + "." + _endpoint)),
+                    new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
+                    .map(new Func1<GetImageContentResponse, Blob>() {
+                        @Override
+                        public Blob call(final GetImageContentResponse resp) {
+                            final byte[] content = resp.content();
+                            final String contentType = resp.contentType();
+                            final String contentDisposition = resp.contentDisposition();
+                            return new Blob() {
+                                @Override
+                                public String toString() {
+                                    final StringBuilder builder = new StringBuilder();
+                                    builder.append("Blob [contentSize=").append(content.length)
+                                            .append(", contentType=").append(contentType)
+                                            .append(", contentDisposition=").append(contentDisposition)
+                                            .append("]");
+                                    return builder.toString();
+                                }
+                                @Override
+                                public String name() {
+                                    return null;
+                                }
+                                @Override
+                                public String filename() {
+                                    return null;
+                                }
+                                @Override
+                                public String contentType() {
+                                    return contentType;
+                                }
+                                @Override
+                                public byte[] content() {
+                                    return content;
+                                }};
+                        }});
+        } catch (URISyntaxException e) {
+            LOG.warn("exception when signalClient.defineInteraction, detail: {}",
+                    ExceptionUtils.exception2detail(e));
+            return Observable.error(e);
+        }
+    }
+    
     public void setEndpoint(final String endpoint) {
         this._endpoint = endpoint;
     }
@@ -99,6 +149,11 @@ public class OSSImageServiceImpl implements OSSImageService {
     
     private String _bucketName;
 
+    @Override
+    public ActionSet actions() {
+        return new DefaultActionSet();
+    }
+    
     static class DefaultActionSet implements ActionSet {
 
         @Override

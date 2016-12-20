@@ -31,9 +31,18 @@ public interface OSSImageService {
         public Crop h(final int h);
     }
     
+    public interface Resize extends ProcessAction {
+        public Resize m(final String m);
+        public Resize w(final int w);
+        public Resize h(final int h);
+        public Resize limit(final int limit);
+        public Resize color(final String color);
+    }
+    
     public interface ActionSet {
         public Info info();
         public Crop crop();
+        public Resize resize();
         public String build();
     }
     

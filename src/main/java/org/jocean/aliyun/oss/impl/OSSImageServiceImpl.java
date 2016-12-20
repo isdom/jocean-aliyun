@@ -167,6 +167,11 @@ public class OSSImageServiceImpl implements OSSImageService {
         }
 
         @Override
+        public Resize resize() {
+            throw new UnsupportedOperationException();
+        }
+        
+        @Override
         public String build() {
             final StringBuilder sb = new StringBuilder();
             sb.append("image");

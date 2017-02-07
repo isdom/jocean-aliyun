@@ -1,6 +1,6 @@
 package org.jocean.aliyun.oss;
 
-import org.jocean.idiom.store.BlobRepo.Blob;
+import org.jocean.netty.BlobRepo.Blob;
 
 import rx.Observable;
 

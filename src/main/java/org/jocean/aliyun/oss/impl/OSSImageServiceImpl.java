@@ -14,7 +14,7 @@ import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
 import org.jocean.http.Feature;
 import org.jocean.http.rosa.SignalClient;
 import org.jocean.idiom.ExceptionUtils;
-import org.jocean.idiom.store.BlobRepo.Blob;
+import org.jocean.netty.BlobRepo.Blob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,6 @@
 package org.jocean.aliyun.oss;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 import javax.inject.Inject;
@@ -36,12 +35,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 if (!subscriber.isUnsubscribed()) {
                     final ObjectMetadata meta = new ObjectMetadata();
                     // 必须设置ContentLength
-                    try {
-                        meta.setContentLength(blob.inputStream().available()/*blob.content().length*/);
-                    } catch (IOException e) {
-                        LOG.warn("exception when invoke blob.inputStream().available(), detail: {}",
-                            ExceptionUtils.exception2detail(e));
-                    }
+                    meta.setContentLength(blob.contentLength());
                     meta.setContentType(blob.contentType());
                     final PutObjectResult result = _ossclient.putObject(_bucketName, key, 
                             blob.inputStream(), meta);

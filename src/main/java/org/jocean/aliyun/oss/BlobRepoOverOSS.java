@@ -124,6 +124,11 @@ public class BlobRepoOverOSS implements BlobRepo {
                             @Override
                             public InputStream inputStream() {
                                 return new ByteArrayInputStream(blob);
+                            }
+
+                            @Override
+                            public int contentLength() {
+                                return blob.length;
                             }});
                         subscriber.onCompleted();
                     } catch (Exception e) {

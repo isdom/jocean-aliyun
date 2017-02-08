@@ -160,6 +160,10 @@ public class OSSImageServiceImpl implements OSSImageService {
                                 @Override
                                 public InputStream inputStream() {
                                     return new ByteArrayInputStream(content);
+                                }
+                                @Override
+                                public int contentLength() {
+                                    return content.length;
                                 }};
                         }});
         } catch (URISyntaxException e) {

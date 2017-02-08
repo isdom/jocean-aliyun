@@ -1,6 +1,7 @@
 package org.jocean.aliyun.oss;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.inject.Inject;
@@ -37,9 +38,17 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // 必须设置ContentLength
                     meta.setContentLength(blob.contentLength());
                     meta.setContentType(blob.contentType());
-                    final PutObjectResult result = _ossclient.putObject(_bucketName, key, 
-                            blob.inputStream(), meta);
-                    LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
+                    try (final InputStream is = blob.inputStream()) {
+                        final PutObjectResult result = _ossclient.putObject(
+                                _bucketName, 
+                                key, 
+                                is, 
+                                meta);
+                        LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
+                    } catch (IOException e) {
+                        LOG.warn("exception when close inputStream, detail: {}", 
+                            ExceptionUtils.exception2detail(e));
+                    }
                     subscriber.onNext(key);
                     subscriber.onCompleted();
                 }

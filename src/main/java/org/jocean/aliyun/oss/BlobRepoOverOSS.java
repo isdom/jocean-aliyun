@@ -1,6 +1,7 @@
 package org.jocean.aliyun.oss;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.inject.Inject;
@@ -16,6 +17,7 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
+import io.netty.util.ReferenceCounted;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
@@ -34,10 +36,15 @@ public class BlobRepoOverOSS implements BlobRepo {
                 if (!subscriber.isUnsubscribed()) {
                     final ObjectMetadata meta = new ObjectMetadata();
                     // 必须设置ContentLength
-                    meta.setContentLength(blob.content().length);
+                    try {
+                        meta.setContentLength(blob.inputStream().available()/*blob.content().length*/);
+                    } catch (IOException e) {
+                        LOG.warn("exception when invoke blob.inputStream().available(), detail: {}",
+                            ExceptionUtils.exception2detail(e));
+                    }
                     meta.setContentType(blob.contentType());
                     final PutObjectResult result = _ossclient.putObject(_bucketName, key, 
-                            new ByteArrayInputStream(blob.content()), meta);
+                            blob.inputStream(), meta);
                     LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
                     subscriber.onNext(key);
                     subscriber.onCompleted();
@@ -57,10 +64,10 @@ public class BlobRepoOverOSS implements BlobRepo {
                     try (final InputStream is = ossobj.getObjectContent()) {
                         final byte[] blob = ByteStreams.toByteArray(is);
                         subscriber.onNext(new Blob() {
-                            @Override
-                            public byte[] content() {
-                                return blob;
-                            }
+//                            @Override
+//                            public byte[] content() {
+//                                return blob;
+//                            }
 
                             @Override
                             public String contentType() {
@@ -77,6 +84,46 @@ public class BlobRepoOverOSS implements BlobRepo {
                             public String filename() {
                                 // TODO return actual name from meta.getContentDisposition()
                                 return null;
+                            }
+
+                            @Override
+                            public int refCnt() {
+                                return 1;
+                            }
+
+                            @Override
+                            public ReferenceCounted retain() {
+                                return this;
+                            }
+
+                            @Override
+                            public ReferenceCounted retain(int increment) {
+                                return this;
+                            }
+
+                            @Override
+                            public ReferenceCounted touch() {
+                                return this;
+                            }
+
+                            @Override
+                            public ReferenceCounted touch(Object hint) {
+                                return this;
+                            }
+
+                            @Override
+                            public boolean release() {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean release(int decrement) {
+                                return false;
+                            }
+
+                            @Override
+                            public InputStream inputStream() {
+                                return new ByteArrayInputStream(blob);
                             }});
                         subscriber.onCompleted();
                     } catch (Exception e) {

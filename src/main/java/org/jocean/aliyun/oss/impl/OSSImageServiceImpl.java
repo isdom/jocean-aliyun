@@ -1,5 +1,7 @@
 package org.jocean.aliyun.oss.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
+import io.netty.util.ReferenceCounted;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -122,9 +125,41 @@ public class OSSImageServiceImpl implements OSSImageService {
                                 public String contentType() {
                                     return contentType;
                                 }
+//                                @Override
+//                                public byte[] content() {
+//                                    return content;
+//                                }
                                 @Override
-                                public byte[] content() {
-                                    return content;
+                                public int refCnt() {
+                                    return 1;
+                                }
+                                @Override
+                                public ReferenceCounted retain() {
+                                    return this;
+                                }
+                                @Override
+                                public ReferenceCounted retain(int increment) {
+                                    return this;
+                                }
+                                @Override
+                                public ReferenceCounted touch() {
+                                    return this;
+                                }
+                                @Override
+                                public ReferenceCounted touch(Object hint) {
+                                    return this;
+                                }
+                                @Override
+                                public boolean release() {
+                                    return false;
+                                }
+                                @Override
+                                public boolean release(int decrement) {
+                                    return false;
+                                }
+                                @Override
+                                public InputStream inputStream() {
+                                    return new ByteArrayInputStream(content);
                                 }};
                         }});
         } catch (URISyntaxException e) {

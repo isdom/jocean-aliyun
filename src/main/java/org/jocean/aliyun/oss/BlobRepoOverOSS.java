@@ -1,6 +1,5 @@
 package org.jocean.aliyun.oss;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -17,7 +16,6 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
-import io.netty.util.ReferenceCounted;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
@@ -66,73 +64,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     final String contentType = meta.getContentType();
                     try (final InputStream is = ossobj.getObjectContent()) {
                         final byte[] blob = ByteStreams.toByteArray(is);
-                        subscriber.onNext(new Blob() {
-//                            @Override
-//                            public byte[] content() {
-//                                return blob;
-//                            }
-
-                            @Override
-                            public String contentType() {
-                                return contentType;
-                            }
-
-                            @Override
-                            public String name() {
-                                // TODO return actual name from meta.getContentDisposition()
-                                return null;
-                            }
-
-                            @Override
-                            public String filename() {
-                                // TODO return actual name from meta.getContentDisposition()
-                                return null;
-                            }
-
-                            @Override
-                            public int refCnt() {
-                                return 1;
-                            }
-
-                            @Override
-                            public ReferenceCounted retain() {
-                                return this;
-                            }
-
-                            @Override
-                            public ReferenceCounted retain(int increment) {
-                                return this;
-                            }
-
-                            @Override
-                            public ReferenceCounted touch() {
-                                return this;
-                            }
-
-                            @Override
-                            public ReferenceCounted touch(Object hint) {
-                                return this;
-                            }
-
-                            @Override
-                            public boolean release() {
-                                return false;
-                            }
-
-                            @Override
-                            public boolean release(int decrement) {
-                                return false;
-                            }
-
-                            @Override
-                            public InputStream inputStream() {
-                                return new ByteArrayInputStream(blob);
-                            }
-
-                            @Override
-                            public int contentLength() {
-                                return blob.length;
-                            }});
+                        subscriber.onNext(Blob.Util.fromByteArray(blob, contentType, null, null));
                         subscriber.onCompleted();
                     } catch (Exception e) {
                         LOG.warn("exception when get oss object {}, detail: {}",

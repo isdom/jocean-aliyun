@@ -1,7 +1,5 @@
 package org.jocean.aliyun.oss.impl;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -22,7 +20,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-import io.netty.util.ReferenceCounted;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -102,69 +99,8 @@ public class OSSImageServiceImpl implements OSSImageService {
                         public Blob call(final GetImageContentResponse resp) {
                             final byte[] content = resp.content();
                             final String contentType = resp.contentType();
-                            final String contentDisposition = resp.contentDisposition();
-                            return new Blob() {
-                                @Override
-                                public String toString() {
-                                    final StringBuilder builder = new StringBuilder();
-                                    builder.append("Blob [contentSize=").append(content.length)
-                                            .append(", contentType=").append(contentType)
-                                            .append(", contentDisposition=").append(contentDisposition)
-                                            .append("]");
-                                    return builder.toString();
-                                }
-                                @Override
-                                public String name() {
-                                    return null;
-                                }
-                                @Override
-                                public String filename() {
-                                    return null;
-                                }
-                                @Override
-                                public String contentType() {
-                                    return contentType;
-                                }
-//                                @Override
-//                                public byte[] content() {
-//                                    return content;
-//                                }
-                                @Override
-                                public int refCnt() {
-                                    return 1;
-                                }
-                                @Override
-                                public ReferenceCounted retain() {
-                                    return this;
-                                }
-                                @Override
-                                public ReferenceCounted retain(int increment) {
-                                    return this;
-                                }
-                                @Override
-                                public ReferenceCounted touch() {
-                                    return this;
-                                }
-                                @Override
-                                public ReferenceCounted touch(Object hint) {
-                                    return this;
-                                }
-                                @Override
-                                public boolean release() {
-                                    return false;
-                                }
-                                @Override
-                                public boolean release(int decrement) {
-                                    return false;
-                                }
-                                @Override
-                                public InputStream inputStream() {
-                                    return new ByteArrayInputStream(content);
-                                }
-                                @Override
-                                public int contentLength() {
-                                    return content.length;
-                                }};
+//                            final String contentDisposition = resp.contentDisposition();
+                            return Blob.Util.fromByteArray(content, contentType, null, null);
                         }});
         } catch (URISyntaxException e) {
             LOG.warn("exception when signalClient.defineInteraction, detail: {}",

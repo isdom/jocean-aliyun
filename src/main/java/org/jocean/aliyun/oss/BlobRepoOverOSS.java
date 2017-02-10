@@ -26,11 +26,11 @@ public class BlobRepoOverOSS implements BlobRepo {
         LoggerFactory.getLogger(BlobRepoOverOSS.class);
     
     @Override
-    public Observable<String> putBlob(final String key, 
+    public Observable<PutResult> putBlob(final String key, 
             final Blob blob) {
-        return Observable.create(new OnSubscribe<String>() {
+        return Observable.create(new OnSubscribe<PutResult>() {
             @Override
-            public void call(Subscriber<? super String> subscriber) {
+            public void call(Subscriber<? super PutResult> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
                     final ObjectMetadata meta = new ObjectMetadata();
                     // 必须设置ContentLength
@@ -47,7 +47,16 @@ public class BlobRepoOverOSS implements BlobRepo {
                         LOG.warn("exception when close inputStream, detail: {}", 
                             ExceptionUtils.exception2detail(e));
                     }
-                    subscriber.onNext(key);
+                    subscriber.onNext(new PutResult() {
+                        @Override
+                        public String key() {
+                            return key;
+                        }
+
+                        @Override
+                        public Blob blob() {
+                            return blob;
+                        }});
                     subscriber.onCompleted();
                 }
             }});

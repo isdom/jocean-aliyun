@@ -34,12 +34,14 @@ public class OSSImageServiceImpl implements OSSImageService {
             req.setPathToImage(pathToImage);
             req.setProcessActions(actions().info().and().build());
             
-            return _signalClient.<GetImageInfoResponse>defineInteraction(req, 
-                    Feature.ENABLE_LOGGING,
-                    Feature.ENABLE_COMPRESSOR,
-                    new SignalClient.UsingMethod(GET.class),
-                    new SignalClient.UsingUri(new URI("http://" + _bucketName + "." + _endpoint)),
-                    new SignalClient.DecodeResponseBodyAs(GetImageInfoResponse.class))
+            return _signalClient.interaction().request(req)
+                    .feature(
+                        Feature.ENABLE_LOGGING,
+                        Feature.ENABLE_COMPRESSOR,
+                        new SignalClient.UsingMethod(GET.class),
+                        new SignalClient.UsingUri(new URI("http://" + _bucketName + "." + _endpoint)),
+                        new SignalClient.DecodeResponseBodyAs(GetImageInfoResponse.class))
+                    .<GetImageInfoResponse>build()
                     .map(new Func1<GetImageInfoResponse, ImageInfo>() {
                         @Override
                         public ImageInfo call(final GetImageInfoResponse resp) {
@@ -88,12 +90,14 @@ public class OSSImageServiceImpl implements OSSImageService {
             req.setPathToImage(pathToImage);
             req.setProcessActions(actions);
             
-            return _signalClient.<GetImageContentResponse>defineInteraction(req, 
-                    Feature.ENABLE_LOGGING,
-                    Feature.ENABLE_COMPRESSOR,
-                    new SignalClient.UsingMethod(GET.class),
-                    new SignalClient.UsingUri(new URI("http://" + _bucketName + "." + _endpoint)),
-                    new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
+            return _signalClient.interaction().request(req)
+                    .feature(
+                        Feature.ENABLE_LOGGING,
+                        Feature.ENABLE_COMPRESSOR,
+                        new SignalClient.UsingMethod(GET.class),
+                        new SignalClient.UsingUri(new URI("http://" + _bucketName + "." + _endpoint)),
+                        new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
+                    .<GetImageContentResponse>build()
                     .map(new Func1<GetImageContentResponse, Blob>() {
                         @Override
                         public Blob call(final GetImageContentResponse resp) {

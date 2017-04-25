@@ -23,5 +23,8 @@ dependencies {
     /* for aliyun-sdk-oss */
     compile 'com.aliyun.oss:aliyun-sdk-oss:2.3.0'
     
+    /*aliyun mns*/
+    compile 'com.aliyun.mns:aliyun-sdk-mns:1.1.8.4'
+    
     testCompile 'junit:junit:4.12'
 }

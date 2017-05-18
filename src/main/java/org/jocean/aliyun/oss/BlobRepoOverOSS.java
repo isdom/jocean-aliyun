@@ -28,7 +28,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Observable<PutResult> putBlob(final String key, 
             final Blob blob) {
-        return Observable.create(new OnSubscribe<PutResult>() {
+        return Observable.unsafeCreate(new OnSubscribe<PutResult>() {
             @Override
             public void call(Subscriber<? super PutResult> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
@@ -64,7 +64,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     
     @Override
     public Observable<Blob> getBlob(final String key) {
-        return Observable.create(new OnSubscribe<Blob>() {
+        return Observable.unsafeCreate(new OnSubscribe<Blob>() {
             @Override
             public void call(Subscriber<? super Blob> subscriber) {
                 if (!subscriber.isUnsubscribed()) {
@@ -80,7 +80,6 @@ public class BlobRepoOverOSS implements BlobRepo {
                                 key, ExceptionUtils.exception2detail(e));
                         subscriber.onError(e);
                     }
-                    
                 }
             }});
     }

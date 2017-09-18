@@ -19,6 +19,7 @@ import com.google.common.io.ByteStreams;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
+import rx.functions.Func0;
 
 public class BlobRepoOverOSS implements BlobRepo {
     
@@ -58,6 +59,43 @@ public class BlobRepoOverOSS implements BlobRepo {
                             return blob;
                         }});
                     subscriber.onCompleted();
+                }
+            }});
+    }
+    
+    @Override
+    public Observable<String> putBlob(final String key, final Func0<? extends Blob> blobProducer) {
+        return Observable.unsafeCreate(new OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    final Blob blob = blobProducer.call();
+                    
+                    if (null != blob) {
+                        try (final InputStream is = blob.inputStream()) {
+                            final ObjectMetadata meta = new ObjectMetadata();
+                            // 必须设置ContentLength
+                            meta.setContentLength(blob.contentLength());
+                            meta.setContentType(blob.contentType());
+                            final PutObjectResult result = _ossclient.putObject(
+                                    _bucketName, 
+                                    key, 
+                                    is, 
+                                    meta);
+                            LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
+                        } catch (IOException e) {
+                            LOG.warn("exception when close inputStream, detail: {}", 
+                                ExceptionUtils.exception2detail(e));
+                            subscriber.onError(e);
+                            return;
+                        } finally {
+                            blob.release();
+                        }
+                        subscriber.onNext(key);
+                        subscriber.onCompleted();
+                    } else {
+                        subscriber.onError(new RuntimeException("can't produce blob"));
+                    }
                 }
             }});
     }

@@ -124,6 +124,28 @@ public class BlobRepoOverOSS implements BlobRepo {
             }});
     }
     
+
+    @Override
+    public Observable<String> deleteBlob(final String key) {
+        return Observable.unsafeCreate(new OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    try {
+                        _ossclient.deleteObject(_bucketName, key);
+                        
+                        LOG.info("blob {} deleted", key);
+                        subscriber.onNext(key);
+                        subscriber.onCompleted();
+                    } catch (Exception e) {
+                        LOG.warn("exception when delete blob {}, detail: {}", key,
+                            ExceptionUtils.exception2detail(e));
+                        subscriber.onError(e);
+                    }
+                }
+            }});
+    }
+    
     @Override
     public Observable<Blob> getBlob(final String key) {
         return Observable.unsafeCreate(new OnSubscribe<Blob>() {

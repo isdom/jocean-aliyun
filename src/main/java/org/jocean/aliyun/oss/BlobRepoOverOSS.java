@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.CopyObjectResult;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
@@ -95,6 +96,33 @@ public class BlobRepoOverOSS implements BlobRepo {
                         subscriber.onCompleted();
                     } else {
                         subscriber.onError(new RuntimeException("can't produce blob"));
+                    }
+                }
+            }});
+    }
+    
+    @Override
+    public Observable<String> copyBlob(final String sourceKey, final String destinationKey) {
+        return Observable.unsafeCreate(new OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    try {
+                        final CopyObjectResult result = 
+                                _ossclient.copyObject(_bucketName, sourceKey, _bucketName, destinationKey);
+                        
+                        if (result.getResponse().isSuccessful()) {
+                            LOG.info("blob {} copied as {}, and new ETag is {}", sourceKey, destinationKey, 
+                                    result.getETag());
+                            subscriber.onNext(destinationKey);
+                            subscriber.onCompleted();
+                        } else {
+                            subscriber.onError(new RuntimeException(result.getResponse().getErrorResponseAsString()));
+                        }
+                    } catch (Exception e) {
+                        LOG.warn("exception when copy blob {} to {}, detail: {}", sourceKey, destinationKey,
+                            ExceptionUtils.exception2detail(e));
+                        subscriber.onError(e);
                     }
                 }
             }});

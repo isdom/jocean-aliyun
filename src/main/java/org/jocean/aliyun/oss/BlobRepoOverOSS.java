@@ -111,14 +111,10 @@ public class BlobRepoOverOSS implements BlobRepo {
                         final CopyObjectResult result = 
                                 _ossclient.copyObject(_bucketName, sourceKey, _bucketName, destinationKey);
                         
-                        if (result.getResponse().isSuccessful()) {
-                            LOG.info("blob {} copied as {}, and new ETag is {}", sourceKey, destinationKey, 
-                                    result.getETag());
-                            subscriber.onNext(destinationKey);
-                            subscriber.onCompleted();
-                        } else {
-                            subscriber.onError(new RuntimeException(result.getResponse().getErrorResponseAsString()));
-                        }
+                        LOG.info("blob {} copied as {}, and new ETag is {}", sourceKey, destinationKey, 
+                                result.getETag());
+                        subscriber.onNext(destinationKey);
+                        subscriber.onCompleted();
                     } catch (Exception e) {
                         LOG.warn("exception when copy blob {} to {}, detail: {}", sourceKey, destinationKey,
                             ExceptionUtils.exception2detail(e));

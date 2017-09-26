@@ -28,14 +28,17 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.handler.codec.http.DefaultHttpContent;
 import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
+import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
-//import io.netty.handler.codec.http.HttpContent;
+import io.netty.handler.codec.http.LastHttpContent;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
@@ -79,6 +82,106 @@ public class BlobRepoOverOSS implements BlobRepo {
         });
     }
     
+    private Observable<String> buildPutAPI(
+            final String host, 
+            final String objname, 
+            final Blob blob) {
+        final HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.PUT,
+                "/" + objname);
+
+        // Host header
+        request.headers().set(HttpHeaderNames.HOST, host);
+
+        // Date header
+        request.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));
+
+        // Content-Length header
+        request.headers().set(HttpHeaderNames.CONTENT_LENGTH, blob.contentLength());
+
+        // Content-Type header
+        request.headers().set(HttpHeaderNames.CONTENT_TYPE, blob.contentType());
+        
+        new OSSRequestSigner( "/" + _bucketName + "/" + objname, 
+                _ossclient.getCredentialsProvider().getCredentials()).sign(request);
+        
+        return _httpclient.initiator().remoteAddress(new InetSocketAddress(host, 80))
+            .feature(Feature.ENABLE_LOGGING)
+            .build()
+            .flatMap(callOSSAPI(buildObsRequest(request, blob)));
+    }
+
+    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable<HttpObject> obsRequest) {
+        return new Func1<HttpInitiator, Observable<String>>() {
+            @Override
+            public Observable<String> call(final HttpInitiator initiator) {
+                final HttpMessageHolder holder = new HttpMessageHolder();
+                initiator.doOnTerminate(holder.closer());
+                return initiator.defineInteraction(obsRequest)
+                        .compose(holder.<HttpObject>assembleAndHold())
+                        .last()
+                        .flatMap(new Func1<HttpObject, Observable<String>>() {
+                            @Override
+                            public Observable<String> call(final HttpObject any) {
+                                final FullHttpResponse fhr = holder.fullOf(RxNettys.BUILD_FULL_RESPONSE).call();
+                                if (null != fhr) {
+                                    try {
+//                                        return Observable.just(new String(
+//                                            ByteStreams.toByteArray(new ByteBufInputStream(fhr.content())), 
+//                                            CharsetUtil.UTF_8));
+                                        return Observable.just(fhr.headers().get(HttpHeaderNames.ETAG));
+                                    }
+//                                    catch (IOException e) {
+//                                        return Observable.error(e);
+//                                    }
+                                    finally {
+                                        fhr.release();
+                                    }
+                                }
+                                return Observable.error(new RuntimeException("can't get response"));
+                            }})
+                        .doOnUnsubscribe(initiator.closer());
+            }};
+    }
+
+    private String hostWithBucketname() {
+        return this._bucketName + "." + this._ossclient.getEndpoint().getHost();
+    }
+
+    private static Observable<HttpObject> buildObsRequest(final HttpRequest request, final Blob blob) {
+        return Observable.concat( 
+                    Observable.just(request), 
+                    blob.content().flatMap(new Func1<ByteBuf, Observable<HttpContent>>() {
+                        @Override
+                        public Observable<HttpContent> call(final ByteBuf buf) {
+                            return Observable.unsafeCreate(new Observable.OnSubscribe<HttpContent>() {
+                                @Override
+                                public void call(final Subscriber<? super HttpContent> subscriber) {
+                                    if (!subscriber.isUnsubscribed()) {
+                                        final HttpContent content = new DefaultHttpContent(buf);
+                                        subscriber.add(Subscriptions.create(new Action0() {
+                                            @Override
+                                            public void call() {
+                                                final boolean released = content.release();
+                                                LOG.debug("HttpContent {} invoke release with return {}", 
+                                                        content, released);
+                                            }
+                                        }));
+                                        subscriber.onNext(content);
+                                        subscriber.onCompleted();
+                                    }
+                                }
+                            });
+                        }}),
+                    Observable.just(LastHttpContent.EMPTY_LAST_CONTENT)
+                );
+    }
+
+    private static String buildGMT4Now(final Date date) {
+        final SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT")); // 设置时区为GMT
+        return sdf.format(date);
+    }
+
     @Override
     public Observable<PutResult> putBlob(final String key, 
             final Blob blob) {
@@ -228,83 +331,6 @@ public class BlobRepoOverOSS implements BlobRepo {
         this._ossclient = ossclient;
     }
     
-    private Observable<String> buildPutAPI(
-            final String host, 
-            final String objname, 
-            final Blob blob) {
-        final HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.PUT,
-                "/" + objname);
-
-        // Host header
-        request.headers().set(HttpHeaderNames.HOST, host);
-
-        // Date header
-        request.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));
-
-        // Content-Length header
-        request.headers().set(HttpHeaderNames.CONTENT_LENGTH, blob.contentLength());
-
-        // Content-Type header
-        request.headers().set(HttpHeaderNames.CONTENT_TYPE, blob.contentType());
-        
-        new OSSRequestSigner( "/" + _bucketName + "/" + objname, 
-                _ossclient.getCredentialsProvider().getCredentials()).sign(request);
-        
-        return _httpclient.initiator().remoteAddress(new InetSocketAddress(host, 80))
-            .feature(Feature.ENABLE_LOGGING)
-            .build()
-            .flatMap(callAPI(buildObsRequest(request, blob)));
-    }
-
-    private Func1<HttpInitiator, Observable<String>> callAPI(final Observable<HttpObject> obsRequest) {
-        return new Func1<HttpInitiator, Observable<String>>() {
-            @Override
-            public Observable<String> call(final HttpInitiator initiator) {
-                final HttpMessageHolder holder = new HttpMessageHolder();
-                initiator.doOnTerminate(holder.closer());
-                return initiator.defineInteraction(obsRequest)
-                        .compose(holder.<HttpObject>assembleAndHold())
-                        .last()
-                        .flatMap(new Func1<HttpObject, Observable<String>>() {
-                            @Override
-                            public Observable<String> call(final HttpObject any) {
-                                final FullHttpResponse fhr = holder.fullOf(RxNettys.BUILD_FULL_RESPONSE).call();
-                                if (null != fhr) {
-                                    try {
-//                                        return Observable.just(new String(
-//                                            ByteStreams.toByteArray(new ByteBufInputStream(fhr.content())), 
-//                                            CharsetUtil.UTF_8));
-                                        return Observable.just(fhr.headers().get(HttpHeaderNames.ETAG));
-                                    }
-//                                    catch (IOException e) {
-//                                        return Observable.error(e);
-//                                    }
-                                    finally {
-                                        fhr.release();
-                                    }
-                                }
-                                return Observable.error(new RuntimeException("can't get response"));
-                            }})
-                        .doOnUnsubscribe(initiator.closer());
-            }};
-    }
-
-    private Observable<HttpObject> buildObsRequest(final HttpRequest request, final Blob blob) {
-        return Observable.concat( 
-                    Observable.just(request), 
-                    blob.content());
-    }
-
-    private String hostWithBucketname() {
-        return this._bucketName + "." + this._ossclient.getEndpoint().getHost();
-    }
-
-    private static String buildGMT4Now(final Date date) {
-        final SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT")); // 设置时区为GMT
-        return sdf.format(date);
-    }
-
     @Inject
     private OSSClient _ossclient;
     

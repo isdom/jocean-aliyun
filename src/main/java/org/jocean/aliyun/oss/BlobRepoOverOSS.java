@@ -157,17 +157,25 @@ public class BlobRepoOverOSS implements BlobRepo {
                                 @Override
                                 public void call(final Subscriber<? super HttpContent> subscriber) {
                                     if (!subscriber.isUnsubscribed()) {
-                                        final HttpContent content = new DefaultHttpContent(buf);
-                                        subscriber.add(Subscriptions.create(new Action0() {
-                                            @Override
-                                            public void call() {
-                                                final boolean released = content.release();
-                                                LOG.debug("HttpContent {} invoke release with return {}", 
-                                                        content, released);
+                                        try {
+                                            if (null!=buf.retainedSlice()) {
+                                                final HttpContent content = new DefaultHttpContent(buf);
+                                                subscriber.add(Subscriptions.create(new Action0() {
+                                                    @Override
+                                                    public void call() {
+                                                        final boolean released = content.release();
+                                                        LOG.debug("HttpContent {} invoke release with return {}", 
+                                                                content, released);
+                                                    }
+                                                }));
+                                                subscriber.onNext(content);
+                                                subscriber.onCompleted();
+                                            } else {
+                                                subscriber.onError(new RuntimeException("retain buf BUT return null"));
                                             }
-                                        }));
-                                        subscriber.onNext(content);
-                                        subscriber.onCompleted();
+                                        } catch (Exception e) {
+                                            subscriber.onError(e);
+                                        }
                                     }
                                 }
                             });

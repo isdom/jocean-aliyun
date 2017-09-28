@@ -68,8 +68,8 @@ public class BlobRepoOverOSS implements BlobRepo {
                             @Override
                             public void call() {
                                 final boolean released = blob.release();
-                                LOG.debug("{} unsubscribe cause call blob {}'s release with return {}", subscriber,
-                                        blob, released);
+                                LOG.debug("{} unsubscribe cause call {} (Blob)'s release with return {}", 
+                                        subscriber, blob, released);
                             }
                         }));
 
@@ -164,8 +164,8 @@ public class BlobRepoOverOSS implements BlobRepo {
                                                     @Override
                                                     public void call() {
                                                         final boolean released = content.release();
-                                                        LOG.debug("HttpContent {} invoke release with return {}", 
-                                                                content, released);
+                                                        LOG.debug("{} unsubscribe cause call {}(HttpContent)'s release with return {}", 
+                                                                subscriber, content, released);
                                                     }
                                                 }));
                                                 subscriber.onNext(content);

@@ -18,6 +18,7 @@ import org.jocean.http.util.HttpMessageHolder;
 import org.jocean.http.util.RxNettys;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
+import org.jocean.netty.util.ReferenceCountedCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +40,12 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
+import io.netty.util.ReferenceCounted;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
 import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.subscriptions.Subscriptions;
@@ -52,9 +55,42 @@ public class BlobRepoOverOSS implements BlobRepo {
     private static final Logger LOG = 
         LoggerFactory.getLogger(BlobRepoOverOSS.class);
     
+    private static final Func1<ByteBuf, Observable<HttpContent>> _BUF2CONTENT = 
+        new Func1<ByteBuf, Observable<HttpContent>>() {
+        @Override
+        public Observable<HttpContent> call(final ByteBuf buf) {
+            return Observable.unsafeCreate(new Observable.OnSubscribe<HttpContent>() {
+                @Override
+                public void call(final Subscriber<? super HttpContent> subscriber) {
+                    if (!subscriber.isUnsubscribed()) {
+                        try {
+                            if (null!=buf.retainedSlice()) {
+                                final HttpContent content = new DefaultHttpContent(buf);
+                                subscriber.add(Subscriptions.create(new Action0() {
+                                    @Override
+                                    public void call() {
+                                        final boolean released = content.release();
+                                        LOG.debug("{} unsubscribe cause call {}(HttpContent)'s release with return {}", 
+                                                subscriber, content, released);
+                                    }
+                                }));
+                                subscriber.onNext(content);
+                                subscriber.onCompleted();
+                            } else {
+                                subscriber.onError(new RuntimeException("retain buf BUT return null"));
+                            }
+                        } catch (Exception e) {
+                            subscriber.onError(e);
+                        }
+                    }
+                }
+            });
+        }};
+        
     public Observable<String> putObject(
             final String objname,
-            final Func0<? extends Blob> blobProducer) {
+            final Func0<? extends Blob> blobProducer,
+            final ReferenceCountedCollector collector) {
         return Observable.unsafeCreate(new OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
@@ -62,6 +98,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     final Blob blob = blobProducer.call();
 
                     if (null != blob) {
+                        collector.add(blob);
                         // ensure blob will be release when
                         // subscriber.unsubscribe
                         subscriber.add(Subscriptions.create(new Action0() {
@@ -72,8 +109,15 @@ public class BlobRepoOverOSS implements BlobRepo {
                                         subscriber, blob, released);
                             }
                         }));
-
-                        buildPutAPI(hostWithBucketname(), objname, blob).subscribe(subscriber);
+                        
+                        final String host = hostWithBucketname();
+                        _httpclient.initiator().remoteAddress(new InetSocketAddress(host, 80))
+                            .feature(Feature.ENABLE_LOGGING)
+                            .build()
+                            .flatMap(callOSSAPI(
+                                buildObsRequest(buildPutObjectRequest(host, objname, blob), 
+                                        buildBody(blob.content(), collector))))
+                            .subscribe(subscriber);
                     } else {
                         subscriber.onError(new RuntimeException("can't produce blob"));
                     }
@@ -82,8 +126,7 @@ public class BlobRepoOverOSS implements BlobRepo {
         });
     }
     
-    private Observable<String> buildPutAPI(
-            final String host, 
+    private HttpRequest buildPutObjectRequest(final String host, 
             final String objname, 
             final Blob blob) {
         final HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.PUT,
@@ -103,11 +146,7 @@ public class BlobRepoOverOSS implements BlobRepo {
         
         new OSSRequestSigner( "/" + _bucketName + "/" + objname, 
                 _ossclient.getCredentialsProvider().getCredentials()).sign(request);
-        
-        return _httpclient.initiator().remoteAddress(new InetSocketAddress(host, 80))
-            .feature(Feature.ENABLE_LOGGING)
-            .build()
-            .flatMap(callOSSAPI(buildObsRequest(request, blob)));
+        return request;
     }
 
     private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable<HttpObject> obsRequest) {
@@ -147,41 +186,28 @@ public class BlobRepoOverOSS implements BlobRepo {
         return this._bucketName + "." + this._ossclient.getEndpoint().getHost();
     }
 
-    private static Observable<HttpObject> buildObsRequest(final HttpRequest request, final Blob blob) {
-        return Observable.concat( 
+    private static Observable<HttpObject> buildObsRequest(
+            final HttpRequest request, 
+            final Observable<? extends HttpContent> content) {
+        return Observable.concat(
                     Observable.just(request), 
-                    blob.content().flatMap(new Func1<ByteBuf, Observable<HttpContent>>() {
-                        @Override
-                        public Observable<HttpContent> call(final ByteBuf buf) {
-                            return Observable.unsafeCreate(new Observable.OnSubscribe<HttpContent>() {
-                                @Override
-                                public void call(final Subscriber<? super HttpContent> subscriber) {
-                                    if (!subscriber.isUnsubscribed()) {
-                                        try {
-                                            if (null!=buf.retainedSlice()) {
-                                                final HttpContent content = new DefaultHttpContent(buf);
-                                                subscriber.add(Subscriptions.create(new Action0() {
-                                                    @Override
-                                                    public void call() {
-                                                        final boolean released = content.release();
-                                                        LOG.debug("{} unsubscribe cause call {}(HttpContent)'s release with return {}", 
-                                                                subscriber, content, released);
-                                                    }
-                                                }));
-                                                subscriber.onNext(content);
-                                                subscriber.onCompleted();
-                                            } else {
-                                                subscriber.onError(new RuntimeException("retain buf BUT return null"));
-                                            }
-                                        } catch (Exception e) {
-                                            subscriber.onError(e);
-                                        }
-                                    }
-                                }
-                            });
-                        }}),
-                    Observable.just(LastHttpContent.EMPTY_LAST_CONTENT)
-                );
+                    content,
+                    Observable.just(LastHttpContent.EMPTY_LAST_CONTENT));
+    }
+
+    private static Observable<HttpContent> buildBody(final Observable<? extends ByteBuf> content,
+            final ReferenceCountedCollector collector) {
+        return content.doOnNext(add2Collector(collector))
+        .flatMap(_BUF2CONTENT)
+        .doOnNext(add2Collector(collector));
+    }
+
+    private static <T extends ReferenceCounted> Action1<T> add2Collector(final ReferenceCountedCollector collector) {
+        return new Action1<T>() {
+            @Override
+            public void call(final T t) {
+                collector.add(t);
+            }};
     }
 
     private static String buildGMT4Now(final Date date) {

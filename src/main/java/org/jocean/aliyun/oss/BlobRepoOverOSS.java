@@ -96,14 +96,6 @@ public class BlobRepoOverOSS implements BlobRepo {
             .flatMap(callOSSAPI(
                 buildObsRequest(buildPutObjectRequest(host, objname, meta), 
                         content.flatMap(_BUF2CONTENT))));
-//        return Observable.unsafeCreate(new OnSubscribe<String>() {
-//            @Override
-//            public void call(final Subscriber<? super String> subscriber) {
-//                if (!subscriber.isUnsubscribed()) {
-//                        .subscribe(subscriber);
-//                }
-//            }
-//        });
     }
     
     private HttpRequest buildPutObjectRequest(final String host, 

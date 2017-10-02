@@ -18,7 +18,6 @@ import org.jocean.http.util.HttpMessageHolder;
 import org.jocean.http.util.RxNettys;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
-import org.jocean.netty.util.ReferenceCountedCollector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +39,10 @@ import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
-import io.netty.util.ReferenceCounted;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
 import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.functions.Func0;
 import rx.functions.Func1;
 import rx.subscriptions.Subscriptions;
@@ -89,46 +86,29 @@ public class BlobRepoOverOSS implements BlobRepo {
         
     public Observable<String> putObject(
             final String objname,
-            final Func0<? extends Blob> blobProducer,
-            final ReferenceCountedCollector collector) {
-        return Observable.unsafeCreate(new OnSubscribe<String>() {
-            @Override
-            public void call(final Subscriber<? super String> subscriber) {
-                if (!subscriber.isUnsubscribed()) {
-                    final Blob blob = blobProducer.call();
-
-                    if (null != blob) {
-                        collector.add(blob);
-                        // ensure blob will be release when
-                        // subscriber.unsubscribe
-                        subscriber.add(Subscriptions.create(new Action0() {
-                            @Override
-                            public void call() {
-                                final boolean released = blob.release();
-                                LOG.debug("{} unsubscribe cause call {} (Blob)'s release with return {}", 
-                                        subscriber, blob, released);
-                            }
-                        }));
-                        
-                        final String host = hostWithBucketname();
-                        _httpclient.initiator().remoteAddress(new InetSocketAddress(host, 80))
-                            .feature(Feature.ENABLE_LOGGING)
-                            .build()
-                            .flatMap(callOSSAPI(
-                                buildObsRequest(buildPutObjectRequest(host, objname, blob), 
-                                        buildBody(blob.content(), collector))))
-                            .subscribe(subscriber);
-                    } else {
-                        subscriber.onError(new RuntimeException("can't produce blob"));
-                    }
-                }
-            }
-        });
+            final ObjectMetadata meta,
+            final Observable<? extends ByteBuf> content) {
+        final String host = hostWithBucketname();
+        return _httpclient.initiator()
+            .remoteAddress(new InetSocketAddress(host, 80))
+            .feature(Feature.ENABLE_LOGGING)
+            .build()
+            .flatMap(callOSSAPI(
+                buildObsRequest(buildPutObjectRequest(host, objname, meta), 
+                        content.flatMap(_BUF2CONTENT))));
+//        return Observable.unsafeCreate(new OnSubscribe<String>() {
+//            @Override
+//            public void call(final Subscriber<? super String> subscriber) {
+//                if (!subscriber.isUnsubscribed()) {
+//                        .subscribe(subscriber);
+//                }
+//            }
+//        });
     }
     
     private HttpRequest buildPutObjectRequest(final String host, 
             final String objname, 
-            final Blob blob) {
+            final ObjectMetadata meta) {
         final HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.PUT,
                 "/" + objname);
 
@@ -139,10 +119,10 @@ public class BlobRepoOverOSS implements BlobRepo {
         request.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));
 
         // Content-Length header
-        request.headers().set(HttpHeaderNames.CONTENT_LENGTH, blob.contentLength());
+        request.headers().set(HttpHeaderNames.CONTENT_LENGTH, meta.getContentLength());
 
         // Content-Type header
-        request.headers().set(HttpHeaderNames.CONTENT_TYPE, blob.contentType());
+        request.headers().set(HttpHeaderNames.CONTENT_TYPE, meta.getContentType());
         
         new OSSRequestSigner( "/" + _bucketName + "/" + objname, 
                 _ossclient.getCredentialsProvider().getCredentials()).sign(request);
@@ -193,21 +173,6 @@ public class BlobRepoOverOSS implements BlobRepo {
                     Observable.just(request), 
                     content,
                     Observable.just(LastHttpContent.EMPTY_LAST_CONTENT));
-    }
-
-    private static Observable<HttpContent> buildBody(final Observable<? extends ByteBuf> content,
-            final ReferenceCountedCollector collector) {
-        return content.doOnNext(add2Collector(collector))
-        .flatMap(_BUF2CONTENT)
-        .doOnNext(add2Collector(collector));
-    }
-
-    private static <T extends ReferenceCounted> Action1<T> add2Collector(final ReferenceCountedCollector collector) {
-        return new Action1<T>() {
-            @Override
-            public void call(final T t) {
-                collector.add(t);
-            }};
     }
 
     private static String buildGMT4Now(final Date date) {

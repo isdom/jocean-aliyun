@@ -176,7 +176,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
 
     private static String buildGMT4Now(final Date date) {
-        final SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss 'GMT'", Locale.US);
+        final SimpleDateFormat sdf = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss 'GMT'", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("GMT")); // 设置时区为GMT
         return sdf.format(date);
     }

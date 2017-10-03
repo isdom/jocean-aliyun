@@ -95,7 +95,7 @@ public class BlobRepoOverOSS implements BlobRepo {
             .build()
             .flatMap(callOSSAPI(
                 buildObsRequest(buildPutObjectRequest(host, objname, meta), 
-                        content.flatMap(_BUF2CONTENT))));
+                        content/*.flatMap(_BUF2CONTENT)*/)));
     }
     
     private HttpRequest buildPutObjectRequest(final String host, 
@@ -121,7 +121,7 @@ public class BlobRepoOverOSS implements BlobRepo {
         return request;
     }
 
-    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable<HttpObject> obsRequest) {
+    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable</*Http*/Object> obsRequest) {
         return new Func1<HttpInitiator, Observable<String>>() {
             @Override
             public Observable<String> call(final HttpInitiator initiator) {
@@ -158,9 +158,9 @@ public class BlobRepoOverOSS implements BlobRepo {
         return this._bucketName + "." + this._ossclient.getEndpoint().getHost();
     }
 
-    private static Observable<HttpObject> buildObsRequest(
+    private static Observable<Object> buildObsRequest(
             final HttpRequest request, 
-            final Observable<? extends HttpContent> content) {
+            final Observable<? extends Object/*HttpContent*/> content) {
         return Observable.concat(
                     Observable.just(request), 
                     content,

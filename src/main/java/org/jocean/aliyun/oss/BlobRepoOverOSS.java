@@ -29,10 +29,8 @@ import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.handler.codec.http.DefaultHttpContent;
 import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
-import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
@@ -42,16 +40,15 @@ import io.netty.handler.codec.http.LastHttpContent;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
-import rx.functions.Action0;
 import rx.functions.Func0;
 import rx.functions.Func1;
-import rx.subscriptions.Subscriptions;
 
 public class BlobRepoOverOSS implements BlobRepo {
     
     private static final Logger LOG = 
         LoggerFactory.getLogger(BlobRepoOverOSS.class);
     
+    /*
     private static final Func1<ByteBuf, Observable<HttpContent>> _BUF2CONTENT = 
         new Func1<ByteBuf, Observable<HttpContent>>() {
         @Override
@@ -83,6 +80,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 }
             });
         }};
+        */
         
     public Observable<String> putObject(
             final String objname,
@@ -94,8 +92,7 @@ public class BlobRepoOverOSS implements BlobRepo {
             .feature(Feature.ENABLE_LOGGING)
             .build()
             .flatMap(callOSSAPI(
-                buildObsRequest(buildPutObjectRequest(host, objname, meta), 
-                        content/*.flatMap(_BUF2CONTENT)*/)));
+                buildObsRequest(buildPutObjectRequest(host, objname, meta), content)));
     }
     
     private HttpRequest buildPutObjectRequest(final String host, 
@@ -121,7 +118,7 @@ public class BlobRepoOverOSS implements BlobRepo {
         return request;
     }
 
-    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable</*Http*/Object> obsRequest) {
+    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable<? extends Object> obsRequest) {
         return new Func1<HttpInitiator, Observable<String>>() {
             @Override
             public Observable<String> call(final HttpInitiator initiator) {
@@ -158,9 +155,9 @@ public class BlobRepoOverOSS implements BlobRepo {
         return this._bucketName + "." + this._ossclient.getEndpoint().getHost();
     }
 
-    private static Observable<Object> buildObsRequest(
+    private static Observable<? extends Object> buildObsRequest(
             final HttpRequest request, 
-            final Observable<? extends Object/*HttpContent*/> content) {
+            final Observable<? extends Object> content) {
         return Observable.concat(
                     Observable.just(request), 
                     content,

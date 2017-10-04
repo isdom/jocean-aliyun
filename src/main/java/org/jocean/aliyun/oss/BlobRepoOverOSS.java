@@ -157,11 +157,11 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     private static Observable<? extends Object> buildObsRequest(
             final HttpRequest request, 
-            final Observable<? extends Object> content) {
+            final Observable<? extends ByteBuf> content) {
         return Observable.concat(
-                    Observable.just(request), 
-                    content,
-                    Observable.just(LastHttpContent.EMPTY_LAST_CONTENT));
+            Observable.just(request), 
+            content,
+            Observable.just(LastHttpContent.EMPTY_LAST_CONTENT));
     }
 
     private static String buildGMT4Now(final Date date) {

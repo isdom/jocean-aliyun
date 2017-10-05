@@ -87,7 +87,7 @@ public class BlobRepoOverOSS implements BlobRepo {
             final ObjectMetadata meta,
             final Observable<? extends ByteBuf> content) {
         final String host = hostWithBucketname();
-        return _httpclient.initiator()
+        return this._httpclient.initiator()
             .remoteAddress(new InetSocketAddress(host, 80))
             .feature(Feature.ENABLE_LOGGING)
             .build()
@@ -113,8 +113,8 @@ public class BlobRepoOverOSS implements BlobRepo {
         // Content-Type header
         request.headers().set(HttpHeaderNames.CONTENT_TYPE, meta.getContentType());
         
-        new OSSRequestSigner( "/" + _bucketName + "/" + objname, 
-                _ossclient.getCredentialsProvider().getCredentials()).sign(request);
+        new OSSRequestSigner( "/" + this._bucketName + "/" + objname, 
+                this._ossclient.getCredentialsProvider().getCredentials()).sign(request);
         return request;
     }
 

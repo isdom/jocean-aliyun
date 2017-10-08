@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Feature;
+import org.jocean.http.WritePolicy;
 import org.jocean.http.client.HttpClient;
 import org.jocean.http.client.HttpClient.HttpInitiator;
 import org.jocean.http.util.HttpMessageHolder;
@@ -28,7 +29,6 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -47,52 +47,20 @@ public class BlobRepoOverOSS implements BlobRepo {
     
     private static final Logger LOG = 
         LoggerFactory.getLogger(BlobRepoOverOSS.class);
-    
-    /*
-    private static final Func1<ByteBuf, Observable<HttpContent>> _BUF2CONTENT = 
-        new Func1<ByteBuf, Observable<HttpContent>>() {
-        @Override
-        public Observable<HttpContent> call(final ByteBuf buf) {
-            return Observable.unsafeCreate(new Observable.OnSubscribe<HttpContent>() {
-                @Override
-                public void call(final Subscriber<? super HttpContent> subscriber) {
-                    if (!subscriber.isUnsubscribed()) {
-                        try {
-                            if (null!=buf.retainedSlice()) {
-                                final HttpContent content = new DefaultHttpContent(buf);
-                                subscriber.add(Subscriptions.create(new Action0() {
-                                    @Override
-                                    public void call() {
-                                        final boolean released = content.release();
-                                        LOG.debug("{} unsubscribe cause call {}(HttpContent)'s release with return {}", 
-                                                subscriber, content, released);
-                                    }
-                                }));
-                                subscriber.onNext(content);
-                                subscriber.onCompleted();
-                            } else {
-                                subscriber.onError(new RuntimeException("retain buf BUT return null"));
-                            }
-                        } catch (Exception e) {
-                            subscriber.onError(e);
-                        }
-                    }
-                }
-            });
-        }};
-        */
         
     public Observable<String> putObject(
             final String objname,
             final ObjectMetadata meta,
-            final Observable<? extends ByteBuf> content) {
+            final Observable<?> content,
+            final WritePolicy writePolicy) {
         final String host = hostWithBucketname();
         return this._httpclient.initiator()
             .remoteAddress(new InetSocketAddress(host, 80))
             .feature(Feature.ENABLE_LOGGING)
             .build()
             .flatMap(callOSSAPI(
-                buildObsRequest(buildPutObjectRequest(host, objname, meta), content)));
+                buildObsRequest(buildPutObjectRequest(host, objname, meta), content),
+                writePolicy));
     }
     
     private HttpRequest buildPutObjectRequest(final String host, 
@@ -118,13 +86,14 @@ public class BlobRepoOverOSS implements BlobRepo {
         return request;
     }
 
-    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable<? extends Object> obsRequest) {
+    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable<? extends Object> obsRequest, 
+            final WritePolicy writePolicy) {
         return new Func1<HttpInitiator, Observable<String>>() {
             @Override
             public Observable<String> call(final HttpInitiator initiator) {
                 final HttpMessageHolder holder = new HttpMessageHolder();
                 initiator.doOnTerminate(holder.closer());
-                return initiator.defineInteraction(obsRequest)
+                return initiator.defineInteraction(obsRequest, writePolicy)
                         .compose(holder.<HttpObject>assembleAndHold())
                         .last()
                         .flatMap(new Func1<HttpObject, Observable<String>>() {
@@ -157,7 +126,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     private static Observable<? extends Object> buildObsRequest(
             final HttpRequest request, 
-            final Observable<? extends ByteBuf> content) {
+            final Observable<?> content) {
         return Observable.concat(
             Observable.just(request), 
             content,

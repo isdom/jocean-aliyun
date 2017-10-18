@@ -87,11 +87,13 @@ public class BlobRepoOverOSS implements BlobRepo {
 
             @Override
             public Observable<String> build() {
-                if (null == objnameRef.get() || 0 == meta.getContentLength() || null == meta.getContentType() || null == contentRef.get()) {
+                if (null == objnameRef.get() || 0 == meta.getContentLength() || null == meta.getContentType()
+                        || null == contentRef.get()) {
                     throw new RuntimeException("invalid put object parameters.");
                 }
                 return putObject(objnameRef.get(), meta, contentRef.get(), writePolicyRef.get());
-            }};
+            }
+        };
     }
     
     public Observable<String> putObject(

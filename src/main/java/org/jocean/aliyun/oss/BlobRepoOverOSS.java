@@ -1,5 +1,6 @@
 package org.jocean.aliyun.oss;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
@@ -26,6 +27,7 @@ import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.CopyObjectResult;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
+import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
 import io.netty.handler.codec.http.DefaultHttpRequest;
@@ -187,79 +189,42 @@ public class BlobRepoOverOSS implements BlobRepo {
         return sdf.format(date);
     }
 
-//    @Override
-//    public Observable<PutResult> putBlob(final String key, 
-//            final Blob blob) {
-//        return Observable.unsafeCreate(new OnSubscribe<PutResult>() {
-//            @Override
-//            public void call(Subscriber<? super PutResult> subscriber) {
-//                if (!subscriber.isUnsubscribed()) {
-//                    final ObjectMetadata meta = new ObjectMetadata();
-//                    // 必须设置ContentLength
-//                    meta.setContentLength(blob.contentLength());
-//                    meta.setContentType(blob.contentType());
-//                    try (final InputStream is = blob.inputStream()) {
-//                        final PutObjectResult result = _ossclient.putObject(
-//                                _bucketName, 
-//                                key, 
-//                                is, 
-//                                meta);
-//                        LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
-//                    } catch (IOException e) {
-//                        LOG.warn("exception when close inputStream, detail: {}", 
-//                            ExceptionUtils.exception2detail(e));
-//                    }
-//                    subscriber.onNext(new PutResult() {
-//                        @Override
-//                        public String key() {
-//                            return key;
-//                        }
-//
-//                        @Override
-//                        public Blob blob() {
-//                            return blob;
-//                        }});
-//                    subscriber.onCompleted();
-//                }
-//            }});
-//    }
-//    
-//    @Override
-//    public Observable<String> putBlob(final String key, final Func0<? extends Blob> blobProducer) {
-//        return Observable.unsafeCreate(new OnSubscribe<String>() {
-//            @Override
-//            public void call(Subscriber<? super String> subscriber) {
-//                if (!subscriber.isUnsubscribed()) {
-//                    final Blob blob = blobProducer.call();
-//                    
-//                    if (null != blob) {
-//                        try (final InputStream is = blob.inputStream()) {
-//                            final ObjectMetadata meta = new ObjectMetadata();
-//                            // 必须设置ContentLength
-//                            meta.setContentLength(blob.contentLength());
-//                            meta.setContentType(blob.contentType());
-//                            final PutObjectResult result = _ossclient.putObject(
-//                                    _bucketName, 
-//                                    key, 
-//                                    is, 
-//                                    meta);
-//                            LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
-//                        } catch (IOException e) {
-//                            LOG.warn("exception when close inputStream, detail: {}", 
-//                                ExceptionUtils.exception2detail(e));
-//                            subscriber.onError(e);
-//                            return;
-//                        } finally {
-//                            blob.release();
-//                        }
-//                        subscriber.onNext(key);
-//                        subscriber.onCompleted();
-//                    } else {
-//                        subscriber.onError(new RuntimeException("can't produce blob"));
-//                    }
-//                }
-//            }});
-//    }
+    @Override
+    public Observable<PutResult> putBlob(final String key, 
+            final Blob blob) {
+        return Observable.unsafeCreate(new OnSubscribe<PutResult>() {
+            @Override
+            public void call(Subscriber<? super PutResult> subscriber) {
+                if (!subscriber.isUnsubscribed()) {
+                    final ObjectMetadata meta = new ObjectMetadata();
+                    // 必须设置ContentLength
+                    meta.setContentLength(blob.contentLength());
+                    meta.setContentType(blob.contentType());
+                    try (final InputStream is = blob.inputStream()) {
+                        final PutObjectResult result = _ossclient.putObject(
+                                _bucketName, 
+                                key, 
+                                is, 
+                                meta);
+                        LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
+                    } catch (IOException e) {
+                        LOG.warn("exception when close inputStream, detail: {}", 
+                            ExceptionUtils.exception2detail(e));
+                    }
+                    subscriber.onNext(new PutResult() {
+                        @Override
+                        public String key() {
+                            return key;
+                        }
+
+                        @Override
+                        public Blob blob() {
+                            return blob;
+                        }});
+                    subscriber.onCompleted();
+                }
+            }});
+    }
     
     @Override
     public Observable<String> copyBlob(final String sourceKey, final String destinationKey) {

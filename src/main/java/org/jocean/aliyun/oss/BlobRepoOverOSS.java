@@ -110,7 +110,12 @@ public class BlobRepoOverOSS implements BlobRepo {
             .build()
             .flatMap(callOSSAPI(
                 buildObsRequest(buildPutObjectRequest(host, objname, meta), content),
-                writePolicy));
+                writePolicy))
+            .map(new Func1<String, String>() {
+                @Override
+                public String call(final String etag) {
+                    return objname;
+                }});
     }
     
     private HttpRequest buildPutObjectRequest(final String host, 

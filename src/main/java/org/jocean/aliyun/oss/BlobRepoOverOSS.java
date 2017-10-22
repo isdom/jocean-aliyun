@@ -16,8 +16,8 @@ import org.jocean.http.Feature;
 import org.jocean.http.WritePolicy;
 import org.jocean.http.client.HttpClient;
 import org.jocean.http.client.HttpClient.HttpInitiator;
-import org.jocean.http.util.HttpMessageHolder;
 import org.jocean.http.util.RxNettys;
+import org.jocean.idiom.DisposableWrapper;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
@@ -34,7 +34,6 @@ import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.codec.http.LastHttpContent;
@@ -146,30 +145,24 @@ public class BlobRepoOverOSS implements BlobRepo {
         return new Func1<HttpInitiator, Observable<String>>() {
             @Override
             public Observable<String> call(final HttpInitiator initiator) {
-                final HttpMessageHolder holder = new HttpMessageHolder();
-                initiator.doOnTerminate(holder.closer());
                 return initiator.defineInteraction(obsRequest, writePolicy)
-                        .compose(holder.<HttpObject>assembleAndHold())
-                        .last()
-                        .flatMap(new Func1<HttpObject, Observable<String>>() {
+                        .compose(RxNettys.message2fullresp(initiator))
+                        .flatMap(new Func1<DisposableWrapper<FullHttpResponse>, Observable<String>>() {
                             @Override
-                            public Observable<String> call(final HttpObject any) {
-                                final FullHttpResponse fhr = holder.fullOf(RxNettys.BUILD_FULL_RESPONSE).call();
-                                if (null != fhr) {
-                                    try {
+                            public Observable<String> call(final DisposableWrapper<FullHttpResponse> dwresp) {
+                                try {
 //                                        return Observable.just(new String(
 //                                            ByteStreams.toByteArray(new ByteBufInputStream(fhr.content())), 
 //                                            CharsetUtil.UTF_8));
-                                        return Observable.just(fhr.headers().get(HttpHeaderNames.ETAG));
-                                    }
+                                    return Observable.just(dwresp.unwrap().headers().get(HttpHeaderNames.ETAG));
+                                }
 //                                    catch (IOException e) {
 //                                        return Observable.error(e);
 //                                    }
-                                    finally {
-                                        fhr.release();
-                                    }
+                                finally {
+                                    dwresp.dispose();
                                 }
-                                return Observable.error(new RuntimeException("can't get response"));
+//                                return Observable.error(new RuntimeException("can't get response"));
                             }})
                         .doOnUnsubscribe(initiator.closer());
             }};

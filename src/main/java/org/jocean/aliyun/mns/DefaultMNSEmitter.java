@@ -2,14 +2,14 @@ package org.jocean.aliyun.mns;
 
 import javax.inject.Inject;
 
-import org.jocean.aliyun.MNSSender;
+import org.jocean.aliyun.MNSEmitter;
 import org.springframework.beans.factory.annotation.Value;
 
-public class DefaultMNSSender implements MNSSender {
+public class DefaultMNSEmitter implements MNSEmitter {
 
     @Override
-    public void send(final String msg) {
-        _producer.send(msg,  this._topicId, this._tag);
+    public void emit(final String msg) {
+        this._producer.send(msg,  this._topicId, this._tag);
     }
 
     @Inject 

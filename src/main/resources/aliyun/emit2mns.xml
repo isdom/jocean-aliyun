@@ -4,6 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     
-    <bean class="org.jocean.aliyun.mns.DefaultMNSEmitter" scope="singleton" />
+    <bean id="mnsemitter" class="org.jocean.aliyun.mns.DefaultMNSEmitter" 
+        scope="singleton" />
+    <alias name="mnsemitter" alias="${name}"/>
     
 </beans>

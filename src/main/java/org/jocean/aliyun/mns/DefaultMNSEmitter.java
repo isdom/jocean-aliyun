@@ -3,8 +3,8 @@ package org.jocean.aliyun.mns;
 import javax.inject.Inject;
 
 import org.jocean.aliyun.MNSEmitter;
-import org.jocean.j2se.jmx.MBeanRegister;
-import org.jocean.j2se.jmx.MBeanRegisterAware;
+import org.jocean.idiom.jmx.MBeanRegister;
+import org.jocean.idiom.jmx.MBeanRegisterAware;
 import org.springframework.beans.factory.annotation.Value;
 
 public class DefaultMNSEmitter implements MNSEmitter, MBeanRegisterAware {

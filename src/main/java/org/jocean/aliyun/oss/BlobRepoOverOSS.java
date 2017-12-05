@@ -17,11 +17,13 @@ import org.jocean.http.WritePolicy;
 import org.jocean.http.client.HttpClient;
 import org.jocean.http.client.HttpClient.HttpInitiator;
 import org.jocean.http.util.RxNettys;
+import org.jocean.idiom.BeanFinder;
 import org.jocean.idiom.DisposableWrapper;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.model.CopyObjectResult;
@@ -103,10 +105,11 @@ public class BlobRepoOverOSS implements BlobRepo {
             final Observable<?> content,
             final WritePolicy writePolicy) {
         final String host = hostWithBucketname();
-        return this._httpclient.initiator()
-            .remoteAddress(new InetSocketAddress(host, 80))
-            .feature(Feature.ENABLE_LOGGING)
-            .build()
+        return this._finder.find(HttpClient.class).flatMap(client ->
+                client.initiator()
+                .remoteAddress(new InetSocketAddress(host, 80))
+                .feature(Feature.ENABLE_LOGGING)
+                .build())
             .flatMap(callOSSAPI(
                 buildObsRequest(buildPutObjectRequest(host, objname, meta), content),
                 writePolicy))
@@ -291,19 +294,12 @@ public class BlobRepoOverOSS implements BlobRepo {
             }});
     }
     
-    public void setBucketName(final String bucketName) {
-        this._bucketName = bucketName;
-    }
-    
-    public void setOSSClient(final OSSClient ossclient) {
-        this._ossclient = ossclient;
-    }
-    
     @Inject
     private OSSClient _ossclient;
     
     @Inject
-    private HttpClient _httpclient;
+    private BeanFinder _finder;
     
+    @Value("${bucket.name}")
     private String _bucketName;
 }

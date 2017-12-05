@@ -18,7 +18,6 @@ import org.jocean.http.client.HttpClient;
 import org.jocean.http.client.HttpClient.HttpInitiator;
 import org.jocean.http.util.RxNettys;
 import org.jocean.idiom.BeanFinder;
-import org.jocean.idiom.DisposableWrapper;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
@@ -33,7 +32,6 @@ import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
 import io.netty.handler.codec.http.DefaultHttpRequest;
-import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
@@ -150,24 +148,21 @@ public class BlobRepoOverOSS implements BlobRepo {
             public Observable<String> call(final HttpInitiator initiator) {
                 return initiator.defineInteraction(obsRequest, writePolicy)
                         .compose(RxNettys.message2fullresp(initiator))
-                        .flatMap(new Func1<DisposableWrapper<FullHttpResponse>, Observable<String>>() {
-                            @Override
-                            public Observable<String> call(final DisposableWrapper<FullHttpResponse> dwresp) {
-                                try {
+                        .flatMap(dwresp -> {
+                            try {
 //                                        return Observable.just(new String(
 //                                            ByteStreams.toByteArray(new ByteBufInputStream(fhr.content())), 
 //                                            CharsetUtil.UTF_8));
-                                    return Observable.just(dwresp.unwrap().headers().get(HttpHeaderNames.ETAG));
-                                }
+                                return Observable.just(dwresp.unwrap().headers().get(HttpHeaderNames.ETAG));
+                            }
 //                                    catch (IOException e) {
 //                                        return Observable.error(e);
 //                                    }
-                                finally {
-                                    dwresp.dispose();
-                                }
+                            finally {
+                                dwresp.dispose();
+                            }
 //                                return Observable.error(new RuntimeException("can't get response"));
-                            }})
-                        .doOnUnsubscribe(initiator.closer());
+                        }).doOnUnsubscribe(initiator.closer());
             }};
     }
 

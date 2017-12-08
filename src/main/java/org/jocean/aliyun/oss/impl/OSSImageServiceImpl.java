@@ -13,6 +13,7 @@ import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
 import org.jocean.http.Feature;
 import org.jocean.http.rosa.SignalClient;
+import org.jocean.idiom.BeanFinder;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo.Blob;
 import org.slf4j.Logger;
@@ -21,7 +22,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Lists;
 
 import rx.Observable;
-import rx.functions.Func1;
 
 public class OSSImageServiceImpl implements OSSImageService {
     private static final Logger LOG = 
@@ -33,19 +33,15 @@ public class OSSImageServiceImpl implements OSSImageService {
             final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
             req.setPathToImage(pathToImage);
             req.setProcessActions(actions().info().and().build());
-            
-            return _signalClient.interaction().request(req)
-                    .feature(
-                        Feature.ENABLE_LOGGING,
-                        Feature.ENABLE_COMPRESSOR,
-                        new SignalClient.UsingMethod(GET.class),
-                        new SignalClient.UsingUri(new URI("http://" + _bucketName + "." + _endpoint)),
-                        new SignalClient.DecodeResponseBodyAs(GetImageInfoResponse.class))
-                    .<GetImageInfoResponse>build()
-                    .map(new Func1<GetImageInfoResponse, ImageInfo>() {
-                        @Override
-                        public ImageInfo call(final GetImageInfoResponse resp) {
-                            return new ImageInfo() {
+            final URI uri = new URI("http://" + _bucketName + "." + _endpoint);
+            return this._finder.find(SignalClient.class).flatMap(signal -> signal.interaction().request(req)
+                    .feature(Feature.ENABLE_LOGGING)
+                    .feature(Feature.ENABLE_COMPRESSOR)
+                    .feature(new SignalClient.UsingMethod(GET.class))
+                    .feature(new SignalClient.UsingUri(uri))
+                    .feature(new SignalClient.DecodeResponseBodyAs(GetImageInfoResponse.class))
+                    .<GetImageInfoResponse>build())
+                    .<ImageInfo>map(resp -> new ImageInfo() {
                                 @Override
                                 public String toString() {
                                     final StringBuilder builder = new StringBuilder();
@@ -75,8 +71,7 @@ public class OSSImageServiceImpl implements OSSImageService {
                                 @Override
                                 public int imageHeight() {
                                     return resp.getImageHeight();
-                                }};
-                        }});
+                                }});
         } catch (URISyntaxException e) {
             LOG.warn("exception when signalClient.defineInteraction, detail: {}",
                     ExceptionUtils.exception2detail(e));
@@ -89,23 +84,21 @@ public class OSSImageServiceImpl implements OSSImageService {
             final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
             req.setPathToImage(pathToImage);
             req.setProcessActions(actions);
+            final URI uri = new URI("http://" + _bucketName + "." + _endpoint);
             
-            return _signalClient.interaction().request(req)
-                    .feature(
-                        Feature.ENABLE_LOGGING,
-                        Feature.ENABLE_COMPRESSOR,
-                        new SignalClient.UsingMethod(GET.class),
-                        new SignalClient.UsingUri(new URI("http://" + _bucketName + "." + _endpoint)),
-                        new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
-                    .<GetImageContentResponse>build()
-                    .map(new Func1<GetImageContentResponse, Blob>() {
-                        @Override
-                        public Blob call(final GetImageContentResponse resp) {
+            return this._finder.find(SignalClient.class).flatMap(signal -> signal.interaction().request(req)
+                    .feature(Feature.ENABLE_LOGGING)
+                    .feature(Feature.ENABLE_COMPRESSOR)
+                    .feature(new SignalClient.UsingMethod(GET.class))
+                    .feature(new SignalClient.UsingUri(uri))
+                    .feature(new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
+                    .<GetImageContentResponse>build())
+                    .map(resp -> {
                             final byte[] content = resp.content();
                             final String contentType = resp.contentType();
 //                            final String contentDisposition = resp.contentDisposition();
                             return Blob.Util.fromByteArray(content, contentType, null, null);
-                        }});
+                        });
         } catch (URISyntaxException e) {
             LOG.warn("exception when signalClient.defineInteraction, detail: {}",
                     ExceptionUtils.exception2detail(e));
@@ -122,7 +115,7 @@ public class OSSImageServiceImpl implements OSSImageService {
     }
 
     @Inject
-    private SignalClient _signalClient;
+    private BeanFinder _finder;
     
     private String _endpoint;
     

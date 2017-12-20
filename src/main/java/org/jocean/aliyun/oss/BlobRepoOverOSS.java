@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Feature;
+import org.jocean.http.MessageBody;
 import org.jocean.http.WritePolicy;
 import org.jocean.http.client.HttpClient;
 import org.jocean.http.client.HttpClient.HttpInitiator;
@@ -49,8 +50,7 @@ public class BlobRepoOverOSS implements BlobRepo {
         
     @Override
     public PutObjectBuilder putObject() {
-        final ObjectMetadata meta = new ObjectMetadata();
-        final AtomicReference<Observable<?>> contentRef = new AtomicReference<>(null);
+        final AtomicReference<MessageBody> bodyRef = new AtomicReference<>(null);
         final AtomicReference<String> objnameRef = new AtomicReference<>(null);
         final AtomicReference<WritePolicy> writePolicyRef = new AtomicReference<>(null);
         
@@ -63,20 +63,8 @@ public class BlobRepoOverOSS implements BlobRepo {
             }
 
             @Override
-            public PutObjectBuilder contentLength(final long contentLength) {
-                meta.setContentLength(contentLength);
-                return this;
-            }
-
-            @Override
-            public PutObjectBuilder contentType(final String contentType) {
-                meta.setContentType(contentType);
-                return this;
-            }
-
-            @Override
-            public PutObjectBuilder content(final Observable<?> content) {
-                contentRef.set(content);
+            public PutObjectBuilder content(final MessageBody body) {
+                bodyRef.set(body);
                 return this;
             }
 
@@ -88,19 +76,17 @@ public class BlobRepoOverOSS implements BlobRepo {
 
             @Override
             public Observable<String> build() {
-                if (null == objnameRef.get() || 0 == meta.getContentLength() || null == meta.getContentType()
-                        || null == contentRef.get()) {
+                if (null == objnameRef.get() || null == bodyRef.get()) {
                     throw new RuntimeException("invalid put object parameters.");
                 }
-                return putObject(objnameRef.get(), meta, contentRef.get(), writePolicyRef.get());
+                return putObject(objnameRef.get(), bodyRef.get(), writePolicyRef.get());
             }
         };
     }
     
     public Observable<String> putObject(
             final String objname,
-            final ObjectMetadata meta,
-            final Observable<?> content,
+            final MessageBody body,
             final WritePolicy writePolicy) {
         final String host = hostWithBucketname();
         return this._finder.find(HttpClient.class).flatMap(client ->
@@ -109,14 +95,14 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .feature(Feature.ENABLE_LOGGING)
                 .build())
             .flatMap(callOSSAPI(
-                buildObsRequest(buildPutObjectRequest(host, objname, meta), content),
+                buildObsRequest(buildPutObjectRequest(host, objname, body), body.content()),
                 writePolicy))
             .map(etag->objname);
     }
     
     private HttpRequest buildPutObjectRequest(final String host, 
             final String objname, 
-            final ObjectMetadata meta) {
+            final MessageBody body) {
         final HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.PUT,
                 "/" + objname);
 
@@ -127,10 +113,10 @@ public class BlobRepoOverOSS implements BlobRepo {
         request.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));
 
         // Content-Length header
-        request.headers().set(HttpHeaderNames.CONTENT_LENGTH, meta.getContentLength());
+        request.headers().set(HttpHeaderNames.CONTENT_LENGTH, body.contentLength());
 
         // Content-Type header
-        request.headers().set(HttpHeaderNames.CONTENT_TYPE, meta.getContentType());
+        request.headers().set(HttpHeaderNames.CONTENT_TYPE, body.contentType());
         
         new OSSRequestSigner( "/" + this._bucketName + "/" + objname, 
                 this._ossclient.getCredentialsProvider().getCredentials()).sign(request);

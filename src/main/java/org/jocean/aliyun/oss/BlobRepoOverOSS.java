@@ -80,13 +80,13 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
     
     public Observable<String> putObject(final String objname, final MessageBody body, final WritePolicy writePolicy) {
-        return this._finder.find(HttpClient.class).flatMap(client -> MessageUtil.interaction(client)
-                .method(HttpMethod.PUT).uri(uri4bucket()).path("/" + objname).onrequest(obj -> {
-                    if (obj instanceof HttpRequest) {
-                        addDateAndSign((HttpRequest) obj, objname);
-                    }
-                }).body(terminable -> Observable.just(body)).writePolicy(writePolicy).feature(Feature.ENABLE_LOGGING)
-                .execution())
+        return this._finder.find(HttpClient.class)
+                .flatMap(client -> MessageUtil.interaction(client).method(HttpMethod.PUT).uri(uri4bucket())
+                        .path("/" + objname).body(Observable.just(body)).onrequest(obj -> {
+                            if (obj instanceof HttpRequest) {
+                                addDateAndSign((HttpRequest) obj, objname);
+                            }
+                        }).writePolicy(writePolicy).feature(Feature.ENABLE_LOGGING).execution())
                 .flatMap(execution -> execution.execute().compose(RxNettys.message2fullresp(execution.initiator(), true))
                             .doOnUnsubscribe(execution.initiator().closer()))
                 .map(dwresp -> dwresp.unwrap().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);

@@ -2,7 +2,6 @@ package org.jocean.aliyun.oss;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetSocketAddress;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -14,9 +13,9 @@ import javax.inject.Inject;
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Feature;
 import org.jocean.http.MessageBody;
+import org.jocean.http.MessageUtil;
 import org.jocean.http.WritePolicy;
 import org.jocean.http.client.HttpClient;
-import org.jocean.http.client.HttpClient.HttpInitiator;
 import org.jocean.http.util.RxNettys;
 import org.jocean.idiom.BeanFinder;
 import org.jocean.idiom.ExceptionUtils;
@@ -32,16 +31,12 @@ import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
-import io.netty.handler.codec.http.DefaultHttpRequest;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.HttpVersion;
-import io.netty.handler.codec.http.LastHttpContent;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
-import rx.functions.Func1;
 
 public class BlobRepoOverOSS implements BlobRepo {
     
@@ -84,81 +79,29 @@ public class BlobRepoOverOSS implements BlobRepo {
         };
     }
     
-    public Observable<String> putObject(
-            final String objname,
-            final MessageBody body,
-            final WritePolicy writePolicy) {
-        final String host = hostWithBucketname();
-        return this._finder.find(HttpClient.class).flatMap(client ->
-                client.initiator()
-                .remoteAddress(new InetSocketAddress(host, 80))
-                .feature(Feature.ENABLE_LOGGING)
-                .build())
-            .flatMap(callOSSAPI(
-                buildObsRequest(buildPutObjectRequest(host, objname, body), body.content()),
-                writePolicy))
-            .map(etag->objname);
+    public Observable<String> putObject(final String objname, final MessageBody body, final WritePolicy writePolicy) {
+        return this._finder.find(HttpClient.class).flatMap(client -> MessageUtil.interaction(client)
+                .method(HttpMethod.PUT).uri(uri4bucket()).path("/" + objname).onrequest(obj -> {
+                    if (obj instanceof HttpRequest) {
+                        addDateAndSign((HttpRequest) obj, objname);
+                    }
+                }).body(terminable -> Observable.just(body)).writePolicy(writePolicy).feature(Feature.ENABLE_LOGGING)
+                .execution())
+                .flatMap(execution -> execution.execute().compose(RxNettys.message2fullresp(execution.initiator(), true))
+                            .doOnUnsubscribe(execution.initiator().closer()))
+                .map(dwresp -> dwresp.unwrap().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);
     }
     
-    private HttpRequest buildPutObjectRequest(final String host, 
-            final String objname, 
-            final MessageBody body) {
-        final HttpRequest request = new DefaultHttpRequest(HttpVersion.HTTP_1_1, HttpMethod.PUT,
-                "/" + objname);
-
-        // Host header
-        request.headers().set(HttpHeaderNames.HOST, host);
-
+    private void addDateAndSign(final HttpRequest request, final String objname) {
         // Date header
         request.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));
 
-        // Content-Length header
-        request.headers().set(HttpHeaderNames.CONTENT_LENGTH, body.contentLength());
-
-        // Content-Type header
-        request.headers().set(HttpHeaderNames.CONTENT_TYPE, body.contentType());
-        
         new OSSRequestSigner( "/" + this._bucketName + "/" + objname, 
                 this._ossclient.getCredentialsProvider().getCredentials()).sign(request);
-        return request;
     }
 
-    private static Func1<HttpInitiator, Observable<String>> callOSSAPI(final Observable<? extends Object> obsRequest, 
-            final WritePolicy writePolicy) {
-        return new Func1<HttpInitiator, Observable<String>>() {
-            @Override
-            public Observable<String> call(final HttpInitiator initiator) {
-                return initiator.defineInteraction(obsRequest, writePolicy)
-                        .compose(RxNettys.message2fullresp(initiator))
-                        .flatMap(dwresp -> {
-                            try {
-//                                        return Observable.just(new String(
-//                                            ByteStreams.toByteArray(new ByteBufInputStream(fhr.content())), 
-//                                            CharsetUtil.UTF_8));
-                                return Observable.just(dwresp.unwrap().headers().get(HttpHeaderNames.ETAG));
-                            }
-//                                    catch (IOException e) {
-//                                        return Observable.error(e);
-//                                    }
-                            finally {
-                                dwresp.dispose();
-                            }
-//                                return Observable.error(new RuntimeException("can't get response"));
-                        }).doOnUnsubscribe(initiator.closer());
-            }};
-    }
-
-    private String hostWithBucketname() {
-        return this._bucketName + "." + this._ossclient.getEndpoint().getHost();
-    }
-
-    private static Observable<? extends Object> buildObsRequest(
-            final HttpRequest request, 
-            final Observable<?> content) {
-        return Observable.concat(
-            Observable.just(request), 
-            content,
-            Observable.just(LastHttpContent.EMPTY_LAST_CONTENT));
+    private String uri4bucket() {
+        return "http://" + this._bucketName + "." + this._ossclient.getEndpoint().getHost();
     }
 
     private static String buildGMT4Now(final Date date) {

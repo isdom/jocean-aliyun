@@ -16,7 +16,6 @@ import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
 import org.jocean.http.WritePolicy;
 import org.jocean.http.client.HttpClient;
-import org.jocean.http.util.RxNettys;
 import org.jocean.idiom.BeanFinder;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
@@ -87,9 +86,9 @@ public class BlobRepoOverOSS implements BlobRepo {
                                 addDateAndSign((HttpRequest) obj, objname);
                             }
                         }).writePolicy(writePolicy).feature(Feature.ENABLE_LOGGING).execution())
-                .flatMap(execution -> execution.execute().compose(RxNettys.message2fullresp(execution.initiator(), true))
+                .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                             .doOnUnsubscribe(execution.initiator().closer()))
-                .map(dwresp -> dwresp.unwrap().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);
+                .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);
     }
     
     private void addDateAndSign(final HttpRequest request, final String objname) {

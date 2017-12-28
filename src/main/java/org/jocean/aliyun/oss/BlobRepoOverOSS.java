@@ -87,6 +87,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                             }
                         }).writePolicy(writePolicy).feature(Feature.ENABLE_LOGGING).execution())
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
+                            // TODO: deal with error
                             .doOnUnsubscribe(execution.initiator().closer()))
                 .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);
     }

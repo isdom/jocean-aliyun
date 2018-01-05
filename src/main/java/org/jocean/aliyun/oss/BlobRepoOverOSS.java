@@ -14,7 +14,6 @@ import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Feature;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
-import org.jocean.http.WritePolicy;
 import org.jocean.http.client.HttpClient;
 import org.jocean.idiom.BeanFinder;
 import org.jocean.idiom.ExceptionUtils;
@@ -46,7 +45,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     public PutObjectBuilder putObject() {
         final AtomicReference<MessageBody> bodyRef = new AtomicReference<>(null);
         final AtomicReference<String> objnameRef = new AtomicReference<>(null);
-        final AtomicReference<WritePolicy> writePolicyRef = new AtomicReference<>(null);
+//        final AtomicReference<WritePolicy> writePolicyRef = new AtomicReference<>(null);
         
         return new PutObjectBuilder() {
 
@@ -62,30 +61,30 @@ public class BlobRepoOverOSS implements BlobRepo {
                 return this;
             }
 
-            @Override
-            public PutObjectBuilder writePolicy(final WritePolicy writePolicy) {
-                writePolicyRef.set(writePolicy);
-                return this;
-            }
+//            @Override
+//            public PutObjectBuilder writePolicy(final WritePolicy writePolicy) {
+//                writePolicyRef.set(writePolicy);
+//                return this;
+//            }
 
             @Override
             public Observable<String> build() {
                 if (null == objnameRef.get() || null == bodyRef.get()) {
                     throw new RuntimeException("invalid put object parameters.");
                 }
-                return putObject(objnameRef.get(), bodyRef.get(), writePolicyRef.get());
+                return putObject(objnameRef.get(), bodyRef.get() /*, writePolicyRef.get()*/);
             }
         };
     }
     
-    public Observable<String> putObject(final String objname, final MessageBody body, final WritePolicy writePolicy) {
+    public Observable<String> putObject(final String objname, final MessageBody body/*, final WritePolicy writePolicy*/) {
         return this._finder.find(HttpClient.class)
                 .flatMap(client -> MessageUtil.interaction(client).method(HttpMethod.PUT).uri(uri4bucket())
                         .path("/" + objname).body(Observable.just(body)).disposeBodyOnTerminate(false).onrequest(obj -> {
                             if (obj instanceof HttpRequest) {
                                 addDateAndSign((HttpRequest) obj, objname);
                             }
-                        }).writePolicy(writePolicy).feature(Feature.ENABLE_LOGGING).execution())
+                        })/*.writePolicy(writePolicy)*/.feature(Feature.ENABLE_LOGGING).execution())
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                             // TODO: deal with error
                             .doOnUnsubscribe(execution.initiator().closer()))

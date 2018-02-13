@@ -1,5 +1,8 @@
 package org.jocean.aliyun.oss.internal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -23,10 +26,15 @@ import com.aliyun.oss.ClientException;
 import com.aliyun.oss.common.auth.Credentials;
 import com.aliyun.oss.common.auth.ServiceSignature;
 
+import io.netty.buffer.ByteBufUtil;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.util.CharsetUtil;
 
 public class OSSRequestSigner {
 
+    private static final Logger LOG = 
+            LoggerFactory.getLogger(OSSRequestSigner.class);
+    
     /* Note that resource path should not have been url-encoded. */
     private String resourcePath;
     private Credentials creds;
@@ -43,7 +51,18 @@ public class OSSRequestSigner {
         if (accessKeyId.length() > 0 && secretAccessKey.length() > 0) {
             final String canonicalString = SignUtils.buildCanonicalString(
                     request.method().toString(), resourcePath, request, null);
+            
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("sign: canonicalString is {} AS HEX {}", canonicalString, 
+                        ByteBufUtil.hexDump(canonicalString.getBytes(CharsetUtil.UTF_8)));
+            }
+            
             final String signature = ServiceSignature.create().computeSignature(secretAccessKey, canonicalString);
+            
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("sign: getAccessKeyId {} and signature {}", accessKeyId, signature);
+            }
+            
             request.headers().add(OSSHeaders.AUTHORIZATION, 
                 OSSUtils.composeRequestAuthorization(accessKeyId, signature));
         } 

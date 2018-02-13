@@ -134,6 +134,16 @@ public class BlobRepoOverOSS implements BlobRepo {
                         public Date getLastModified() {
                             return lastModified;
                         }
+                        
+                        @Override
+                        public String toString() {
+                            final StringBuilder builder = new StringBuilder();
+                            builder.append("SimplifiedObjectMeta [ETag=").append(etag)
+                                    .append(", Size=").append(size)
+                                    .append(", LastModified=").append(lastModified)
+                                    .append("]");
+                            return builder.toString();
+                        }
                     };
                 });
     }

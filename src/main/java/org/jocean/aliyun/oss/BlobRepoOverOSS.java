@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.common.utils.DateUtil;
 import com.aliyun.oss.model.CopyObjectResult;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
@@ -32,9 +33,12 @@ import com.google.common.io.ByteStreams;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
+import rx.functions.Action1;
 
 public class BlobRepoOverOSS implements BlobRepo {
     
@@ -73,11 +77,8 @@ public class BlobRepoOverOSS implements BlobRepo {
     public Observable<String> putObject(final String objname, final MessageBody body) {
         return this._finder.find(HttpClient.class)
                 .flatMap(client -> MessageUtil.interaction(client).method(HttpMethod.PUT).uri(uri4bucket())
-                        .path("/" + objname).body(Observable.just(body)).disposeBodyOnTerminate(false).onrequest(obj -> {
-                            if (obj instanceof HttpRequest) {
-                                addDateAndSign((HttpRequest) obj, objname);
-                            }
-                        }).feature(Feature.ENABLE_LOGGING).execution())
+                        .path("/" + objname).body(Observable.just(body)).disposeBodyOnTerminate(false)
+                        .onrequest(signRequest(objname)).feature(Feature.ENABLE_LOGGING).execution())
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                             // TODO: deal with error
                             .doOnUnsubscribe(execution.initiator().closer()))
@@ -102,6 +103,57 @@ public class BlobRepoOverOSS implements BlobRepo {
         return sdf.format(date);
     }
 
+    @Override
+    public Observable<SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
+        return this._finder.find(HttpClient.class)
+                .flatMap(client -> MessageUtil.interaction(client).uri(uri4bucket())
+                        .path("/" + objectName + "?objectMeta").onrequest(signRequest(objectName))
+                        .feature(Feature.ENABLE_LOGGING).execution())
+                .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
+                            // TODO: deal with error
+                            .doOnUnsubscribe(execution.initiator().closer()))
+                .map(fullmsg -> {
+                    final HttpResponse resp = fullmsg.message();
+                    
+                    final String etag = resp.headers().get(HttpHeaderNames.ETAG);
+                    final long size = HttpUtil.getContentLength(resp, -1);
+                    final Date lastModified = parseRfc822Date(resp.headers().get(HttpHeaderNames.LAST_MODIFIED));
+                    
+                    return new SimplifiedObjectMeta() {
+                        @Override
+                        public String getETag() {
+                            return etag;
+                        }
+    
+                        @Override
+                        public long getSize() {
+                            return size;
+                        }
+    
+                        @Override
+                        public Date getLastModified() {
+                            return lastModified;
+                        }
+                    };
+                });
+    }
+
+    private static Date parseRfc822Date(final String lastModified) {
+        try {
+            return lastModified != null ? DateUtil.parseRfc822Date(lastModified) : null;
+        } catch (Exception e) {
+            LOG.warn("exception when parseRfc822Date({}), detail: {}", lastModified, ExceptionUtils.exception2detail(e));
+            return null;
+        }
+    }
+
+    private Action1<Object> signRequest(final String objectName){
+        return obj -> {
+            if (obj instanceof HttpRequest) {
+                addDateAndSign((HttpRequest) obj, objectName);
+            }};
+    }
+    
     @Override
     public Observable<PutResult> putBlob(final String key, 
             final Blob blob) {

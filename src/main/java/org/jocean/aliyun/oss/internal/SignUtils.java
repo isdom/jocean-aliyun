@@ -255,7 +255,10 @@ public class SignUtils {
                 builder.append(paramName);
                 List<String> paramValue = parameters.get(paramName);
                 if (paramValue != null && paramValue.size() > 0) {
-                    builder.append("=").append(paramValue.get(0));
+                    final String v = paramValue.get(0);
+                    if (!v.isEmpty()) {
+                        builder.append("=").append(v);
+                    }
                 }
 
                 separater = '&';

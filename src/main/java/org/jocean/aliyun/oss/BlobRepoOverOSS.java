@@ -85,11 +85,11 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);
     }
     
-    private void addDateAndSign(final HttpRequest request, final String canonicalizedResource) {
+    private void addDateAndSign(final HttpRequest request, final String objname) {
         // Date header
         request.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));
 
-        new OSSRequestSigner( "/" + this._bucketName + "/" + canonicalizedResource, 
+        new OSSRequestSigner( "/" + this._bucketName + "/" + objname, 
                 this._ossclient.getCredentialsProvider().getCredentials()).sign(request);
     }
 
@@ -107,7 +107,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     public Observable<SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
         return this._finder.find(HttpClient.class)
                 .flatMap(client -> MessageUtil.interaction(client).uri(uri4bucket())
-                        .path("/" + objectName + "?objectMeta").onrequest(signRequest(objectName + "?objectMeta"))
+                        .path("/" + objectName + "?objectMeta").onrequest(signRequest(objectName))
                         .feature(Feature.ENABLE_LOGGING).execution())
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                             // TODO: deal with error
@@ -157,10 +157,10 @@ public class BlobRepoOverOSS implements BlobRepo {
         }
     }
 
-    private Action1<Object> signRequest(final String canonicalizedResource){
+    private Action1<Object> signRequest(final String objname){
         return obj -> {
             if (obj instanceof HttpRequest) {
-                addDateAndSign((HttpRequest) obj, canonicalizedResource);
+                addDateAndSign((HttpRequest) obj, objname);
             }};
     }
     

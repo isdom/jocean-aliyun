@@ -27,6 +27,7 @@ import com.aliyun.oss.common.auth.Credentials;
 import com.aliyun.oss.common.auth.ServiceSignature;
 
 import io.netty.buffer.ByteBufUtil;
+import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.util.CharsetUtil;
 
@@ -53,8 +54,8 @@ public class OSSRequestSigner {
                     request.method().toString(), resourcePath, request, null);
             
             if (LOG.isDebugEnabled()) {
-                LOG.debug("sign: canonicalString is {} AS HEX {}", canonicalString, 
-                        ByteBufUtil.hexDump(canonicalString.getBytes(CharsetUtil.UTF_8)));
+                LOG.debug("sign: canonicalString is {} AS HEX\n{}", canonicalString, 
+                        ByteBufUtil.prettyHexDump( Unpooled.wrappedBuffer(canonicalString.getBytes(CharsetUtil.UTF_8))));
             }
             
             final String signature = ServiceSignature.create().computeSignature(secretAccessKey, canonicalString);

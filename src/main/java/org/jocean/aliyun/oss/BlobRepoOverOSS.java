@@ -76,8 +76,8 @@ public class BlobRepoOverOSS implements BlobRepo {
     
     public Observable<String> putObject(final String objname, final MessageBody body) {
         return this._finder.find(HttpClient.class)
-                .flatMap(client -> MessageUtil.interaction(client).method(HttpMethod.PUT).uri(uri4bucket())
-                        .path("/" + objname).body(Observable.just(body)).disposeBodyOnTerminate(false)
+                .flatMap(client -> MessageUtil.interact(client).method(HttpMethod.PUT).uri(uri4bucket())
+                        .path("/" + objname).body(Observable.just(body))/*.disposeBodyOnTerminate(false)*/
                         .onrequest(signRequest(objname)).feature(Feature.ENABLE_LOGGING).execution())
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                             // TODO: deal with error
@@ -106,7 +106,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Observable<SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
         return this._finder.find(HttpClient.class)
-                .flatMap(client -> MessageUtil.interaction(client).uri(uri4bucket())
+                .flatMap(client -> MessageUtil.interact(client).uri(uri4bucket())
                         .path("/" + objectName + "?objectMeta").onrequest(signRequest(objectName))
                         .feature(Feature.ENABLE_LOGGING).execution())
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())

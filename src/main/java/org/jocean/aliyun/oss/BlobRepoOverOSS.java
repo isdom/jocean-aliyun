@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Feature;
+import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
 import org.jocean.http.client.HttpClient;
@@ -39,6 +40,7 @@ import rx.Observable;
 import rx.Observable.OnSubscribe;
 import rx.Subscriber;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 public class BlobRepoOverOSS implements BlobRepo {
     
@@ -65,7 +67,7 @@ public class BlobRepoOverOSS implements BlobRepo {
             }
 
             @Override
-            public Observable<String> build() {
+            public Func1<Interact, Observable<String>> build() {
                 if (null == objnameRef.get() || null == bodyRef.get()) {
                     throw new RuntimeException("invalid put object parameters.");
                 }
@@ -74,14 +76,13 @@ public class BlobRepoOverOSS implements BlobRepo {
         };
     }
     
-    public Observable<String> putObject(final String objname, final MessageBody body) {
-        return this._finder.find(HttpClient.class)
-                .flatMap(client -> MessageUtil.interact(client).method(HttpMethod.PUT).uri(uri4bucket())
-                        .path("/" + objname).body(Observable.just(body))/*.disposeBodyOnTerminate(false)*/
-                        .onrequest(signRequest(objname)).feature(Feature.ENABLE_LOGGING).execution())
+    public Func1<Interact, Observable<String>> putObject(final String objname, final MessageBody body) {
+        return interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
+                .path("/" + objname).body(Observable.just(body))
+                .onrequest(signRequest(objname)).feature(Feature.ENABLE_LOGGING).execution()
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
-                            // TODO: deal with error
-                            .doOnUnsubscribe(execution.initiator().closer()))
+                    // TODO: deal with error
+                )
                 .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);
     }
     

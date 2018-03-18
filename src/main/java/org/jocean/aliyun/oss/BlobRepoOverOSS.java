@@ -15,7 +15,6 @@ import org.jocean.http.Feature;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
-import org.jocean.http.client.HttpClient;
 import org.jocean.idiom.BeanFinder;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
@@ -105,14 +104,14 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
 
     @Override
-    public Observable<SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
-        return this._finder.find(HttpClient.class)
-                .flatMap(client -> MessageUtil.interact(client).uri(uri4bucket())
-                        .path("/" + objectName + "?objectMeta").onrequest(signRequest(objectName))
-                        .feature(Feature.ENABLE_LOGGING).execution())
+    public Func1<Interact, Observable<SimplifiedObjectMeta>> getSimplifiedObjectMeta(final String objectName) {
+        return interact->interact.uri(uri4bucket())
+                .path("/" + objectName + "?objectMeta")
+                .onrequest(signRequest(objectName))
+                .feature(Feature.ENABLE_LOGGING).execution()
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
-                            // TODO: deal with error
-                            .doOnUnsubscribe(execution.initiator().closer()))
+                    // TODO: deal with error
+                )
                 .map(fullmsg -> {
                     final HttpResponse resp = fullmsg.message();
                     

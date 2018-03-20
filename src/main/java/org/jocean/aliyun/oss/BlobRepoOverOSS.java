@@ -15,7 +15,6 @@ import org.jocean.http.Feature;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
-import org.jocean.idiom.BeanFinder;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
@@ -270,9 +269,6 @@ public class BlobRepoOverOSS implements BlobRepo {
     
     @Inject
     private OSSClient _ossclient;
-    
-    @Inject
-    private BeanFinder _finder;
     
     @Value("${bucket.name}")
     private String _bucketName;

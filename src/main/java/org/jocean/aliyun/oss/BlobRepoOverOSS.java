@@ -26,7 +26,6 @@ import com.aliyun.oss.common.utils.DateUtil;
 import com.aliyun.oss.model.CopyObjectResult;
 import com.aliyun.oss.model.OSSObject;
 import com.aliyun.oss.model.ObjectMetadata;
-import com.aliyun.oss.model.PutObjectResult;
 import com.google.common.io.ByteStreams;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
@@ -65,7 +64,7 @@ public class BlobRepoOverOSS implements BlobRepo {
             }
 
             @Override
-            public Func1<Interact, Observable<String>> build() {
+            public Func1<Interact, Observable<PutObjectResult>> build() {
                 if (null == objnameRef.get() || null == bodyRef.get()) {
                     throw new RuntimeException("invalid put object parameters.");
                 }
@@ -74,14 +73,23 @@ public class BlobRepoOverOSS implements BlobRepo {
         };
     }
 
-    public Func1<Interact, Observable<String>> putObject(final String objname, final MessageBody body) {
+    public Func1<Interact, Observable<PutObjectResult>> putObject(final String objname, final MessageBody body) {
         return interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname)).feature(Feature.ENABLE_LOGGING).execution()
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                     // TODO: deal with error
                 )
-                .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> objname);
+                .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> new PutObjectResult() {
+                    @Override
+                    public String objectName() {
+                        return objname;
+                    }
+
+                    @Override
+                    public String etag() {
+                        return etag;
+                    }});
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {
@@ -175,7 +183,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     meta.setContentLength(blob.contentLength());
                     meta.setContentType(blob.contentType());
                     try (final InputStream is = blob.inputStream()) {
-                        final PutObjectResult result = _ossclient.putObject(
+                        final com.aliyun.oss.model.PutObjectResult result = _ossclient.putObject(
                                 _bucketName,
                                 key,
                                 is,

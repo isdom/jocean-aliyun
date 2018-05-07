@@ -80,16 +80,20 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                     // TODO: deal with error
                 )
-                .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> new PutObjectResult() {
-                    @Override
-                    public String objectName() {
-                        return objname;
-                    }
+                .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> {
+                    final String unquotes_etag = etag.replaceAll("\"", "");
+                    return new PutObjectResult() {
+                        @Override
+                        public String objectName() {
+                            return objname;
+                        }
 
-                    @Override
-                    public String etag() {
-                        return etag;
-                    }});
+                        @Override
+                        public String etag() {
+                            return unquotes_etag;
+                        }
+                    };
+                });
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

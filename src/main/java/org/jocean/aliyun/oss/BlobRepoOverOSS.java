@@ -77,9 +77,14 @@ public class BlobRepoOverOSS implements BlobRepo {
         return interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname)).feature(Feature.ENABLE_LOGGING).execution()
-                .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
-                    // TODO: deal with error
-                )
+                .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage()))
+                .doOnNext(fullmsg-> {
+                    // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
+                    final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    if (null != contentType && contentType.startsWith("application/xml")) {
+                        throw new RuntimeException("error for putObject to oss");
+                    }
+                })
                 .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> {
                     final String unquotes_etag = etag.replaceAll("\"", "");
                     return new PutObjectResult() {

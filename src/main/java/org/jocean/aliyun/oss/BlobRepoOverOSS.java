@@ -11,7 +11,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
-import org.jocean.http.Feature;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
@@ -76,7 +75,8 @@ public class BlobRepoOverOSS implements BlobRepo {
     public Func1<Interact, Observable<PutObjectResult>> putObject(final String objname, final MessageBody body) {
         return interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + objname).body(Observable.just(body))
-                .onrequest(signRequest(objname)).feature(Feature.ENABLE_LOGGING).execution()
+                .onrequest(signRequest(objname))
+                .execution()
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage()))
                 .doOnNext(fullmsg-> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
@@ -124,7 +124,7 @@ public class BlobRepoOverOSS implements BlobRepo {
         return interact->interact.uri(uri4bucket())
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
-                .feature(Feature.ENABLE_LOGGING).execution()
+                .execution()
                 .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
                     // TODO: deal with error
                 )

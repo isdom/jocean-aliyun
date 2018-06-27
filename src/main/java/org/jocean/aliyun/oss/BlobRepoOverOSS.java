@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
+import org.jocean.http.DoRead;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
@@ -77,7 +78,9 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname))
                 .execution()
-                .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage()))
+                .flatMap(execution -> execution.execute()
+                        .compose(DoRead.Util.autoread())
+                        .compose(MessageUtil.asFullMessage()))
                 .doOnNext(fullmsg-> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
@@ -125,7 +128,9 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
                 .execution()
-                .flatMap(execution -> execution.execute().compose(MessageUtil.asFullMessage())
+                .flatMap(execution -> execution.execute()
+                        .compose(DoRead.Util.autoread())
+                        .compose(MessageUtil.asFullMessage())
                     // TODO: deal with error
                 )
                 .map(fullmsg -> {

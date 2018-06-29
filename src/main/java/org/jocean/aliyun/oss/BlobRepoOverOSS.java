@@ -14,7 +14,6 @@ import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
-import org.jocean.http.ReadComplete;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
@@ -79,7 +78,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objname))
                 .execution()
                 .flatMap(execution -> execution.execute()
-                        .compose(ReadComplete.Util.autoread())
+                        .compose(MessageUtil.dwhWithAutoread())
                         .compose(MessageUtil.asFullMessage()))
                 .doOnNext(fullmsg-> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
@@ -129,7 +128,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objectName))
                 .execution()
                 .flatMap(execution -> execution.execute()
-                        .compose(ReadComplete.Util.autoread())
+                        .compose(MessageUtil.dwhWithAutoread())
                         .compose(MessageUtil.asFullMessage())
                     // TODO: deal with error
                 )

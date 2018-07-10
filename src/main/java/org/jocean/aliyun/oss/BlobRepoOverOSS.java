@@ -78,7 +78,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objname))
                 .execution()
                 .flatMap(execution -> execution.execute()
-                        .compose(MessageUtil.dwhWithAutoread())
+                        .compose(MessageUtil.rollout2dwhs())
                         .compose(MessageUtil.asFullMessage()))
                 .doOnNext(fullmsg-> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
@@ -128,7 +128,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objectName))
                 .execution()
                 .flatMap(execution -> execution.execute()
-                        .compose(MessageUtil.dwhWithAutoread())
+                        .compose(MessageUtil.rollout2dwhs())
                         .compose(MessageUtil.asFullMessage())
                     // TODO: deal with error
                 )

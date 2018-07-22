@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
-import org.jocean.http.MessageUtil;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
@@ -30,7 +29,6 @@ import com.google.common.io.ByteStreams;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
 import rx.Observable.OnSubscribe;
@@ -77,17 +75,16 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname))
                 .execution()
-                .flatMap(execution -> execution.execute()
-                        .compose(MessageUtil.rollout2dwhs())
-                        .compose(MessageUtil.asFullMessage()))
-                .doOnNext(fullmsg-> {
+                .flatMap(execution -> execution.execute())
+                .flatMap(resp -> resp.message())
+                .doOnNext(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
-                    final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    final String contentType = resp.headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
                         throw new RuntimeException("error for putObject to oss");
                     }
                 })
-                .map(fullmsg -> fullmsg.message().headers().get(HttpHeaderNames.ETAG)).map(etag -> {
+                .map(resp -> resp.headers().get(HttpHeaderNames.ETAG)).map(etag -> {
                     final String unquotes_etag = etag.replaceAll("\"", "");
                     return new PutObjectResult() {
                         @Override
@@ -127,14 +124,10 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
                 .execution()
-                .flatMap(execution -> execution.execute()
-                        .compose(MessageUtil.rollout2dwhs())
-                        .compose(MessageUtil.asFullMessage())
-                    // TODO: deal with error
-                )
-                .map(fullmsg -> {
-                    final HttpResponse resp = fullmsg.message();
-
+                .flatMap(execution -> execution.execute())
+                // TODO: deal with error
+                .flatMap(resp -> resp.message())
+                .map(resp -> {
                     final String etag = resp.headers().get(HttpHeaderNames.ETAG);
                     final long size = HttpUtil.getContentLength(resp, -1);
                     final Date lastModified = parseRfc822Date(resp.headers().get(HttpHeaderNames.LAST_MODIFIED));

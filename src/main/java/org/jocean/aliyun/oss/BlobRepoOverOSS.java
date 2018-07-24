@@ -76,7 +76,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objname))
                 .execution()
                 .flatMap(execution -> execution.execute())
-                .flatMap(resp -> resp.message())
+                .map(resp -> resp.message())
                 .doOnNext(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.headers().get(HttpHeaderNames.CONTENT_TYPE);
@@ -126,7 +126,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .execution()
                 .flatMap(execution -> execution.execute())
                 // TODO: deal with error
-                .flatMap(resp -> resp.message())
+                .map(resp -> resp.message())
                 .map(resp -> {
                     final String etag = resp.headers().get(HttpHeaderNames.ETAG);
                     final long size = HttpUtil.getContentLength(resp, -1);

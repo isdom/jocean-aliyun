@@ -1,33 +1,26 @@
 package org.jocean.aliyun.oss.impl;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-
 import org.jocean.aliyun.oss.OSSImageService;
-import org.jocean.aliyun.oss.spi.GetImageContentResponse;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
-import org.jocean.http.Feature;
 import org.jocean.http.Interact;
+import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
-import org.jocean.http.rosa.SignalClient;
-import org.jocean.idiom.BeanFinder;
-import org.jocean.idiom.ExceptionUtils;
-import org.jocean.netty.BlobRepo.Blob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
+import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import rx.Observable;
 import rx.functions.Func1;
 
 public class OSSImageServiceImpl implements OSSImageService {
+
+    @SuppressWarnings("unused")
     private static final Logger LOG =
             LoggerFactory.getLogger(OSSImageServiceImpl.class);
 
@@ -72,31 +65,37 @@ public class OSSImageServiceImpl implements OSSImageService {
     }
 
     @Override
-    public Observable<? extends Blob> process(final String pathToImage, final String actions) {
-        try {
+    public Func1<Interact, Observable<? extends MessageBody>> process(final String pathToImage, final String actions) {
             final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
             req.setPathToImage(pathToImage);
             req.setProcessActions(actions);
-            final URI uri = new URI("http://" + _bucketName + "." + _endpoint);
+            final String uri = "http://" + _bucketName + "." + _endpoint;
 
-            return this._finder.find(SignalClient.class).flatMap(signal -> signal.interaction().request(req)
-                    .feature(Feature.ENABLE_LOGGING)
-                    .feature(Feature.ENABLE_COMPRESSOR)
-                    .feature(new SignalClient.UsingMethod(GET.class))
-                    .feature(new SignalClient.UsingUri(uri))
-                    .feature(new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
-                    .<GetImageContentResponse>build())
-                    .map(resp -> {
-                            final byte[] content = resp.content();
-                            final String contentType = resp.contentType();
+            return interact -> interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
+                    .flatMap(interaction->interaction.execute())
+                    .flatMap(fullmsg -> {
+                        final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                        if (null != contentType && contentType.startsWith("application/xml")) {
+                            // TODO, decode as XML format
+                            throw new RuntimeException("error for process for oss object");
+                        } else {
+                            return fullmsg.body();
+                        }
+                    });
+
+//            return this._finder.find(SignalClient.class).flatMap(signal -> signal.interaction().request(req)
+//                    .feature(Feature.ENABLE_LOGGING)
+//                    .feature(Feature.ENABLE_COMPRESSOR)
+//                    .feature(new SignalClient.UsingMethod(GET.class))
+//                    .feature(new SignalClient.UsingUri(uri))
+//                    .feature(new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
+//                    .<GetImageContentResponse>build())
+//                    .map(resp -> {
+//                            final byte[] content = resp.content();
+//                            final String contentType = resp.contentType();
 //                            final String contentDisposition = resp.contentDisposition();
-                            return Blob.Util.fromByteArray(content, contentType, null, null);
-                        });
-        } catch (final URISyntaxException e) {
-            LOG.warn("exception when signalClient.defineInteraction, detail: {}",
-                    ExceptionUtils.exception2detail(e));
-            return Observable.error(e);
-        }
+//                            return Blob.Util.fromByteArray(content, contentType, null, null);
+//                        });
     }
 
     public void setEndpoint(final String endpoint) {
@@ -107,8 +106,8 @@ public class OSSImageServiceImpl implements OSSImageService {
         this._bucketName = bucketName;
     }
 
-    @Inject
-    private BeanFinder _finder;
+//    @Inject
+//    private BeanFinder _finder;
 
     private String _endpoint;
 

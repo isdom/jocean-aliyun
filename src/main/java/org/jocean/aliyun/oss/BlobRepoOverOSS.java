@@ -36,6 +36,7 @@ import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
+// TODO, add getObject API
 public class BlobRepoOverOSS implements BlobRepo {
 
     private static final Logger LOG =

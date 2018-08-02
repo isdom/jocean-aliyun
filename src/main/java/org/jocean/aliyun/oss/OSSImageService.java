@@ -1,7 +1,7 @@
 package org.jocean.aliyun.oss;
 
 import org.jocean.http.Interact;
-import org.jocean.netty.BlobRepo.Blob;
+import org.jocean.http.MessageBody;
 
 import rx.Observable;
 import rx.functions.Func1;
@@ -16,7 +16,7 @@ public interface OSSImageService {
 
     public Func1<Interact, Observable<? extends ImageInfo>> info(final String pathToImage);
 
-    public Observable<? extends Blob> process(final String pathToImage, final String actions);
+    public Func1<Interact, Observable<? extends MessageBody>> process(final String pathToImage, final String actions);
 
     public interface ProcessAction {
         public ActionSet and();

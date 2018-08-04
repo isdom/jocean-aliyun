@@ -119,6 +119,21 @@ public class BlobRepoOverOSS implements BlobRepo {
         return sdf.format(date);
     }
 
+    public Func1<Interact, Observable<? extends MessageBody>> getObject(final String objname) {
+        return interact->interact.method(HttpMethod.GET).uri(uri4bucket())
+                .path("/" + objname)
+                .onrequest(signRequest(objname))
+                .execution()
+                .flatMap(execution -> execution.execute())
+                .doOnNext(resp -> {
+                    // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
+                    final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    if (null != contentType && contentType.startsWith("application/xml")) {
+                        throw new RuntimeException("error for putObject to oss");
+                    }
+                }).flatMap(resp -> resp.body());
+    }
+
     @Override
     public Func1<Interact, Observable<SimplifiedObjectMeta>> getSimplifiedObjectMeta(final String objectName) {
         return interact->interact.uri(uri4bucket())

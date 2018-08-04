@@ -33,12 +33,12 @@ import io.netty.util.CharsetUtil;
 
 public class OSSRequestSigner {
 
-    private static final Logger LOG = 
+    private static final Logger LOG =
             LoggerFactory.getLogger(OSSRequestSigner.class);
-    
+
     /* Note that resource path should not have been url-encoded. */
-    private String resourcePath;
-    private Credentials creds;
+    private final String resourcePath;
+    private final Credentials creds;
 
     public OSSRequestSigner(final String resourcePath, final Credentials creds) {
         this.resourcePath = resourcePath;
@@ -46,26 +46,26 @@ public class OSSRequestSigner {
     }
 
     public void sign(final HttpRequest request) throws ClientException {
-        String accessKeyId = creds.getAccessKeyId();
-        String secretAccessKey = creds.getSecretAccessKey();
+        final String accessKeyId = creds.getAccessKeyId();
+        final String secretAccessKey = creds.getSecretAccessKey();
 
         if (accessKeyId.length() > 0 && secretAccessKey.length() > 0) {
             final String canonicalString = SignUtils.buildCanonicalString(
                     request.method().toString(), resourcePath, request, null);
-            
+
             if (LOG.isDebugEnabled()) {
-                LOG.debug("sign: canonicalString is {} AS HEX\n{}", canonicalString, 
-                        ByteBufUtil.prettyHexDump( Unpooled.wrappedBuffer(canonicalString.getBytes(CharsetUtil.UTF_8))));
+                LOG.debug("sign: canonicalString is {} AS HEX\n{}", canonicalString,
+                    ByteBufUtil.prettyHexDump(Unpooled.wrappedBuffer(canonicalString.getBytes(CharsetUtil.UTF_8))));
             }
-            
+
             final String signature = ServiceSignature.create().computeSignature(secretAccessKey, canonicalString);
-            
+
             if (LOG.isDebugEnabled()) {
                 LOG.debug("sign: getAccessKeyId {} and signature {}", accessKeyId, signature);
             }
-            
-            request.headers().add(OSSHeaders.AUTHORIZATION, 
+
+            request.headers().add(OSSHeaders.AUTHORIZATION,
                 OSSUtils.composeRequestAuthorization(accessKeyId, signature));
-        } 
+        }
     }
 }

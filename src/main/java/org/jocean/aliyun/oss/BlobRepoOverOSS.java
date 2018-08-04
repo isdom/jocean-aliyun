@@ -1,7 +1,5 @@
 package org.jocean.aliyun.oss;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -21,18 +19,12 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.utils.DateUtil;
-import com.aliyun.oss.model.CopyObjectResult;
-import com.aliyun.oss.model.OSSObject;
-import com.aliyun.oss.model.ObjectMetadata;
-import com.google.common.io.ByteStreams;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
-import rx.Observable.OnSubscribe;
-import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -119,6 +111,7 @@ public class BlobRepoOverOSS implements BlobRepo {
         return sdf.format(date);
     }
 
+    @Override
     public Func1<Interact, Observable<? extends MessageBody>> getObject(final String objname) {
         return interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objname)
@@ -136,7 +129,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     @Override
     public Func1<Interact, Observable<SimplifiedObjectMeta>> getSimplifiedObjectMeta(final String objectName) {
-        return interact->interact.uri(uri4bucket())
+        return interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
                 .execution()
@@ -193,9 +186,9 @@ public class BlobRepoOverOSS implements BlobRepo {
             }};
     }
 
+    /*
     @Override
-    public Observable<PutResult> putBlob(final String key,
-            final Blob blob) {
+    public Observable<PutResult> putBlob(final String key, final Blob blob) {
         return Observable.unsafeCreate(new OnSubscribe<PutResult>() {
             @Override
             public void call(final Subscriber<? super PutResult> subscriber) {
@@ -296,6 +289,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 }
             }});
     }
+    */
 
     @Inject
     private OSSClient _ossclient;

@@ -188,42 +188,6 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     /*
     @Override
-    public Observable<PutResult> putBlob(final String key, final Blob blob) {
-        return Observable.unsafeCreate(new OnSubscribe<PutResult>() {
-            @Override
-            public void call(final Subscriber<? super PutResult> subscriber) {
-                if (!subscriber.isUnsubscribed()) {
-                    final ObjectMetadata meta = new ObjectMetadata();
-                    // 必须设置ContentLength
-                    meta.setContentLength(blob.contentLength());
-                    meta.setContentType(blob.contentType());
-                    try (final InputStream is = blob.inputStream()) {
-                        final com.aliyun.oss.model.PutObjectResult result = _ossclient.putObject(
-                                _bucketName,
-                                key,
-                                is,
-                                meta);
-                        LOG.info("blob stored as {}, and ETag is {}", key, result.getETag());
-                    } catch (final IOException e) {
-                        LOG.warn("exception when close inputStream, detail: {}",
-                            ExceptionUtils.exception2detail(e));
-                    }
-                    subscriber.onNext(new PutResult() {
-                        @Override
-                        public String key() {
-                            return key;
-                        }
-
-                        @Override
-                        public Blob blob() {
-                            return blob;
-                        }});
-                    subscriber.onCompleted();
-                }
-            }});
-    }
-
-    @Override
     public Observable<String> copyBlob(final String sourceKey, final String destinationKey) {
         return Observable.unsafeCreate(new OnSubscribe<String>() {
             @Override

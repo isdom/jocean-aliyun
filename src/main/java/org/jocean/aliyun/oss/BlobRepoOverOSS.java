@@ -189,6 +189,15 @@ public class BlobRepoOverOSS implements BlobRepo {
             }};
     }
 
+
+    /* REF: https://help.aliyun.com/document_detail/31979.html?spm=a2c4g.11186623.6.926.p75n2Q
+     * API:
+    PUT /DestObjectName HTTP/1.1
+    Host: DestBucketName.oss-cn-hangzhou.aliyuncs.com
+    Date: GMT Date
+    Authorization: SignatureValue
+    x-oss-copy-source: /SourceBucketName/SourceObjectName
+    */
     @Override
     public Observable<String> copyObject(final String sourceKey, final String destinationKey) {
         return Observable.unsafeCreate(new OnSubscribe<String>() {

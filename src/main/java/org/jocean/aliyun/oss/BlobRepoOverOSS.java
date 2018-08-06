@@ -19,12 +19,15 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.common.utils.DateUtil;
+import com.aliyun.oss.model.CopyObjectResult;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
+import rx.Observable.OnSubscribe;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -186,9 +189,8 @@ public class BlobRepoOverOSS implements BlobRepo {
             }};
     }
 
-    /*
     @Override
-    public Observable<String> copyBlob(final String sourceKey, final String destinationKey) {
+    public Observable<String> copyObject(final String sourceKey, final String destinationKey) {
         return Observable.unsafeCreate(new OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
@@ -212,7 +214,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
 
     @Override
-    public Observable<String> deleteBlob(final String key) {
+    public Observable<String> deleteObject(final String key) {
         return Observable.unsafeCreate(new OnSubscribe<String>() {
             @Override
             public void call(final Subscriber<? super String> subscriber) {
@@ -232,6 +234,7 @@ public class BlobRepoOverOSS implements BlobRepo {
             }});
     }
 
+    /*
     @Override
     public Observable<Blob> getBlob(final String key) {
         return Observable.unsafeCreate(new OnSubscribe<Blob>() {

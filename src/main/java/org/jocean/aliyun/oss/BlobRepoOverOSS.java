@@ -26,8 +26,6 @@ import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
-import rx.Observable.OnSubscribe;
-import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
@@ -199,16 +197,14 @@ public class BlobRepoOverOSS implements BlobRepo {
     x-oss-copy-source: /SourceBucketName/SourceObjectName
     */
     @Override
-    public Observable<String> copyObject(final String sourceKey, final String destinationKey) {
-        return Observable.unsafeCreate(new OnSubscribe<String>() {
-            @Override
-            public void call(final Subscriber<? super String> subscriber) {
+    public Func1<Interact, Observable<String>> copyObject(final String sourceKey, final String destinationKey) {
+        return interact -> Observable.unsafeCreate(subscriber -> {
                 if (!subscriber.isUnsubscribed()) {
                     try {
                         final CopyObjectResult result =
                                 _ossclient.copyObject(_bucketName, sourceKey, _bucketName, destinationKey);
 
-                        LOG.info("blob {} copied as {}, and new ETag is {}", sourceKey, destinationKey,
+                        LOG.info("object {} copied as {}, and new ETag is {}", sourceKey, destinationKey,
                                 result.getETag());
                         subscriber.onNext(destinationKey);
                         subscriber.onCompleted();
@@ -218,20 +214,18 @@ public class BlobRepoOverOSS implements BlobRepo {
                         subscriber.onError(e);
                     }
                 }
-            }});
+            });
     }
 
 
     @Override
-    public Observable<String> deleteObject(final String key) {
-        return Observable.unsafeCreate(new OnSubscribe<String>() {
-            @Override
-            public void call(final Subscriber<? super String> subscriber) {
+    public Func1<Interact, Observable<String>> deleteObject(final String key) {
+        return interact -> Observable.unsafeCreate(subscriber -> {
                 if (!subscriber.isUnsubscribed()) {
                     try {
                         _ossclient.deleteObject(_bucketName, key);
 
-                        LOG.info("blob {} deleted", key);
+                        LOG.info("object {} deleted", key);
                         subscriber.onNext(key);
                         subscriber.onCompleted();
                     } catch (final Exception e) {
@@ -240,32 +234,8 @@ public class BlobRepoOverOSS implements BlobRepo {
                         subscriber.onError(e);
                     }
                 }
-            }});
+            });
     }
-
-    /*
-    @Override
-    public Observable<Blob> getBlob(final String key) {
-        return Observable.unsafeCreate(new OnSubscribe<Blob>() {
-            @Override
-            public void call(final Subscriber<? super Blob> subscriber) {
-                if (!subscriber.isUnsubscribed()) {
-                    final OSSObject ossobj = _ossclient.getObject(_bucketName, key);
-                    final ObjectMetadata meta = ossobj.getObjectMetadata();
-                    final String contentType = meta.getContentType();
-                    try (final InputStream is = ossobj.getObjectContent()) {
-                        final byte[] blob = ByteStreams.toByteArray(is);
-                        subscriber.onNext(Blob.Util.fromByteArray(blob, contentType, null, null));
-                        subscriber.onCompleted();
-                    } catch (final Exception e) {
-                        LOG.warn("exception when get oss object {}, detail: {}",
-                                key, ExceptionUtils.exception2detail(e));
-                        subscriber.onError(e);
-                    }
-                }
-            }});
-    }
-    */
 
     @Inject
     private OSSClient _ossclient;

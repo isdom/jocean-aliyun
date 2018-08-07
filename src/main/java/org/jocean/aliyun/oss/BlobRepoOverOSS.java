@@ -113,7 +113,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
 
     @Override
-    public Func1<Interact, Observable<? extends MessageBody>> getObject(final String objname) {
+    public Func1<Interact, Observable<MessageBody>> getObject(final String objname) {
         return interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objname)
                 .onrequest(signRequest(objname))

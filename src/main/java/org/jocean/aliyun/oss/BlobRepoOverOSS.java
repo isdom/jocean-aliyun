@@ -189,10 +189,10 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
 
     @Override
-    public Func1<Interact, Observable<String>> deleteObject(final String key) {
+    public Func1<Interact, Observable<String>> deleteObject(final String objectName) {
         return interact->interact.method(HttpMethod.DELETE).uri(uri4bucket())
-                .path("/" + key)
-                .onrequest(signRequest(key))
+                .path("/" + objectName)
+                .onrequest(signRequest(objectName))
                 .execution()
                 .flatMap(execution -> execution.execute())
                 // TODO: deal with error
@@ -202,10 +202,10 @@ public class BlobRepoOverOSS implements BlobRepo {
                     if (null != contentType && contentType.startsWith("application/xml")) {
                         throw new RuntimeException("error for deleteObject");
                     } else {
-                        LOG.info("object {} deleted", key);
+                        LOG.info("object {} deleted", objectName);
                     }
                 })
-                .map(msg -> key);
+                .map(msg -> objectName);
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

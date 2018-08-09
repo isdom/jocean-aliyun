@@ -190,21 +190,22 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     @Override
     public Func1<Interact, Observable<String>> deleteObject(final String key) {
-        return interact -> Observable.unsafeCreate(subscriber -> {
-                if (!subscriber.isUnsubscribed()) {
-                    try {
-                        _ossclient.deleteObject(_bucketName, key);
-
+        return interact->interact.method(HttpMethod.DELETE).uri(uri4bucket())
+                .path("/" + key)
+                .onrequest(signRequest(key))
+                .execution()
+                .flatMap(execution -> execution.execute())
+                // TODO: deal with error
+                .doOnNext(resp -> {
+                    // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
+                    final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    if (null != contentType && contentType.startsWith("application/xml")) {
+                        throw new RuntimeException("error for deleteObject");
+                    } else {
                         LOG.info("object {} deleted", key);
-                        subscriber.onNext(key);
-                        subscriber.onCompleted();
-                    } catch (final Exception e) {
-                        LOG.warn("exception when delete blob {}, detail: {}", key,
-                            ExceptionUtils.exception2detail(e));
-                        subscriber.onError(e);
                     }
-                }
-            });
+                })
+                .map(msg -> key);
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

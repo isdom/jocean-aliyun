@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
+import org.jocean.http.MessageUtil;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
@@ -195,17 +196,18 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objectName))
                 .execution()
                 .flatMap(execution -> execution.execute())
-                // TODO: deal with error
-                .doOnNext(resp -> {
+                .flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        throw new RuntimeException("error for deleteObject");
+                        return resp.body()
+                                .flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
+                                .flatMap(error -> Observable.error(new RuntimeException(error.toString())));
                     } else {
                         LOG.info("object {} deleted", objectName);
+                        return Observable.just(objectName);
                     }
-                })
-                .map(msg -> objectName);
+                });
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

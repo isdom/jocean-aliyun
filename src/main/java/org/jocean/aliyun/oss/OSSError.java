@@ -94,20 +94,20 @@ public class OSSError {
     public static void main(final String[] args) throws Exception {
         final String xmlsrc =
                 "<?xml version=\"1.0\" ?>"
-                //<Error xmlns=”http://doc.oss-cn-hangzhou.aliyuncs.com”>
-                //    <Code>
-                //        AccessDenied
-                //    </Code>
-                //    <Message>
-                //        Query-string authentication requires the Signature, Expires and OSSAccessKeyId parameters
-                //    </Message>
-                //    <RequestId>
-                //        1D842BC5425544BB
-                //    </RequestId>
-                //    <HostId>
-                //        oss-cn-hangzhou.aliyuncs.com
-                //    </HostId>
-                //</Error>""
+                + "<Error xmlns=\"http://doc.oss-cn-hangzhou.aliyuncs.com\">"
+                + "   <Code>"
+                + "       AccessDenied"
+                + "   </Code>"
+                + "   <Message>"
+                + "      Query-string authentication requires the Signature, Expires and OSSAccessKeyId parameters"
+                + "   </Message>"
+                + "   <RequestId>"
+                + "       1D842BC5425544BB"
+                + "   </RequestId>"
+                + "   <HostId>"
+                + "       oss-cn-hangzhou.aliyuncs.com"
+                + "    </HostId>"
+                + "</Error>"
                 ;
         final ObjectMapper mapper = new XmlMapper();
 

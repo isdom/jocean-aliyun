@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
+import org.jocean.http.FullMessage;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
@@ -24,6 +25,7 @@ import com.aliyun.oss.common.utils.DateUtil;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
 import rx.functions.Action1;
@@ -118,38 +120,43 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .execution()
                 .flatMap(execution -> execution.execute())
                 // TODO: deal with error
-                .map(resp -> resp.message())
-                .map(resp -> {
-                    final String etag = resp.headers().get(HttpHeaderNames.ETAG);
-                    final long size = HttpUtil.getContentLength(resp, -1);
-                    final Date lastModified = parseRfc822Date(resp.headers().get(HttpHeaderNames.LAST_MODIFIED));
+                .flatMap(resp -> {
+                    // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
+                    final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    if (null != contentType && contentType.startsWith("application/xml")) {
+                        return extractAndReturnOSSError(resp, "getSimplifiedObjectMeta error: ");
+                    } else {
+                        final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
+                        final long size = HttpUtil.getContentLength(resp.message(), -1);
+                        final Date lastModified = parseRfc822Date(resp.message().headers().get(HttpHeaderNames.LAST_MODIFIED));
 
-                    return new SimplifiedObjectMeta() {
-                        @Override
-                        public String getETag() {
-                            return etag;
-                        }
+                        return Observable.<SimplifiedObjectMeta>just(new SimplifiedObjectMeta() {
+                            @Override
+                            public String getETag() {
+                                return etag;
+                            }
 
-                        @Override
-                        public long getSize() {
-                            return size;
-                        }
+                            @Override
+                            public long getSize() {
+                                return size;
+                            }
 
-                        @Override
-                        public Date getLastModified() {
-                            return lastModified;
-                        }
+                            @Override
+                            public Date getLastModified() {
+                                return lastModified;
+                            }
 
-                        @Override
-                        public String toString() {
-                            final StringBuilder builder = new StringBuilder();
-                            builder.append("SimplifiedObjectMeta [ETag=").append(etag)
-                                    .append(", Size=").append(size)
-                                    .append(", LastModified=").append(lastModified)
-                                    .append("]");
-                            return builder.toString();
-                        }
-                    };
+                            @Override
+                            public String toString() {
+                                final StringBuilder builder = new StringBuilder();
+                                builder.append("SimplifiedObjectMeta [ETag=").append(etag)
+                                        .append(", Size=").append(size)
+                                        .append(", LastModified=").append(lastModified)
+                                        .append("]");
+                                return builder.toString();
+                            }
+                        });
+                    }
                 });
     }
 
@@ -176,17 +183,17 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .execution()
                 .flatMap(execution -> execution.execute())
                 // TODO: deal with error
-                .doOnNext(resp -> {
+                .flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        throw new RuntimeException("error for copyObject");
+                        return extractAndReturnOSSError(resp, "copyObject error: ");
                     } else {
                         final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
                         LOG.info("object {} copied as {}, and new ETag is {}", sourceObjectName, destObjectName, etag);
+                        return Observable.just(destObjectName);
                     }
-                })
-                .map(msg -> destObjectName);
+                });
     }
 
     @Override
@@ -200,14 +207,17 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return resp.body()
-                                .flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
-                                .flatMap(error -> Observable.error(new RuntimeException(error.toString())));
+                        return extractAndReturnOSSError(resp, "deleteObject error: ");
                     } else {
                         LOG.info("object {} deleted", objectName);
                         return Observable.just(objectName);
                     }
                 });
+    }
+
+    private <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
+        return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
+                .flatMap(error -> Observable.error(new RuntimeException(msg + error.toString())));
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

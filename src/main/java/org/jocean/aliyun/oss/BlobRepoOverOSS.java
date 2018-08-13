@@ -31,7 +31,6 @@ import rx.Observable;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
-// TODO, add getObject API
 public class BlobRepoOverOSS implements BlobRepo {
 
     private static final Logger LOG =
@@ -103,13 +102,15 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objname))
                 .execution()
                 .flatMap(execution -> execution.execute())
-                .doOnNext(resp -> {
+                .flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        throw new RuntimeException("error for getObject from oss");
+                        return extractAndReturnOSSError(resp, "getObject error");
+                    } else {
+                        return resp.body();
                     }
-                }).flatMap(resp -> resp.body());
+                });
     }
 
     @Override
@@ -124,7 +125,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return extractAndReturnOSSError(resp, "getSimplifiedObjectMeta error: ");
+                        return extractAndReturnOSSError(resp, "getSimplifiedObjectMeta error");
                     } else {
                         final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
                         final long size = HttpUtil.getContentLength(resp.message(), -1);
@@ -187,7 +188,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return extractAndReturnOSSError(resp, "copyObject error: ");
+                        return extractAndReturnOSSError(resp, "copyObject error");
                     } else {
                         final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
                         LOG.info("object {} copied as {}, and new ETag is {}", sourceObjectName, destObjectName, etag);
@@ -207,7 +208,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return extractAndReturnOSSError(resp, "deleteObject error: ");
+                        return extractAndReturnOSSError(resp, "deleteObject error");
                     } else {
                         LOG.info("object {} deleted", objectName);
                         return Observable.just(objectName);
@@ -217,7 +218,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     private <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
         return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
-                .flatMap(error -> Observable.error(new RuntimeException(msg + error.toString())));
+                .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

@@ -2,9 +2,11 @@ package org.jocean.aliyun.oss.impl;
 
 import java.util.List;
 
+import org.jocean.aliyun.oss.OSSError;
 import org.jocean.aliyun.oss.OSSImageService;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
+import org.jocean.http.FullMessage;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
@@ -15,6 +17,7 @@ import com.google.common.collect.Lists;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -76,26 +79,17 @@ public class OSSImageServiceImpl implements OSSImageService {
                     .flatMap(fullmsg -> {
                         final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                         if (null != contentType && contentType.startsWith("application/xml")) {
-                            // TODO, decode as XML format
-                            throw new RuntimeException("error for process for oss object");
+//                            throw new RuntimeException("error for process for oss object");
+                            return extractAndReturnOSSError(fullmsg, "process oss object error");
                         } else {
                             return fullmsg.body();
                         }
                     });
+    }
 
-//            return this._finder.find(SignalClient.class).flatMap(signal -> signal.interaction().request(req)
-//                    .feature(Feature.ENABLE_LOGGING)
-//                    .feature(Feature.ENABLE_COMPRESSOR)
-//                    .feature(new SignalClient.UsingMethod(GET.class))
-//                    .feature(new SignalClient.UsingUri(uri))
-//                    .feature(new SignalClient.ConvertResponseTo(GetImageContentResponse.class))
-//                    .<GetImageContentResponse>build())
-//                    .map(resp -> {
-//                            final byte[] content = resp.content();
-//                            final String contentType = resp.contentType();
-//                            final String contentDisposition = resp.contentDisposition();
-//                            return Blob.Util.fromByteArray(content, contentType, null, null);
-//                        });
+    private <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
+        return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
+                .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));
     }
 
     public void setEndpoint(final String endpoint) {

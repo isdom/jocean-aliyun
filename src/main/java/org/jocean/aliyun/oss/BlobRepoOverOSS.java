@@ -183,7 +183,6 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(destObjectName))
                 .execution()
                 .flatMap(execution -> execution.execute())
-                // TODO: deal with error
                 .flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);

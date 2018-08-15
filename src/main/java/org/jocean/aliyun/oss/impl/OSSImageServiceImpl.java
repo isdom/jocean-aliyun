@@ -1,5 +1,6 @@
 package org.jocean.aliyun.oss.impl;
 
+import java.io.InputStream;
 import java.util.List;
 
 import org.jocean.aliyun.oss.OSSError;
@@ -8,18 +9,23 @@ import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
 import org.jocean.http.FullMessage;
 import org.jocean.http.Interact;
+import org.jocean.http.Interaction;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
+import org.jocean.http.util.Nettys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable;
+import rx.Observable.Transformer;
 import rx.functions.Func1;
+import rx.functions.Func2;
 
 public class OSSImageServiceImpl implements OSSImageService {
 
@@ -34,7 +40,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         req.setProcessActions(actions().info().and().build());
         final String uri = "http://" + _bucketName + "." + _endpoint;
         return interact -> interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
-                .compose(MessageUtil.responseAs(GetImageInfoResponse.class, MessageUtil::unserializeAsJson))
+                .compose(checkErrorAndResponseAs(GetImageInfoResponse.class, MessageUtil::unserializeAsJson))
                 .<ImageInfo>map(resp -> new ImageInfo() {
                     @Override
                     public String toString() {
@@ -67,6 +73,26 @@ public class OSSImageServiceImpl implements OSSImageService {
                 });
     }
 
+    private static <RESP> Transformer<Interaction, RESP> checkErrorAndResponseAs(
+            final Class<RESP> resptype,
+            final Func2<InputStream, Class<RESP>, RESP> decoder) {
+        return interactions -> interactions.flatMap(interaction -> interaction.execute().flatMap(fullresp -> {
+            final String contentType = fullresp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+            if (null != contentType && contentType.startsWith("application/xml")) {
+                return extractAndReturnOSSError(fullresp, "get info error");
+            } else {
+                return fullresp.body().flatMap(body -> body.content().compose(MessageUtil.AUTOSTEP2DWB));
+            }
+        }).doOnUnsubscribe(interaction.initiator().closer()).toList().map(dwbs -> {
+            final ByteBuf content = Nettys.dwbs2buf(dwbs);
+            try {
+                return decoder.call(MessageUtil.contentAsInputStream(content), resptype);
+            } finally {
+                content.release();
+            }
+        }));
+    }
+
     @Override
     public Func1<Interact, Observable<? extends MessageBody>> process(final String pathToImage, final String actions) {
             final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
@@ -87,7 +113,7 @@ public class OSSImageServiceImpl implements OSSImageService {
                     });
     }
 
-    private <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
+    private static <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
         return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
                 .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));
     }

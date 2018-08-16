@@ -13,6 +13,7 @@ import org.jocean.http.Interaction;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
 import org.jocean.http.util.Nettys;
+import org.jocean.idiom.DisposableWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +77,7 @@ public class OSSImageServiceImpl implements OSSImageService {
     private static <RESP> Transformer<Interaction, RESP> checkErrorAndResponseAs(
             final Class<RESP> resptype,
             final Func2<InputStream, Class<RESP>, RESP> decoder) {
-        return interactions -> interactions.flatMap(interaction -> interaction.execute().flatMap(fullresp -> {
+        return interactions -> interactions.flatMap(interaction -> interaction.execute().<DisposableWrapper<? extends ByteBuf>>flatMap(fullresp -> {
             final String contentType = fullresp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
             if (null != contentType && contentType.startsWith("application/xml")) {
                 return extractAndReturnOSSError(fullresp, "get info error");
@@ -102,7 +103,7 @@ public class OSSImageServiceImpl implements OSSImageService {
 
             return interact -> interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
                     .flatMap(interaction->interaction.execute())
-                    .flatMap(fullmsg -> {
+                    .<MessageBody>flatMap(fullmsg -> {
                         final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                         if (null != contentType && contentType.startsWith("application/xml")) {
 //                            throw new RuntimeException("error for process for oss object");

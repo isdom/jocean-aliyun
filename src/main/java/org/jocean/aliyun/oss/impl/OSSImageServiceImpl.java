@@ -3,11 +3,10 @@ package org.jocean.aliyun.oss.impl;
 import java.io.InputStream;
 import java.util.List;
 
-import org.jocean.aliyun.oss.OSSError;
 import org.jocean.aliyun.oss.OSSImageService;
+import org.jocean.aliyun.oss.OSSUtil;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
-import org.jocean.http.FullMessage;
 import org.jocean.http.Interact;
 import org.jocean.http.Interaction;
 import org.jocean.http.MessageBody;
@@ -22,7 +21,6 @@ import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
-import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable;
 import rx.Observable.Transformer;
 import rx.functions.Func1;
@@ -80,7 +78,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         return interactions -> interactions.flatMap(interaction -> interaction.execute().<DisposableWrapper<? extends ByteBuf>>flatMap(fullresp -> {
             final String contentType = fullresp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
             if (null != contentType && contentType.startsWith("application/xml")) {
-                return extractAndReturnOSSError(fullresp, "get info error");
+                return OSSUtil.extractAndReturnOSSError(fullresp, "get info error");
             } else {
                 return fullresp.body().flatMap(body -> body.content().compose(MessageUtil.AUTOSTEP2DWB));
             }
@@ -107,16 +105,11 @@ public class OSSImageServiceImpl implements OSSImageService {
                         final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                         if (null != contentType && contentType.startsWith("application/xml")) {
 //                            throw new RuntimeException("error for process for oss object");
-                            return extractAndReturnOSSError(fullmsg, "process oss object error");
+                            return OSSUtil.extractAndReturnOSSError(fullmsg, "process oss object error");
                         } else {
                             return fullmsg.body();
                         }
                     });
-    }
-
-    private static <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
-        return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
-                .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));
     }
 
     public void setEndpoint(final String endpoint) {

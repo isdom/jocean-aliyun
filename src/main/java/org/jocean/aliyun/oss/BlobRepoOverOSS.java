@@ -9,10 +9,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
-import org.jocean.http.FullMessage;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
-import org.jocean.http.MessageUtil;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
 import org.slf4j.Logger;
@@ -25,7 +23,6 @@ import com.aliyun.oss.common.utils.DateUtil;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
-import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
 import rx.functions.Action1;
@@ -106,7 +103,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return extractAndReturnOSSError(resp, "getObject error");
+                        return OSSUtil.extractAndReturnOSSError(resp, "getObject error");
                     } else {
                         return resp.body();
                     }
@@ -124,7 +121,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return extractAndReturnOSSError(resp, "getSimplifiedObjectMeta error");
+                        return OSSUtil.extractAndReturnOSSError(resp, "getSimplifiedObjectMeta error");
                     } else {
                         final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
                         final long size = HttpUtil.getContentLength(resp.message(), -1);
@@ -186,7 +183,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return extractAndReturnOSSError(resp, "copyObject error");
+                        return OSSUtil.extractAndReturnOSSError(resp, "copyObject error");
                     } else {
                         final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
                         LOG.info("object {} copied as {}, and new ETag is {}", sourceObjectName, destObjectName, etag);
@@ -206,17 +203,12 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return extractAndReturnOSSError(resp, "deleteObject error");
+                        return OSSUtil.extractAndReturnOSSError(resp, "deleteObject error");
                     } else {
                         LOG.info("object {} deleted", objectName);
                         return Observable.just(objectName);
                     }
                 });
-    }
-
-    private <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
-        return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
-                .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

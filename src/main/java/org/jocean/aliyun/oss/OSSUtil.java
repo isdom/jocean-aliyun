@@ -7,6 +7,10 @@ import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable;
 
 public class OSSUtil {
+    private OSSUtil() {
+        throw new IllegalStateException("No instances!");
+    }
+
     public static <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
         return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
                 .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));

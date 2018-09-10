@@ -11,8 +11,10 @@ import javax.inject.Inject;
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
+import org.jocean.http.MessageUtil;
 import org.jocean.idiom.ExceptionUtils;
 import org.jocean.netty.BlobRepo;
+import org.jocean.netty.CopyObjectResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +25,7 @@ import com.aliyun.oss.common.utils.DateUtil;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
 import rx.functions.Action1;
@@ -68,12 +71,13 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(objname))
                 .execution()
                 .flatMap(execution -> execution.execute())
-                .map(resp -> resp.message())
-                .doOnNext(resp -> {
+                .<HttpResponse>flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
-                    final String contentType = resp.headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        throw new RuntimeException("error for putObject to oss");
+                        return OSSUtil.extractAndReturnOSSError(resp, "putObject error");
+                    } else {
+                        return Observable.just(resp.message());
                     }
                 })
                 .map(resp -> resp.headers().get(HttpHeaderNames.ETAG)).map(etag -> {
@@ -166,7 +170,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     x-oss-copy-source: /SourceBucketName/SourceObjectName
     */
     @Override
-    public Func1<Interact, Observable<String>> copyObject(final String sourceObjectName, final String destObjectName) {
+    public Func1<Interact, Observable<CopyObjectResult>> copyObject(final String sourceObjectName, final String destObjectName) {
         return interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + destObjectName)
                 .onrequest(obj -> {
@@ -179,15 +183,19 @@ public class BlobRepoOverOSS implements BlobRepo {
                 .onrequest(signRequest(destObjectName))
                 .execution()
                 .flatMap(execution -> execution.execute())
-                .<String>flatMap(resp -> {
+                .<CopyObjectResult>flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return OSSUtil.extractAndReturnOSSError(resp, "copyObject error");
+                        if (null != etag) {
+                            LOG.info("object {} copied as {}, and new ETag is {}", sourceObjectName, destObjectName, etag);
+                            return resp.body().flatMap(body -> MessageUtil.<CopyObjectResult>decodeXmlAs(body, CopyObjectResult.class));
+                        } else {
+                            return OSSUtil.extractAndReturnOSSError(resp, "copyObject error");
+                        }
                     } else {
-                        final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
-                        LOG.info("object {} copied as {}, and new ETag is {}", sourceObjectName, destObjectName, etag);
-                        return Observable.just(destObjectName);
+                        return Observable.error(new RuntimeException("invalid response:" + resp.message().toString()));
                     }
                 });
     }

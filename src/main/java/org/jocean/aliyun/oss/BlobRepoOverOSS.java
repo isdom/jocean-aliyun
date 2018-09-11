@@ -8,13 +8,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
+import org.jocean.aliyun.BlobRepo;
+import org.jocean.aliyun.CopyObjectResult;
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
-import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
+import org.jocean.http.RpcRunner;
 import org.jocean.idiom.ExceptionUtils;
-import org.jocean.netty.BlobRepo;
-import org.jocean.netty.CopyObjectResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,8 +28,8 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponse;
 import io.netty.handler.codec.http.HttpUtil;
 import rx.Observable;
+import rx.Observable.Transformer;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
 public class BlobRepoOverOSS implements BlobRepo {
 
@@ -56,7 +56,7 @@ public class BlobRepoOverOSS implements BlobRepo {
             }
 
             @Override
-            public Func1<Interact, Observable<PutObjectResult>> build() {
+            public Transformer<RpcRunner, PutObjectResult> build() {
                 if (null == objnameRef.get() || null == bodyRef.get()) {
                     throw new RuntimeException("invalid put object parameters.");
                 }
@@ -65,8 +65,9 @@ public class BlobRepoOverOSS implements BlobRepo {
         };
     }
 
-    public Func1<Interact, Observable<PutObjectResult>> putObject(final String objname, final MessageBody body) {
-        return interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
+    public Transformer<RpcRunner, PutObjectResult> putObject(final String objname, final MessageBody body) {
+        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+                interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname))
                 .execution()
@@ -80,7 +81,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                         return Observable.just(resp.message());
                     }
                 })
-                .map(resp -> resp.headers().get(HttpHeaderNames.ETAG)).map(etag -> {
+                .map(resp -> resp.headers().get(HttpHeaderNames.ETAG)).<PutObjectResult>map(etag -> {
                     final String unquotes_etag = etag.replaceAll("\"", "");
                     return new PutObjectResult() {
                         @Override
@@ -93,12 +94,13 @@ public class BlobRepoOverOSS implements BlobRepo {
                             return unquotes_etag;
                         }
                     };
-                });
+                })));
     }
 
     @Override
-    public Func1<Interact, Observable<MessageBody>> getObject(final String objname) {
-        return interact->interact.method(HttpMethod.GET).uri(uri4bucket())
+    public Transformer<RpcRunner, MessageBody> getObject(final String objname) {
+        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+                interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objname)
                 .onrequest(signRequest(objname))
                 .execution()
@@ -111,12 +113,13 @@ public class BlobRepoOverOSS implements BlobRepo {
                     } else {
                         return resp.body();
                     }
-                });
+                })));
     }
 
     @Override
-    public Func1<Interact, Observable<SimplifiedObjectMeta>> getSimplifiedObjectMeta(final String objectName) {
-        return interact->interact.method(HttpMethod.GET).uri(uri4bucket())
+    public Transformer<RpcRunner, SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
+        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+                interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
                 .execution()
@@ -158,7 +161,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                             }
                         });
                     }
-                });
+                })));
     }
 
     /* REF: https://help.aliyun.com/document_detail/31979.html?spm=a2c4g.11186623.6.926.p75n2Q
@@ -170,8 +173,9 @@ public class BlobRepoOverOSS implements BlobRepo {
     x-oss-copy-source: /SourceBucketName/SourceObjectName
     */
     @Override
-    public Func1<Interact, Observable<CopyObjectResult>> copyObject(final String sourceObjectName, final String destObjectName) {
-        return interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
+    public Transformer<RpcRunner, CopyObjectResult> copyObject(final String sourceObjectName, final String destObjectName) {
+        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+                interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + destObjectName)
                 .onrequest(obj -> {
                     if (obj instanceof HttpRequest) {
@@ -197,12 +201,13 @@ public class BlobRepoOverOSS implements BlobRepo {
                     } else {
                         return Observable.error(new RuntimeException("invalid response:" + resp.message().toString()));
                     }
-                });
+                })));
     }
 
     @Override
-    public Func1<Interact, Observable<String>> deleteObject(final String objectName) {
-        return interact->interact.method(HttpMethod.DELETE).uri(uri4bucket())
+    public Transformer<RpcRunner, String> deleteObject(final String objectName) {
+        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+                interact->interact.method(HttpMethod.DELETE).uri(uri4bucket())
                 .path("/" + objectName)
                 .onrequest(signRequest(objectName))
                 .execution()
@@ -216,7 +221,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                         LOG.info("object {} deleted", objectName);
                         return Observable.just(objectName);
                     }
-                });
+                })));
     }
 
     private void addDateAndSign(final HttpRequest request, final String objname) {

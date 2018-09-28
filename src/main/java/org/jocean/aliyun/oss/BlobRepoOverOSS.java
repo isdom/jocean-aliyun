@@ -201,7 +201,9 @@ public class BlobRepoOverOSS implements BlobRepo {
                     } else {
                         return Observable.error(new RuntimeException("invalid response:" + resp.message().toString()));
                     }
-                })));
+                }))).doOnNext(result -> {
+                    result.setETag(result.getETag().replaceAll("\"", ""));
+                });
     }
 
     @Override

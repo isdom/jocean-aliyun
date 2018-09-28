@@ -7,10 +7,10 @@ import org.jocean.aliyun.oss.OSSImageService;
 import org.jocean.aliyun.oss.OSSUtil;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
-import org.jocean.http.Interact;
 import org.jocean.http.Interaction;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
+import org.jocean.http.RpcRunner;
 import org.jocean.http.util.Nettys;
 import org.jocean.idiom.DisposableWrapper;
 import org.slf4j.Logger;
@@ -21,9 +21,7 @@ import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
-import rx.Observable;
 import rx.Observable.Transformer;
-import rx.functions.Func1;
 import rx.functions.Func2;
 
 public class OSSImageServiceImpl implements OSSImageService {
@@ -33,12 +31,14 @@ public class OSSImageServiceImpl implements OSSImageService {
             LoggerFactory.getLogger(OSSImageServiceImpl.class);
 
     @Override
-    public Func1<Interact, Observable<? extends ImageInfo>> info(final String pathToImage) {
+    public Transformer<RpcRunner, ImageInfo> info(final String pathToImage) {
         final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
         req.setPathToImage(pathToImage);
         req.setProcessActions(actions().info().and().build());
         final String uri = "http://" + _bucketName + "." + _endpoint;
-        return interact -> interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
+
+        return rpcs -> rpcs.flatMap(rpc -> rpc.execute(interact ->
+            interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
                 .compose(checkErrorAndResponseAs(GetImageInfoResponse.class, MessageUtil::unserializeAsJson))
                 .<ImageInfo>map(resp -> new ImageInfo() {
                     @Override
@@ -69,7 +69,7 @@ public class OSSImageServiceImpl implements OSSImageService {
                     public int imageHeight() {
                         return resp.getImageHeight();
                     }
-                });
+                })));
     }
 
     private static <RESP> Transformer<Interaction, RESP> checkErrorAndResponseAs(
@@ -93,13 +93,14 @@ public class OSSImageServiceImpl implements OSSImageService {
     }
 
     @Override
-    public Func1<Interact, Observable<? extends MessageBody>> process(final String pathToImage, final String actions) {
-            final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
-            req.setPathToImage(pathToImage);
-            req.setProcessActions(actions);
-            final String uri = "http://" + _bucketName + "." + _endpoint;
+    public Transformer<RpcRunner, MessageBody> process(final String pathToImage, final String actions) {
+        final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
+        req.setPathToImage(pathToImage);
+        req.setProcessActions(actions);
+        final String uri = "http://" + _bucketName + "." + _endpoint;
 
-            return interact -> interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
+        return rpcs -> rpcs.flatMap(rpc -> rpc.execute(interact ->
+            interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
                     .flatMap(interaction->interaction.execute())
                     .<MessageBody>flatMap(fullmsg -> {
                         final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
@@ -109,7 +110,7 @@ public class OSSImageServiceImpl implements OSSImageService {
                         } else {
                             return fullmsg.body();
                         }
-                    });
+                    })));
     }
 
     public void setEndpoint(final String endpoint) {

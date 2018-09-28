@@ -1,10 +1,9 @@
 package org.jocean.aliyun.oss;
 
-import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
+import org.jocean.http.RpcRunner;
 
-import rx.Observable;
-import rx.functions.Func1;
+import rx.Observable.Transformer;
 
 public interface OSSImageService {
     public interface ImageInfo {
@@ -14,9 +13,9 @@ public interface OSSImageService {
         public int imageHeight();
     }
 
-    public Func1<Interact, Observable<? extends ImageInfo>> info(final String pathToImage);
+    public Transformer<RpcRunner, ImageInfo> info(final String pathToImage);
 
-    public Func1<Interact, Observable<? extends MessageBody>> process(final String pathToImage, final String actions);
+    public Transformer<RpcRunner, MessageBody> process(final String pathToImage, final String actions);
 
     public interface ProcessAction {
         public ActionSet and();

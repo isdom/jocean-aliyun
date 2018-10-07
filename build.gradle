@@ -27,10 +27,10 @@ dependencies {
     compile 'com.aliyun.openservices:ons-client:1.6.0.Final'
     
     /* for aliyun-sdk-oss */
-    compile 'com.aliyun.oss:aliyun-sdk-oss:2.8.1'
+    compile 'com.aliyun.oss:aliyun-sdk-oss:3.3.0'
     
     /*aliyun mns*/
-    compile 'com.aliyun.mns:aliyun-sdk-mns:1.1.8.4'
+    compile 'com.aliyun.mns:aliyun-sdk-mns:1.1.8.6'
     
     compile "org.springframework:spring-context-support:${springVersion}"
     

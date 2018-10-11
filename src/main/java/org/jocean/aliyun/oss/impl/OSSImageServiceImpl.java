@@ -121,9 +121,6 @@ public class OSSImageServiceImpl implements OSSImageService {
         this._bucketName = bucketName;
     }
 
-//    @Inject
-//    private BeanFinder _finder;
-
     private String _endpoint;
 
     private String _bucketName;

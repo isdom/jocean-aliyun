@@ -37,7 +37,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         req.setProcessActions(actions().info().and().build());
         final String uri = "http://" + _bucketName + "." + _endpoint;
 
-        return rpcs -> rpcs.flatMap(rpc -> rpc.execute(interact ->
+        return runners -> runners.flatMap(runner -> runner.name("ossimg.info").execute(interact ->
             interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
                 .compose(checkErrorAndResponseAs(GetImageInfoResponse.class, MessageUtil::unserializeAsJson))
                 .<ImageInfo>map(resp -> new ImageInfo() {
@@ -99,7 +99,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         req.setProcessActions(actions);
         final String uri = "http://" + _bucketName + "." + _endpoint;
 
-        return rpcs -> rpcs.flatMap(rpc -> rpc.execute(interact ->
+        return runners -> runners.flatMap(runner -> runner.name("ossimg.process").execute(interact ->
             interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
                     .flatMap(interaction->interaction.execute())
                     .<MessageBody>flatMap(fullmsg -> {

@@ -66,7 +66,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
 
     public Transformer<RpcRunner, PutObjectResult> putObject(final String objname, final MessageBody body) {
-        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+        return runners -> runners.flatMap( run -> run.name("oss.putObject").execute(
                 interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname))
@@ -99,7 +99,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     @Override
     public Transformer<RpcRunner, MessageBody> getObject(final String objname) {
-        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+        return runners -> runners.flatMap( run -> run.name("oss.getObject").execute(
                 interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objname)
                 .onrequest(signRequest(objname))
@@ -118,7 +118,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     @Override
     public Transformer<RpcRunner, SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
-        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+        return runners -> runners.flatMap( run -> run.name("oss.getSimplifiedObjectMeta").execute(
                 interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
@@ -174,7 +174,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     */
     @Override
     public Transformer<RpcRunner, CopyObjectResult> copyObject(final String sourceObjectName, final String destObjectName) {
-        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+        return runners -> runners.flatMap( run -> run.name("oss.copyObject").execute(
                 interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + destObjectName)
                 .onrequest(obj -> {
@@ -208,7 +208,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     @Override
     public Transformer<RpcRunner, String> deleteObject(final String objectName) {
-        return rpcs -> rpcs.flatMap( rpc -> rpc.execute(
+        return runners -> runners.flatMap( runner -> runner.name("oss.deleteObject").execute(
                 interact->interact.method(HttpMethod.DELETE).uri(uri4bucket())
                 .path("/" + objectName)
                 .onrequest(signRequest(objectName))

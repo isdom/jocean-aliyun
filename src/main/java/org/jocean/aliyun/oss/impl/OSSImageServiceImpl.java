@@ -1,28 +1,23 @@
 package org.jocean.aliyun.oss.impl;
 
-import java.io.InputStream;
 import java.util.List;
 
 import org.jocean.aliyun.oss.OSSImageService;
 import org.jocean.aliyun.oss.OSSUtil;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
-import org.jocean.http.Interaction;
+import org.jocean.http.ContentUtil;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
 import org.jocean.http.RpcRunner;
-import org.jocean.http.util.Nettys;
-import org.jocean.idiom.DisposableWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpMethod;
 import rx.Observable.Transformer;
-import rx.functions.Func2;
 
 public class OSSImageServiceImpl implements OSSImageService {
 
@@ -38,9 +33,15 @@ public class OSSImageServiceImpl implements OSSImageService {
         final String uri = "http://" + _bucketName + "." + _endpoint;
 
         return runners -> runners.flatMap(runner -> runner.name("ossimg.info").execute(interact ->
-            interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
-                .compose(checkErrorAndResponseAs(GetImageInfoResponse.class, MessageUtil::unserializeAsJson))
-                .<ImageInfo>map(resp -> new ImageInfo() {
+                interact.reqbean(req).uri(uri).method(HttpMethod.GET).response(null)
+                .<GetImageInfoResponse>flatMap(fullresp -> {
+                    final String contentType = fullresp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                    if (null != contentType && contentType.startsWith("application/xml")) {
+                        return OSSUtil.extractAndReturnOSSError(fullresp, "get info error");
+                    } else {
+                        return fullresp.body().compose(MessageUtil.body2bean(ContentUtil.ASJSON, GetImageInfoResponse.class));
+                    }
+                }).map(resp -> (ImageInfo)new ImageInfo() {
                     @Override
                     public String toString() {
                         final StringBuilder builder = new StringBuilder();
@@ -72,26 +73,6 @@ public class OSSImageServiceImpl implements OSSImageService {
                 })));
     }
 
-    private static <RESP> Transformer<Interaction, RESP> checkErrorAndResponseAs(
-            final Class<RESP> resptype,
-            final Func2<InputStream, Class<RESP>, RESP> decoder) {
-        return interactions -> interactions.flatMap(interaction -> interaction.execute().<DisposableWrapper<? extends ByteBuf>>flatMap(fullresp -> {
-            final String contentType = fullresp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
-            if (null != contentType && contentType.startsWith("application/xml")) {
-                return OSSUtil.extractAndReturnOSSError(fullresp, "get info error");
-            } else {
-                return fullresp.body().flatMap(body -> body.content().compose(MessageUtil.AUTOSTEP2DWB));
-            }
-        }).doOnUnsubscribe(interaction.initiator().closer()).toList().map(dwbs -> {
-            final ByteBuf content = Nettys.dwbs2buf(dwbs);
-            try {
-                return decoder.call(MessageUtil.contentAsInputStream(content), resptype);
-            } finally {
-                content.release();
-            }
-        }));
-    }
-
     @Override
     public Transformer<RpcRunner, MessageBody> process(final String pathToImage, final String actions) {
         final GetImageWithProcessRequest req = new GetImageWithProcessRequest();
@@ -100,17 +81,17 @@ public class OSSImageServiceImpl implements OSSImageService {
         final String uri = "http://" + _bucketName + "." + _endpoint;
 
         return runners -> runners.flatMap(runner -> runner.name("ossimg.process").execute(interact ->
-            interact.reqbean(req).uri(uri).method(HttpMethod.GET).execution()
-                    .flatMap(interaction->interaction.execute())
-                    .<MessageBody>flatMap(fullmsg -> {
-                        final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
-                        if (null != contentType && contentType.startsWith("application/xml")) {
+            interact.reqbean(req).uri(uri).method(HttpMethod.GET)
+            .response(null)
+            .<MessageBody>flatMap(fullmsg -> {
+                final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
+                if (null != contentType && contentType.startsWith("application/xml")) {
 //                            throw new RuntimeException("error for process for oss object");
-                            return OSSUtil.extractAndReturnOSSError(fullmsg, "process oss object error");
-                        } else {
-                            return fullmsg.body();
-                        }
-                    })));
+                    return OSSUtil.extractAndReturnOSSError(fullmsg, "process oss object error");
+                } else {
+                    return fullmsg.body();
+                }
+            })));
     }
 
     public void setEndpoint(final String endpoint) {

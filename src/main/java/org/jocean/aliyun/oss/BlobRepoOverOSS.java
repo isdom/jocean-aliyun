@@ -70,7 +70,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname))
-                .response(null)
+                .response()
                 .<HttpResponse>flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
@@ -102,7 +102,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objname)
                 .onrequest(signRequest(objname))
-                .response(null)
+                .response()
                 .<MessageBody>flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
@@ -120,7 +120,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 interact->interact.method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
-                .response(null)
+                .response()
                 .<SimplifiedObjectMeta>flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
@@ -182,7 +182,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     }
                 })
                 .onrequest(signRequest(destObjectName))
-                .response(null)
+                .response()
                 .<CopyObjectResult>flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
@@ -208,7 +208,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                 interact->interact.method(HttpMethod.DELETE).uri(uri4bucket())
                 .path("/" + objectName)
                 .onrequest(signRequest(objectName))
-                .response(null)
+                .response()
                 .<String>flatMap(resp -> {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);

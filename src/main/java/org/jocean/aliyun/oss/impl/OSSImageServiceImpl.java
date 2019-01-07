@@ -33,7 +33,7 @@ public class OSSImageServiceImpl implements OSSImageService {
         final String uri = "http://" + _bucketName + "." + _endpoint;
 
         return runners -> runners.flatMap(runner -> runner.name("ossimg.info").execute(interact ->
-                interact.reqbean(req).uri(uri).method(HttpMethod.GET).response(null)
+                interact.reqbean(req).uri(uri).method(HttpMethod.GET).response()
                 .<GetImageInfoResponse>flatMap(fullresp -> {
                     final String contentType = fullresp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
@@ -82,7 +82,7 @@ public class OSSImageServiceImpl implements OSSImageService {
 
         return runners -> runners.flatMap(runner -> runner.name("ossimg.process").execute(interact ->
             interact.reqbean(req).uri(uri).method(HttpMethod.GET)
-            .response(null)
+            .response()
             .<MessageBody>flatMap(fullmsg -> {
                 final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                 if (null != contentType && contentType.startsWith("application/xml")) {

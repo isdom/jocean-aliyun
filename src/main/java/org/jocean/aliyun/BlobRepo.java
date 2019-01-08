@@ -97,6 +97,7 @@ public interface BlobRepo {
          * @param id
          *            Owner Id.
          */
+        @JacksonXmlProperty(localName="ID")
         public void setId(final String id) {
             this.id = id;
         }
@@ -116,6 +117,7 @@ public interface BlobRepo {
          * @param name
          *            Owner's display name.
          */
+        @JacksonXmlProperty(localName="DisplayName")
         public void setDisplayName(final String name) {
             this.displayName = name;
         }
@@ -232,6 +234,7 @@ public interface BlobRepo {
          * @param key
          *            Object key.
          */
+        @JacksonXmlProperty(localName="Key")
         public void setKey(final String key) {
             this.key = key;
         }
@@ -252,6 +255,7 @@ public interface BlobRepo {
          * @param eTag
          *            ETag value.
          */
+        @JacksonXmlProperty(localName="ETag")
         public void setETag(final String eTag) {
             this.eTag = eTag;
         }
@@ -271,6 +275,7 @@ public interface BlobRepo {
          * @param size
          *            Object size.
          */
+        @JacksonXmlProperty(localName="Size")
         public void setSize(final long size) {
             this.size = size;
         }
@@ -290,6 +295,7 @@ public interface BlobRepo {
          * @param lastModified
          *            Last modified time.
          */
+        @JacksonXmlProperty(localName="LastModified")
         public void setLastModified(final Date lastModified) {
             this.lastModified = lastModified;
         }
@@ -309,6 +315,7 @@ public interface BlobRepo {
          * @param owner
          *            Object owner.
          */
+        @JacksonXmlProperty(localName="Owner")
         public void setOwner(final Owner owner) {
             this.owner = owner;
         }
@@ -328,6 +335,7 @@ public interface BlobRepo {
          * @param storageClass
          *            Object storage class.
          */
+        @JacksonXmlProperty(localName="StorageClass")
         public void setStorageClass(final String storageClass) {
             this.storageClass = storageClass;
         }
@@ -422,6 +430,7 @@ public interface BlobRepo {
             return nextMarker;
         }
 
+        @JacksonXmlProperty(localName="NextMarker")
         public void setNextMarker(final String nextMarker) {
             this.nextMarker = nextMarker;
         }
@@ -439,6 +448,7 @@ public interface BlobRepo {
             return prefix;
         }
 
+        @JacksonXmlProperty(localName="Prefix")
         public void setPrefix(final String prefix) {
             this.prefix = prefix;
         }
@@ -447,6 +457,7 @@ public interface BlobRepo {
             return marker;
         }
 
+        @JacksonXmlProperty(localName="Marker")
         public void setMarker(final String marker) {
             this.marker = marker;
         }
@@ -455,6 +466,7 @@ public interface BlobRepo {
             return maxKeys;
         }
 
+        @JacksonXmlProperty(localName="MaxKeys")
         public void setMaxKeys(final int maxKeys) {
             this.maxKeys = maxKeys;
         }
@@ -463,6 +475,7 @@ public interface BlobRepo {
             return delimiter;
         }
 
+        @JacksonXmlProperty(localName="Delimiter")
         public void setDelimiter(final String delimiter) {
             this.delimiter = delimiter;
         }
@@ -471,6 +484,7 @@ public interface BlobRepo {
             return encodingType;
         }
 
+        @JacksonXmlProperty(localName="EncodingType")
         public void setEncodingType(final String encodingType) {
             this.encodingType = encodingType;
         }
@@ -479,6 +493,7 @@ public interface BlobRepo {
             return isTruncated;
         }
 
+        @JacksonXmlProperty(localName="IsTruncated")
         public void setTruncated(final boolean isTruncated) {
             this.isTruncated = isTruncated;
         }

@@ -40,6 +40,8 @@ public interface BlobRepo {
 
     public Transformer<RpcRunner, MessageBody> getObject(final String objname);
 
+    public Transformer<RpcRunner, MessageBody> listObjects( String prefix);
+
     public Transformer<RpcRunner, CopyObjectResult> copyObject(final String sourceKey, final String destinationKey);
 
     public Transformer<RpcRunner, String> deleteObject(final String key);

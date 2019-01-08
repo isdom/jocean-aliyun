@@ -115,6 +115,24 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
 
     @Override
+    public Transformer<RpcRunner, MessageBody> listObjects( final String prefix) {
+        return runners -> runners.flatMap( run -> run.name("oss.listObjects").execute(
+                interact->{
+                    interact = interact.method(HttpMethod.GET).uri(uri4bucket())
+                        .path("/")
+                        .onrequest(signRequest(""));
+
+                    if (null != prefix) {
+                        interact = interact.paramAsQuery("prefix", prefix);
+                    }
+
+                    return interact.response().<MessageBody>flatMap(resp -> {
+                            return resp.body();
+                    });
+                }));
+    }
+
+    @Override
     public Transformer<RpcRunner, SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
         return runners -> runners.flatMap( run -> run.name("oss.getSimplifiedObjectMeta").execute(
                 interact->interact.method(HttpMethod.GET).uri(uri4bucket())

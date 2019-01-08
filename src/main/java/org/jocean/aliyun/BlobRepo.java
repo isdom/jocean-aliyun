@@ -2,9 +2,11 @@ package org.jocean.aliyun;
 
 import java.util.Date;
 
+import org.jocean.http.FullMessage;
 import org.jocean.http.MessageBody;
 import org.jocean.http.RpcRunner;
 
+import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable.Transformer;
 
 public interface BlobRepo {
@@ -40,7 +42,7 @@ public interface BlobRepo {
 
     public Transformer<RpcRunner, MessageBody> getObject(final String objname);
 
-    public Transformer<RpcRunner, MessageBody> listObjects( String prefix);
+    public Transformer<RpcRunner, FullMessage<HttpResponse>> listObjects( String prefix);
 
     public Transformer<RpcRunner, CopyObjectResult> copyObject(final String sourceKey, final String destinationKey);
 

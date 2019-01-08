@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.jocean.aliyun.BlobRepo;
 import org.jocean.aliyun.CopyObjectResult;
 import org.jocean.aliyun.oss.internal.OSSRequestSigner;
+import org.jocean.http.FullMessage;
 import org.jocean.http.MessageBody;
 import org.jocean.http.MessageUtil;
 import org.jocean.http.RpcRunner;
@@ -115,7 +116,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     }
 
     @Override
-    public Transformer<RpcRunner, MessageBody> listObjects( final String prefix) {
+    public Transformer<RpcRunner, FullMessage<HttpResponse>> listObjects( final String prefix) {
         return runners -> runners.flatMap( run -> run.name("oss.listObjects").execute(
                 interact->{
                     interact = interact.method(HttpMethod.GET).uri(uri4bucket())
@@ -126,9 +127,10 @@ public class BlobRepoOverOSS implements BlobRepo {
                         interact = interact.paramAsQuery("prefix", prefix);
                     }
 
-                    return interact.response().<MessageBody>flatMap(resp -> {
-                            return resp.body();
-                    });
+                    return interact.response();
+//                            .<MessageBody>flatMap(resp -> {
+//                            return resp.body();
+//                    });
                 }));
     }
 

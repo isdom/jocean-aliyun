@@ -67,6 +67,19 @@ public class DefaultMetadataAPI implements MetadataAPI {
         }));
     }
 
+    //  /private-ipv4
+    @Override
+    public Transformer<RpcRunner, String> getPrivateIpv4() {
+        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getPrivateIpv4").execute(interact -> {
+            try {
+                return interact.method(HttpMethod.GET).uri(METADATA_URI).path(METADATA_PATH_BASE + "private-ipv4")
+                        .responseAs(ContentUtil.ASTEXT, String.class);
+            } catch (final Exception e) {
+                return Observable.error(e);
+            }
+        }));
+    }
+
     //  访问 http://100.100.100.200/latest/meta-data/ram/security-credentials/EcsRamRoleTest 获取 STS 临时凭证。
     //      路径最后一部分是 RAM 角色名称，您应替换为自己的创建的 RAM 角色名称。
     @Override

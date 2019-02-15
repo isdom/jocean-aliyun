@@ -22,6 +22,9 @@ public interface MetadataAPI {
     //  获取实例ID
     public Transformer<RpcRunner, String> getInstanceId();
 
+    //  获取实例主网卡的私网IPv4地址。
+    public Transformer<RpcRunner, String> getPrivateIpv4();
+
     public interface STSTokenResponse {
         @JSONField(name = "Code")
         public String getCode();

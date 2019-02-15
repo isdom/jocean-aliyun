@@ -42,7 +42,7 @@ public interface MetadataAPI {
         public String getSecurityToken();
 
         @JSONField(name = "SecurityToken")
-        public void setSecurityToken(final String stoken);
+        public void setSecurityToken(final String stsToken);
 
         //  UTC 通用标准时
         @JSONField(name = "Expiration")

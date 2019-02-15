@@ -23,6 +23,8 @@ dependencies {
     compile 'javax.inject:javax.inject:1'
     compile 'com.google.guava:guava:20.0'
     
+    compile 'com.aliyun:aliyun-java-sdk-core:4.3.3'
+    
     /*aliyun ons*/
     compile 'com.aliyun.openservices:ons-client:1.7.8.Final'
     

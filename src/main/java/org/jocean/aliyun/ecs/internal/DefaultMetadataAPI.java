@@ -30,6 +30,19 @@ public class DefaultMetadataAPI implements MetadataAPI {
 
     */
 
+    //      /hostname
+    @Override
+    public Transformer<RpcRunner, String> getHostname() {
+        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getHostname").execute(interact -> {
+            try {
+                return interact.method(HttpMethod.GET).uri(METADATA_URI).path(METADATA_PATH_BASE + "hostname")
+                        .responseAs(ContentUtil.ASTEXT, String.class);
+            } catch (final Exception e) {
+                return Observable.error(e);
+            }
+        }));
+    }
+
     @Override
     public Transformer<RpcRunner, String> getRegionId() {
         return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getRegionId").execute(interact -> {

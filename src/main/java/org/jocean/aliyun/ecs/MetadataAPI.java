@@ -13,6 +13,9 @@ import rx.Observable.Transformer;
 
 public interface MetadataAPI {
 
+    //  获取实例的主机名
+    public Transformer<RpcRunner, String> getHostname();
+
     //  获取实例所属地域
     public Transformer<RpcRunner, String> getRegionId();
 

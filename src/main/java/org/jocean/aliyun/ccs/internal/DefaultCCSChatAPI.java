@@ -60,7 +60,7 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
     }
 
     @Override
-    public Transformer<RpcRunner, String> uploadFile(final String tntInstId, final long timestamp,
+    public Transformer<RpcRunner, String> uploadFile(final String tntInstId, final String scene, final long timestamp,
             final String fileType, final String fileName,
             final Observable<? extends MessageBody> file,
             final Mac digestInstance) {
@@ -72,9 +72,10 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
                 .uri("https://cschat-ccs.aliyun.com")
                 .path("/openapi/uploadFile")
                 .paramAsQuery("tntInstId", tntInstId)
-                .paramAsQuery("src", "outerservice")
-                .paramAsQuery("timestamp", Long.toString(timestamp))
+                .paramAsQuery("scene", scene)
                 .paramAsQuery("digest", toHexString(rawHmac))
+                .paramAsQuery("timestamp", Long.toString(timestamp))
+                .paramAsQuery("src", "outerservice")
                 .body(file.compose(tomultipart(fileType, fileName, timestamp)))
                 .responseAs(ContentUtil.ASTEXT, String.class)));
     }

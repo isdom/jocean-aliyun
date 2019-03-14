@@ -12,7 +12,7 @@ public interface CCSChatAPI {
     public Mac digestInstance();
 
     public Transformer<RpcRunner, String> uploadFile(
-            final String tntInstId, final long timestamp,
+            final String tntInstId, final String scene, final long timestamp,
             final String fileType, final String fileName,
             final Observable<? extends MessageBody> file,
             final Mac digestInstance);

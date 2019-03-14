@@ -195,7 +195,7 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
         });
     }
 
-    @Value("${key.private}")
+    @Value("${ccs.key}")
     void setPrivateKey(final String key) {
         this._keyBytes = key.getBytes(Charsets.UTF_8);
     }

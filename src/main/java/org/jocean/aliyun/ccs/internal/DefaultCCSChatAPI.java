@@ -131,6 +131,15 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
         sb.append("=\"");
         sb.append(name);
         sb.append("\"\r\n");
+        sb.append(HttpHeaderNames.CONTENT_TYPE);
+        sb.append(": ");
+        sb.append(HttpHeaderValues.TEXT_PLAIN);
+        sb.append("; charset=UTF-8");
+        sb.append("\r\n");
+        sb.append(HttpHeaderNames.CONTENT_TRANSFER_ENCODING);
+        sb.append(": 8bit");
+        sb.append("\r\n");
+
         sb.append("\r\n");
         sb.append(content);
         sb.append("\r\n");
@@ -175,6 +184,11 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
         sb.append(HttpHeaderNames.CONTENT_TYPE);
         sb.append(": ");
         sb.append(body.contentType());
+        sb.append("\r\n");
+
+        sb.append(HttpHeaderNames.CONTENT_TRANSFER_ENCODING);
+        sb.append(": ");
+        sb.append(HttpHeaderValues.BINARY);
         sb.append("\r\n\r\n");
 
         return sb.toString().getBytes(CharsetUtil.UTF_8);

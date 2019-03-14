@@ -183,9 +183,9 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
 
         sb.append(HttpHeaderNames.CONTENT_TYPE);
         sb.append(": ");
-        sb.append(body.contentType());
-//        sb.append(HttpHeaderValues.APPLICATION_OCTET_STREAM);
-        sb.append("; charset=ISO-8859-1");
+//        sb.append(body.contentType());
+        sb.append(HttpHeaderValues.APPLICATION_OCTET_STREAM);
+//        sb.append("; charset=ISO-8859-1");
         sb.append("\r\n");
 
         sb.append(HttpHeaderNames.CONTENT_TRANSFER_ENCODING);

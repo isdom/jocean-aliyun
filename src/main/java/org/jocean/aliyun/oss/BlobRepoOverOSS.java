@@ -238,6 +238,26 @@ public class BlobRepoOverOSS implements BlobRepo {
                 })));
     }
 
+    @Override
+    public Transformer<RpcRunner, String> putSymlink(final String targetObjectName, final String symlinkObjectName) {
+        return runners -> runners.flatMap( runner -> runner.name("oss.putSymlink").execute(
+                interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
+                .path("/" + symlinkObjectName + "?symlink")
+                .onrequest(obj -> {
+                    if (obj instanceof HttpRequest) {
+                        // add source object info
+                        final HttpRequest req = (HttpRequest)obj;
+                        req.headers().set("x-oss-symlink-target", targetObjectName);
+                    }
+                })
+                .onrequest(signRequest(symlinkObjectName))
+                .response()
+                .map(resp ->
+                    // https://help.aliyun.com/document_detail/45126.html?spm=a2c4g.11186623.6.1115.64c6bd4fF8GzVG
+                    resp.message().headers().get(HttpHeaderNames.ETAG)
+                )));
+    }
+
     private void addDateAndSign(final HttpRequest request, final String objname) {
         // Date header
         request.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));

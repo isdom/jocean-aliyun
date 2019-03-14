@@ -504,4 +504,6 @@ public interface BlobRepo {
     public Transformer<RpcRunner, CopyObjectResult> copyObject(final String sourceKey, final String destinationKey);
 
     public Transformer<RpcRunner, String> deleteObject(final String key);
+
+    public Transformer<RpcRunner, String> putSymlink(final String targetObjectName, final String symlinkObjectName);
 }

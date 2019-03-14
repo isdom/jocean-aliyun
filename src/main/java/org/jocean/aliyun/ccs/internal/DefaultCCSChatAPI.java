@@ -174,12 +174,12 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
         sb.append(filename);
         sb.append("\"\r\n");
 
-//        if (body.contentLength() > 0) {
-//            sb.append(HttpHeaderNames.CONTENT_LENGTH);
-//            sb.append(": ");
-//            sb.append(body.contentLength());
-//            sb.append("\r\n");
-//        }
+        if (body.contentLength() > 0) {
+            sb.append(HttpHeaderNames.CONTENT_LENGTH);
+            sb.append(": ");
+            sb.append(body.contentLength());
+            sb.append("\r\n");
+        }
 
         sb.append(HttpHeaderNames.CONTENT_TYPE);
         sb.append(": ");

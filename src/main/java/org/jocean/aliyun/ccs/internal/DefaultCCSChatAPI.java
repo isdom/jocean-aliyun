@@ -1,5 +1,6 @@
 package org.jocean.aliyun.ccs.internal;
 
+import java.net.URI;
 import java.util.Arrays;
 
 import javax.crypto.Mac;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.google.common.base.Charsets;
 
 import io.netty.buffer.ByteBuf;
@@ -62,6 +64,62 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
             sb.append(_HEX_DIGITS.charAt(b >>> 4)).append(_HEX_DIGITS.charAt(b & 0xF));
         }
         return sb.toString();
+    }
+
+    public interface FetchFileResponse extends CCSResponse {
+        @JSONField(name="url")
+        public String getUrl();
+
+        @JSONField(name="url")
+        public void setUrl(final String url);
+
+        @JSONField(name="fileKey")
+        public String getFileKey();
+
+        @JSONField(name="fileKey")
+        public void setFileKey(final String filekey);
+
+        @JSONField(name="timestamp")
+        public long getTimestamp();
+
+        @JSONField(name="timestamp")
+        public void setTimestamp(final long timestamp);
+    }
+
+    // https://help.aliyun.com/document_detail/62586.html?spm=a2c4g.11186623.6.563.2b4c418adJDz1w#fetchfile
+    @Override
+    public Transformer<RpcRunner, MessageBody> fetchFile(
+            final String tntInstId, final String scene, final long timestamp, final String fileKey) {
+        return runners -> runners.flatMap(runner -> runner.name("aliyunccs.fetchFileUrl").execute(interact -> {
+                final byte[] rawHmac = digestInstance().doFinal((fileKey + timestamp).getBytes(Charsets.UTF_8));
+                return interact.method(HttpMethod.GET)
+                        .uri("https://cschat-ccs.aliyun.com")
+                        .path("/openapi/fetchFile")
+                        .paramAsQuery("tntInstId", tntInstId)
+                        .paramAsQuery("scene", scene)
+                        .paramAsQuery("timestamp", Long.toString(timestamp))
+                        .paramAsQuery("digest", toHexString(rawHmac))
+                        .paramAsQuery("src", "outerservice")
+                        .paramAsQuery("fileKey", fileKey)
+                        .responseAs(ContentUtil.ASJSON, FetchFileResponse.class)
+                        .doOnNext(resp -> {
+                            if (resp.getCode() != null) {
+                                throw new RuntimeException(resp.toString());
+                            }
+                        });
+                }))
+                .flatMap(resp -> runners.flatMap(runner -> runner.name("aliyunccs.downloadFileForUrl").execute(interact -> {
+                    try {
+                        final String url = resp.getUrl();
+                        final URI uri = new URI(resp.getUrl());
+                        final int pathBegin = url.indexOf(uri.getRawPath());
+
+                        return interact.method(HttpMethod.GET).uri(url.substring(0, pathBegin)).path(url.substring(pathBegin))
+                                .response().flatMap(fullresp -> fullresp.body());
+                    } catch(final Exception e) {
+                        return Observable.error(e);
+                    }
+                })));
     }
 
     @Override

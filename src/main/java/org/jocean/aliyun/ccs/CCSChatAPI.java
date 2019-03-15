@@ -28,6 +28,10 @@ public interface CCSChatAPI {
         public void setMsg(final String msg);
     }
 
+
+    public Transformer<RpcRunner, MessageBody> fetchFile(
+            final String tntInstId, final String scene, final long timestamp, String fileKey);
+
     public interface UploadFileResponse extends CCSResponse {
         @JSONField(name="type")
         public String getType();

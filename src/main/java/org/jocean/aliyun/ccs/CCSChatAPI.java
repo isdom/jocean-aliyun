@@ -11,6 +11,9 @@ import rx.Observable;
 import rx.Observable.Transformer;
 
 public interface CCSChatAPI {
+
+    public Mac digestInstance();
+
     public interface CCSResponse {
         @JSONField(name="code")
         public Long getCode();
@@ -24,8 +27,6 @@ public interface CCSChatAPI {
         @JSONField(name="msg")
         public void setMsg(final String msg);
     }
-
-    public Mac digestInstance();
 
     public interface UploadFileResponse extends CCSResponse {
         @JSONField(name="type")

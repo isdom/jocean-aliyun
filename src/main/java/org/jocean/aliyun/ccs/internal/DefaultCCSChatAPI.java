@@ -12,6 +12,9 @@ import org.jocean.http.MessageBody;
 import org.jocean.http.RpcRunner;
 import org.jocean.idiom.DisposableWrapper;
 import org.jocean.idiom.DisposableWrapperUtil;
+import org.jocean.idiom.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.google.common.base.Charsets;
@@ -28,6 +31,7 @@ import rx.Observable.Transformer;
 import rx.functions.Action1;
 
 public class DefaultCCSChatAPI implements CCSChatAPI {
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultCCSChatAPI.class);
 
     @Override
     public Mac digestInstance() {
@@ -38,6 +42,7 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
 
             return mac;
         } catch (final Exception ex) {
+            LOG.warn("exception when digestInstance, detail: {}", ExceptionUtils.exception2detail(ex));
             return null;
         }
     }

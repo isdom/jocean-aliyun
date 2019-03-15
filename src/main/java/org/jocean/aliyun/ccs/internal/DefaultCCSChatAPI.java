@@ -60,7 +60,7 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
     }
 
     @Override
-    public Transformer<RpcRunner, String> uploadFile(final String tntInstId, final String scene, final long timestamp,
+    public Transformer<RpcRunner, UploadFileResponse> uploadFile(final String tntInstId, final String scene, final long timestamp,
             final String fileType, final String fileName,
             final Observable<? extends MessageBody> file,
             final Mac digestInstance) {
@@ -77,7 +77,13 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
                 .paramAsQuery("timestamp", Long.toString(timestamp))
                 .paramAsQuery("src", "outerservice")
                 .body(file.compose(tomultipart(fileType, fileName, timestamp)))
-                .responseAs(ContentUtil.ASTEXT, String.class)));
+                .responseAs(ContentUtil.ASJSON, UploadFileResponse.class)))
+                .doOnNext(resp -> {
+                    if (resp.getCode() != null) {
+                        throw new RuntimeException(resp.toString());
+                    }
+                })
+                ;
     }
 
     private static String getNewMultipartDelimiter() {

@@ -23,8 +23,10 @@ import com.google.common.base.Charsets;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.EmptyHttpHeaders;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaderValues;
+import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.util.CharsetUtil;
 import io.netty.util.internal.PlatformDependent;
@@ -169,6 +171,10 @@ public class DefaultCCSChatAPI implements CCSChatAPI {
                     + filehead.length + end.length + body.contentLength();
 
             return Observable.just((MessageBody)new MessageBody() {
+                @Override
+                public HttpHeaders headers() {
+                    return EmptyHttpHeaders.INSTANCE;
+                }
                 @Override
                 public String contentType() {
                     return contentType;

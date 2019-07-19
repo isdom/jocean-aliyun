@@ -8,6 +8,8 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.http.FormatType;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsRequest;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
+import com.aliyuncs.ivision.model.v20190308.DescribePredictDatasRequest;
+import com.aliyuncs.ivision.model.v20190308.DescribePredictDatasResponse;
 import com.aliyuncs.ivision.model.v20190308.PredictImageRequest;
 import com.aliyuncs.ivision.model.v20190308.PredictImageResponse;
 import com.aliyuncs.profile.DefaultProfile;
@@ -50,6 +52,27 @@ public class DefaultIvisionAPI implements IvisionAPI {
             // If an error occurs, a ClientException or ServerException may be thrown.
             try {
                 final PredictImageResponse response = client.getAcsResponse(request);
+                return Observable.just(response);
+            } catch (final Exception e) {
+                return Observable.error(e);
+            }
+        });
+    }
+
+    @Override
+    public Transformer<RpcRunner, DescribePredictDatasResponse> describePredictDatas(final String projectId, final String iterationId) {
+        return runners -> runners.flatMap(runner -> {
+            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
+
+            final DescribePredictDatasRequest request = new DescribePredictDatasRequest();
+            request.setAcceptFormat(FormatType.JSON);
+
+            request.setProjectId(projectId);
+            request.setIterationId(iterationId);
+
+            // If an error occurs, a ClientException or ServerException may be thrown.
+            try {
+                final DescribePredictDatasResponse response = client.getAcsResponse(request);
                 return Observable.just(response);
             } catch (final Exception e) {
                 return Observable.error(e);

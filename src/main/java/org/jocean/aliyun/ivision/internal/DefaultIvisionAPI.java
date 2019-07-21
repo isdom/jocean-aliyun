@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.http.FormatType;
+import com.aliyuncs.ivision.model.v20190308.DeleteIterationRequest;
+import com.aliyuncs.ivision.model.v20190308.DeleteIterationResponse;
 import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasRequest;
 import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasResponse;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsRequest;
@@ -32,6 +34,26 @@ public class DefaultIvisionAPI implements IvisionAPI {
             // If an error occurs, a ClientException or ServerException may be thrown.
             try {
                 final DescribeIterationsResponse response = client.getAcsResponse(request);
+                return Observable.just(response);
+            } catch (final Exception e) {
+                return Observable.error(e);
+            }
+        });
+    }
+
+    @Override
+    public Transformer<RpcRunner, DeleteIterationResponse> deleteIteration(final String projectId, final String iterationId) {
+        return runners -> runners.flatMap(runner -> {
+            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
+            final DeleteIterationRequest request = new DeleteIterationRequest();
+
+            request.setAcceptFormat(FormatType.JSON);
+            request.setProjectId(projectId);
+            request.setIterationId(iterationId);
+
+            // If an error occurs, a ClientException or ServerException may be thrown.
+            try {
+                final DeleteIterationResponse response = client.getAcsResponse(request);
                 return Observable.just(response);
             } catch (final Exception e) {
                 return Observable.error(e);

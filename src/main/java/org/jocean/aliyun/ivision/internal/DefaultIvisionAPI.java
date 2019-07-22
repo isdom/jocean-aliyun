@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.http.FormatType;
+import com.aliyuncs.ivision.model.v20190308.CreateProjectRequest;
+import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
 import com.aliyuncs.ivision.model.v20190308.DeleteIterationRequest;
 import com.aliyuncs.ivision.model.v20190308.DeleteIterationResponse;
 import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasRequest;
@@ -24,11 +26,33 @@ import rx.Observable.Transformer;
 public class DefaultIvisionAPI implements IvisionAPI {
 
     @Override
+    public Transformer<RpcRunner, CreateProjectResponse> createProject(final String name, final String description, final String type) {
+
+        return runners -> runners.flatMap(runner -> {
+            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
+            final CreateProjectRequest request = new CreateProjectRequest();
+            request.setAcceptFormat(FormatType.JSON);
+            request.setName(name);
+            request.setDescription(description);
+            request.setProType(type);
+
+            // If an error occurs, a ClientException or ServerException may be thrown.
+            try {
+                final CreateProjectResponse response = client.getAcsResponse(request);
+                return Observable.just(response);
+            } catch (final Exception e) {
+                return Observable.error(e);
+            }
+        });
+    }
+
+    @Override
     public Transformer<RpcRunner, DescribeIterationsResponse> describeIterations(final String projectId) {
 
         return runners -> runners.flatMap(runner -> {
             final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
             final DescribeIterationsRequest request = new DescribeIterationsRequest();
+            request.setAcceptFormat(FormatType.JSON);
             request.setProjectId(projectId);
 
             // If an error occurs, a ClientException or ServerException may be thrown.

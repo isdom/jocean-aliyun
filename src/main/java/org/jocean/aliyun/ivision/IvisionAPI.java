@@ -2,6 +2,7 @@ package org.jocean.aliyun.ivision;
 
 import org.jocean.http.RpcRunner;
 
+import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
 import com.aliyuncs.ivision.model.v20190308.DeleteIterationResponse;
 import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasResponse;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
@@ -11,6 +12,8 @@ import com.aliyuncs.ivision.model.v20190308.PredictImageResponse;
 import rx.Observable.Transformer;
 
 public interface IvisionAPI {
+
+    public Transformer<RpcRunner, CreateProjectResponse> createProject(final String name, final String description, final String type);
 
     public Transformer<RpcRunner, DescribeIterationsResponse> describeIterations(final String projectId);
 

@@ -23,7 +23,6 @@ import org.jocean.http.RpcRunner;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.auth.AcsURLEncoder;
 import com.aliyuncs.http.FormatType;
 import com.aliyuncs.ivision.model.v20190308.CreateProjectRequest;
 import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
@@ -87,16 +86,16 @@ public class DefaultIvisionAPI implements IvisionAPI {
         final StringBuilder canonicalizedQueryString = new StringBuilder();
         try {
             for (final String key : sortedKeys) {
-                canonicalizedQueryString.append("&").append(AcsURLEncoder.percentEncode(key)).append("=")
-                        .append(AcsURLEncoder.percentEncode(queries.get(key)));
+                canonicalizedQueryString.append("&").append(percentEncode(key)).append("=")
+                        .append(percentEncode(queries.get(key)));
             }
 
             final StringBuilder stringToSign = new StringBuilder();
             stringToSign.append(method.toString());
             stringToSign.append(SEPARATOR);
-            stringToSign.append(AcsURLEncoder.percentEncode("/"));
+            stringToSign.append(percentEncode("/"));
             stringToSign.append(SEPARATOR);
-            stringToSign.append(AcsURLEncoder.percentEncode(canonicalizedQueryString.toString().substring(1)));
+            stringToSign.append(percentEncode(canonicalizedQueryString.toString().substring(1)));
 
             return stringToSign.toString();
         } catch (final UnsupportedEncodingException exp) {

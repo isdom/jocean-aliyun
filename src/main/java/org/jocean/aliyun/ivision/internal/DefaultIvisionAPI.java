@@ -238,6 +238,7 @@ public class DefaultIvisionAPI implements IvisionAPI {
                             .uri("http://ivision.cn-beijing.aliyuncs.com")
                             .path("/")
                             .paramAsQuery("Action", "PredictImage")
+                            .paramAsQuery("Version", "2019-03-08")
                             .paramAsQuery("ProjectId", projectId)
                             .paramAsQuery("IterationId", iterationId)
                             .paramAsQuery("DataUrls", imgurl)

@@ -20,6 +20,8 @@ import javax.xml.bind.DatatypeConverter;
 import org.jocean.aliyun.ivision.IvisionAPI;
 import org.jocean.http.ContentUtil;
 import org.jocean.http.RpcRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.aliyuncs.DefaultAcsClient;
@@ -46,6 +48,8 @@ import rx.Observable.Transformer;
 import rx.functions.Action1;
 
 public class DefaultIvisionAPI implements IvisionAPI {
+
+    private static final Logger LOG = LoggerFactory.getLogger(DefaultIvisionAPI.class);
 
     private Action1<Object> signRequest(){
         return obj -> {
@@ -147,9 +151,12 @@ public class DefaultIvisionAPI implements IvisionAPI {
         final QueryStringEncoder encoder = new QueryStringEncoder(decoder.rawPath());
         for (final Map.Entry<String, String> entry : paramsToSign.entrySet()) {
             encoder.addParam(entry.getKey(), entry.getValue());
+            LOG.info("add params {}/{}", entry.getKey(), entry.getValue());
         }
         encoder.addParam("Signature", signature);
-        req.setUri(encoder.toString());
+        final String signedUri = encoder.toString();
+        LOG.info("signedUri: {}", signedUri);
+        req.setUri(signedUri);
     }
 
 

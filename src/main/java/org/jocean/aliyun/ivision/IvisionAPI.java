@@ -43,12 +43,38 @@ public interface IvisionAPI {
         public void seCurrentPage(final Integer currentPage);
     }
 
+    public interface Region {
+        @JSONField(name="Left")
+        public String getLeft();
+
+        @JSONField(name="Left")
+        public void setLeft(final String left);
+
+        @JSONField(name="Top")
+        public String getTop();
+
+        @JSONField(name="Top")
+        public void setTop(final String top);
+
+        @JSONField(name="Width")
+        public String getWidth();
+
+        @JSONField(name="Width")
+        public void setWidth(final String width);
+
+        @JSONField(name="Height")
+        public String getHeight();
+
+        @JSONField(name="Height")
+        public void setHeight(final String height);
+    }
+
     public interface PredictionResult {
         @JSONField(name="Probability")
         public double getProbability();
 
         @JSONField(name="Probability")
-        public void seProbability(final double probability);
+        public void setProbability(final double probability);
 
         @JSONField(name="TagId")
         public String getTagId();
@@ -67,6 +93,12 @@ public interface IvisionAPI {
 
         @JSONField(name="RegionType")
         public void setRegionType(final String regionType);
+
+        @JSONField(name="Region")
+        public Region getRegion();
+
+        @JSONField(name="Region")
+        public void setRegion(final Region region);
     }
 
     public interface PredictionResults {
@@ -74,7 +106,7 @@ public interface IvisionAPI {
         public PredictionResult[] getPredictionResult();
 
         @JSONField(name="PredictionResult")
-        public void sePredictionResult(final PredictionResult[] results);
+        public void setPredictionResult(final PredictionResult[] results);
     }
 
     public interface PredictData {

@@ -34,9 +34,6 @@ import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasRequest;
 import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasResponse;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsRequest;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
-import com.aliyuncs.ivision.model.v20190308.DescribePredictDatasRequest;
-import com.aliyuncs.ivision.model.v20190308.DescribePredictDatasResponse;
-import com.aliyuncs.ivision.model.v20190308.PredictImageResponse;
 import com.aliyuncs.profile.DefaultProfile;
 
 import io.netty.handler.codec.http.HttpMethod;
@@ -241,38 +238,49 @@ public class DefaultIvisionAPI implements IvisionAPI {
                 return Observable.error(e);
             }
             */
-            runner.name("ivision.predictimage").execute(interact -> interact.method(HttpMethod.GET)
-                            .uri("http://ivision.cn-beijing.aliyuncs.com")
-                            .path("/")
-                            .paramAsQuery("Action", "PredictImage")
-                            .paramAsQuery("Version", "2019-03-08")
-                            .paramAsQuery("ProjectId", projectId)
-                            .paramAsQuery("IterationId", iterationId)
-                            .paramAsQuery("DataUrls", imgurl)
-                            .onrequest(signRequest())
-                            .responseAs(ContentUtil.ASJSON, PredictImageResponse.class)
+            runner.name("ivision.predictImage").execute(interact -> interact.method(HttpMethod.GET)
+                .uri("http://ivision.cn-beijing.aliyuncs.com")
+                .path("/")
+                .paramAsQuery("Action", "PredictImage")
+                .paramAsQuery("Version", "2019-03-08")
+                .paramAsQuery("ProjectId", projectId)
+                .paramAsQuery("IterationId", iterationId)
+                .paramAsQuery("DataUrls", imgurl)
+                .onrequest(signRequest())
+                .responseAs(ContentUtil.ASJSON, PredictImageResponse.class)
             ));
     }
 
     @Override
-    public Transformer<RpcRunner, DescribePredictDatasResponse> describePredictDatas(final String projectId, final String iterationId) {
-        return runners -> runners.flatMap(runner -> {
-            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
-
-            final DescribePredictDatasRequest request = new DescribePredictDatasRequest();
-            request.setAcceptFormat(FormatType.JSON);
-
-            request.setProjectId(projectId);
-            request.setIterationId(iterationId);
-
-            // If an error occurs, a ClientException or ServerException may be thrown.
-            try {
-                final DescribePredictDatasResponse response = client.getAcsResponse(request);
-                return Observable.just(response);
-            } catch (final Exception e) {
-                return Observable.error(e);
-            }
-        });
+    public Transformer<RpcRunner, DescribePredictDatasResponse> describePredictDatas(final String projectId, final String iterationId, final String dataIds) {
+        return runners -> runners.flatMap(runner ->
+//        {
+//            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
+//
+//            final DescribePredictDatasRequest request = new DescribePredictDatasRequest();
+//            request.setAcceptFormat(FormatType.JSON);
+//
+//            request.setProjectId(projectId);
+//            request.setIterationId(iterationId);
+//
+//            // If an error occurs, a ClientException or ServerException may be thrown.
+//            try {
+//                final DescribePredictDatasResponse response = client.getAcsResponse(request);
+//                return Observable.just(response);
+//            } catch (final Exception e) {
+//                return Observable.error(e);
+//            }});
+            runner.name("ivision.describePredictDatas").execute(interact -> interact.method(HttpMethod.GET)
+                    .uri("http://ivision.cn-beijing.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DescribePredictDatas")
+                    .paramAsQuery("Version", "2019-03-08")
+                    .paramAsQuery("ProjectId", projectId)
+                    .paramAsQuery("IterationId", iterationId)
+                    .paramAsQuery("DataIds", dataIds)
+                    .onrequest(signRequest())
+                    .responseAs(ContentUtil.ASJSON, DescribePredictDatasResponse.class)
+            ));
     }
 
     @Override

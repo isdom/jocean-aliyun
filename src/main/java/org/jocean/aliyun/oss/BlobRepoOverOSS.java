@@ -68,7 +68,7 @@ public class BlobRepoOverOSS implements BlobRepo {
 
     public Transformer<RpcRunner, PutObjectResult> putObject(final String objname, final MessageBody body) {
         return runners -> runners.flatMap( run -> run.name("oss.putObject").execute(
-                interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
+                interact->interact.name("oss.putObject").method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + objname).body(Observable.just(body))
                 .onrequest(signRequest(objname))
                 .response()
@@ -100,7 +100,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Transformer<RpcRunner, MessageBody> getObject(final String objname) {
         return runners -> runners.flatMap( run -> run.name("oss.getObject").execute(
-                interact->interact.method(HttpMethod.GET).uri(uri4bucket())
+                interact->interact.name("oss.getObject").method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objname)
                 .onrequest(signRequest(objname))
                 .response()
@@ -119,7 +119,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     public Transformer<RpcRunner, ObjectListing> listObjects( final String prefix) {
         return runners -> runners.flatMap( run -> run.name("oss.listObjects").execute(
                 interact->{
-                    interact = interact.method(HttpMethod.GET).uri(uri4bucket())
+                    interact = interact.name("oss.listObjects").method(HttpMethod.GET).uri(uri4bucket())
                         .path("/")
                         .onrequest(signRequest(""));
 
@@ -134,7 +134,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Transformer<RpcRunner, SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
         return runners -> runners.flatMap( run -> run.name("oss.getSimplifiedObjectMeta").execute(
-                interact->interact.method(HttpMethod.GET).uri(uri4bucket())
+                interact->interact.name("oss.getSimplifiedObjectMeta").method(HttpMethod.GET).uri(uri4bucket())
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
                 .response()
@@ -189,7 +189,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Transformer<RpcRunner, CopyObjectResult> copyObject(final String sourceObjectName, final String destObjectName) {
         return runners -> runners.flatMap( run -> run.name("oss.copyObject").execute(
-                interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
+                interact->interact.name("oss.copyObject").method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + destObjectName)
                 .onrequest(obj -> {
                     if (obj instanceof HttpRequest) {
@@ -222,7 +222,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Transformer<RpcRunner, String> deleteObject(final String objectName) {
         return runners -> runners.flatMap( runner -> runner.name("oss.deleteObject").execute(
-                interact->interact.method(HttpMethod.DELETE).uri(uri4bucket())
+                interact->interact.name("oss.deleteObject").method(HttpMethod.DELETE).uri(uri4bucket())
                 .path("/" + objectName)
                 .onrequest(signRequest(objectName))
                 .response()
@@ -241,7 +241,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Transformer<RpcRunner, String> putSymlink(final String targetObjectName, final String symlinkObjectName) {
         return runners -> runners.flatMap( runner -> runner.name("oss.putSymlink").execute(
-                interact->interact.method(HttpMethod.PUT).uri(uri4bucket())
+                interact->interact.name("oss.putSymlink").method(HttpMethod.PUT).uri(uri4bucket())
                 .path("/" + symlinkObjectName + "?symlink")
                 .onrequest(obj -> {
                     if (obj instanceof HttpRequest) {

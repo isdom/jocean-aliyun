@@ -91,24 +91,6 @@ public class DefaultIvisionAPI implements IvisionAPI {
     @Override
     public Transformer<RpcRunner, PredictImageResponse> predictImage(final String projectId, final String iterationId, final String imgurl) {
         return runners -> runners.flatMap(runner ->
-            /*
-            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
-
-            final PredictImageRequest request = new PredictImageRequest();
-            request.setAcceptFormat(FormatType.JSON);
-
-            request.setProjectId(projectId);
-            request.setIterationId(iterationId);
-            request.setDataUrls(imgurl);
-
-            // If an error occurs, a ClientException or ServerException may be thrown.
-            try {
-                final PredictImageResponse response = client.getAcsResponse(request);
-                return Observable.just(response);
-            } catch (final Exception e) {
-                return Observable.error(e);
-            }
-            */
             runner.name("ivision.predictImage").execute(interact -> interact.method(HttpMethod.GET)
                 .uri("http://ivision.cn-beijing.aliyuncs.com")
                 .path("/")
@@ -125,22 +107,6 @@ public class DefaultIvisionAPI implements IvisionAPI {
     @Override
     public Transformer<RpcRunner, DescribePredictDatasResponse> describePredictDatas(final String projectId, final String iterationId, final String dataIds) {
         return runners -> runners.flatMap(runner ->
-//        {
-//            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
-//
-//            final DescribePredictDatasRequest request = new DescribePredictDatasRequest();
-//            request.setAcceptFormat(FormatType.JSON);
-//
-//            request.setProjectId(projectId);
-//            request.setIterationId(iterationId);
-//
-//            // If an error occurs, a ClientException or ServerException may be thrown.
-//            try {
-//                final DescribePredictDatasResponse response = client.getAcsResponse(request);
-//                return Observable.just(response);
-//            } catch (final Exception e) {
-//                return Observable.error(e);
-//            }});
             runner.name("ivision.describePredictDatas").execute(interact -> interact.method(HttpMethod.GET)
                     .uri("http://ivision.cn-beijing.aliyuncs.com")
                     .path("/")

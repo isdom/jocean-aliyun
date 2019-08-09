@@ -83,5 +83,7 @@ public interface NlsAPI {
     }
 
     public Transformer<RpcRunner, CreateTokenResponse> createToken();
-    public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content);
+    public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content,
+            final String format,
+            final int sample_rate);
 }

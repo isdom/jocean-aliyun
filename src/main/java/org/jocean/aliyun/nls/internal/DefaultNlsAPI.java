@@ -35,14 +35,26 @@ public class DefaultNlsAPI implements NlsAPI {
     }
 
     @Override
-    public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content) {
+    public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content,
+            final String format,
+            final int sample_rate) {
         return runners -> runners.compose(createToken()).flatMap(resp ->
             runners.flatMap(runner -> runner.name("nls.streamAsrV1").execute(
-                    interact -> interact.method(HttpMethod.POST)
-                    .uri("http://nls-gateway.cn-shanghai.aliyuncs.com")
-                    .path("/stream/v1/asr")
-                    .paramAsQuery("appkey", _appkey)
-                    .onrequest( obj -> {
+                interact -> {
+                    interact = interact.method(HttpMethod.POST)
+                        .uri("http://nls-gateway.cn-shanghai.aliyuncs.com")
+                        .path("/stream/v1/asr")
+                        .paramAsQuery("appkey", _appkey);
+
+                    if (null != format) {
+                        interact = interact.paramAsQuery("format", format);
+                    }
+
+                    if (sample_rate > 0) {
+                        interact = interact.paramAsQuery("sample_rate", Integer.toString(sample_rate));
+                    }
+
+                    return interact.onrequest( obj -> {
                         if (obj instanceof HttpRequest) {
                             final HttpRequest req = (HttpRequest)obj;
                             req.headers().set("X-NLS-Token", resp.getNlsToken().getId());
@@ -51,8 +63,9 @@ public class DefaultNlsAPI implements NlsAPI {
                         }
                     })
                     .body(Observable.just(content))
-                    .responseAs(ContentUtil.ASJSON, AsrResponse.class)))
-        );
+                    .responseAs(ContentUtil.ASJSON, AsrResponse.class);
+                }
+            )));
     }
 
     @Value("${regionid}")

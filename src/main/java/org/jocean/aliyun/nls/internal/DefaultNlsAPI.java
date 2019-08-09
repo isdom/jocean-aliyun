@@ -38,7 +38,7 @@ public class DefaultNlsAPI implements NlsAPI {
     public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content) {
         return runners -> runners.compose(createToken()).flatMap(resp ->
             runners.flatMap(runner -> runner.name("nls.streamAsrV1").execute(
-                    interact -> interact.method(HttpMethod.GET)
+                    interact -> interact.method(HttpMethod.POST)
                     .uri("http://nls-gateway.cn-shanghai.aliyuncs.com")
                     .path("/stream/v1/asr")
                     .paramAsQuery("appkey", _appkey)

@@ -3,12 +3,18 @@ package org.jocean.aliyun.nls.internal;
 import org.jocean.aliyun.nls.NlsAPI;
 import org.jocean.aliyun.sign.SignerV1;
 import org.jocean.http.ContentUtil;
+import org.jocean.http.MessageBody;
 import org.jocean.http.RpcRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
+import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaderValues;
 import io.netty.handler.codec.http.HttpMethod;
+import io.netty.handler.codec.http.HttpRequest;
+import io.netty.handler.codec.http.HttpUtil;
+import rx.Observable;
 import rx.Observable.Transformer;
 
 public class DefaultNlsAPI implements NlsAPI {
@@ -28,6 +34,27 @@ public class DefaultNlsAPI implements NlsAPI {
         ));
     }
 
+    @Override
+    public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content) {
+        return runners -> runners.compose(createToken()).flatMap(resp ->
+            runners.flatMap(runner -> runner.name("nls.streamAsrV1").execute(
+                    interact -> interact.method(HttpMethod.GET)
+                    .uri("http://nls-gateway.cn-shanghai.aliyuncs.com")
+                    .path("/stream/v1/asr")
+                    .paramAsQuery("appkey", _appkey)
+                    .onrequest( obj -> {
+                        if (obj instanceof HttpRequest) {
+                            final HttpRequest req = (HttpRequest)obj;
+                            req.headers().set("X-NLS-Token", resp.getNlsToken().getId());
+                            req.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_OCTET_STREAM);
+                            HttpUtil.setContentLength(req, content.contentLength());
+                        }
+                    })
+                    .body(Observable.just(content))
+                    .responseAs(ContentUtil.ASJSON, AsrResponse.class)))
+        );
+    }
+
     @Value("${regionid}")
     String _region;
 
@@ -36,4 +63,7 @@ public class DefaultNlsAPI implements NlsAPI {
 
     @Value("${ak_secret}")
     String _ak_secret;
+
+    @Value("${appkey}")
+    String _appkey;
 }

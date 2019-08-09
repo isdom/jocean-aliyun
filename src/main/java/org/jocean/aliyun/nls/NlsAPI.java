@@ -1,5 +1,6 @@
 package org.jocean.aliyun.nls;
 
+import org.jocean.http.MessageBody;
 import org.jocean.http.RpcRunner;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -55,6 +56,32 @@ public interface NlsAPI {
         public void setNlsToken(final NlsToken token);
     }
 
-    public Transformer<RpcRunner, CreateTokenResponse> createToken();
+    public interface AsrResponse {
+        @JSONField(name="status")
+        public int getStatus();
 
+        @JSONField(name="status")
+        public void setStatus(final int status);
+
+        @JSONField(name="message")
+        public String getMessage();
+
+        @JSONField(name="message")
+        public void setMessage(final String message);
+
+        @JSONField(name="task_id")
+        public String getTaskId();
+
+        @JSONField(name="task_id")
+        public void setTaskId(final String task_id);
+
+        @JSONField(name="result")
+        public String getResult();
+
+        @JSONField(name="result")
+        public void setResult(final String result);
+    }
+
+    public Transformer<RpcRunner, CreateTokenResponse> createToken();
+    public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content);
 }

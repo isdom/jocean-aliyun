@@ -33,7 +33,7 @@ public class DefaultMetadataAPI implements MetadataAPI {
     //      /hostname
     @Override
     public Transformer<RpcRunner, String> getHostname() {
-        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getHostname").execute(interact -> {
+        return runners -> runners.flatMap(runner -> runner.name("aliyun.metadata.getHostname").execute(interact -> {
             try {
                 return interact.method(HttpMethod.GET).uri(METADATA_URI).path(METADATA_PATH_BASE + "hostname")
                         .responseAs(ContentUtil.ASTEXT, String.class);
@@ -45,7 +45,7 @@ public class DefaultMetadataAPI implements MetadataAPI {
 
     @Override
     public Transformer<RpcRunner, String> getRegionId() {
-        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getRegionId").execute(interact -> {
+        return runners -> runners.flatMap(runner -> runner.name("aliyun.metadata.getRegionId").execute(interact -> {
             try {
                 return interact.method(HttpMethod.GET).uri(METADATA_URI).path(METADATA_PATH_BASE + "region-id")
                         .responseAs(ContentUtil.ASTEXT, String.class);
@@ -57,7 +57,7 @@ public class DefaultMetadataAPI implements MetadataAPI {
 
     @Override
     public Transformer<RpcRunner, String> getInstanceId() {
-        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getInstanceId").execute(interact -> {
+        return runners -> runners.flatMap(runner -> runner.name("aliyun.metadata.getInstanceId").execute(interact -> {
             try {
                 return interact.method(HttpMethod.GET).uri(METADATA_URI).path(METADATA_PATH_BASE + "instance-id")
                         .responseAs(ContentUtil.ASTEXT, String.class);
@@ -70,7 +70,7 @@ public class DefaultMetadataAPI implements MetadataAPI {
     //  /private-ipv4
     @Override
     public Transformer<RpcRunner, String> getPrivateIpv4() {
-        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getPrivateIpv4").execute(interact -> {
+        return runners -> runners.flatMap(runner -> runner.name("aliyun.metadata.getPrivateIpv4").execute(interact -> {
             try {
                 return interact.method(HttpMethod.GET).uri(METADATA_URI).path(METADATA_PATH_BASE + "private-ipv4")
                         .responseAs(ContentUtil.ASTEXT, String.class);
@@ -84,7 +84,7 @@ public class DefaultMetadataAPI implements MetadataAPI {
     //      路径最后一部分是 RAM 角色名称，您应替换为自己的创建的 RAM 角色名称。
     @Override
     public Transformer<RpcRunner, STSTokenResponse> getSTSToken(final String roleName) {
-        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.getSTSToken").execute(interact -> {
+        return runners -> runners.flatMap(runner -> runner.name("aliyun.metadata.getSTSToken").execute(interact -> {
             try {
                 return interact.method(HttpMethod.GET).uri(METADATA_URI).path(METADATA_PATH_BASE + "ram/security-credentials/" + roleName)
                         .responseAs(ContentUtil.ASJSON, STSTokenResponse.class);

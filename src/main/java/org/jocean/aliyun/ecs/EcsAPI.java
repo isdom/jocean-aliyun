@@ -311,5 +311,7 @@ public interface EcsAPI {
         public void setInstances(final InstanceSet instanceSet);
     }
 
-    public Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId);
+    public Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId,
+            final String vpcId,
+            final String InstanceName);
 }

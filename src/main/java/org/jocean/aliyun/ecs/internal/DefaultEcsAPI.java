@@ -13,7 +13,7 @@ public class DefaultEcsAPI implements EcsAPI {
 
     // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
     @Override
-    public Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId, final String instanceName) {
+    public Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId) {
         return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.describeInstances").execute(
                 interact -> interact.method(HttpMethod.GET)
                     .uri("https://ecs.aliyuncs.com")

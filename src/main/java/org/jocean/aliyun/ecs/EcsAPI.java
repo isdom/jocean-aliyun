@@ -262,6 +262,14 @@ public interface EcsAPI {
         public void setZoneId(final String zoneId);
     }
 
+    public interface InstanceSet {
+        @JSONField(name="Instance")
+        public InstanceAttributesType[] getInstance();
+
+        @JSONField(name="Instance")
+        public void setInstance(final InstanceAttributesType[] instances);
+    }
+
     public interface DescribeInstancesResponse {
         @JSONField(name="RequestId")
         public String getRequestId();
@@ -288,10 +296,10 @@ public interface EcsAPI {
         public void setTotalCount(final int totalCount);
 
         @JSONField(name="Instances")
-        public InstanceAttributesType[] getInstances();
+        public InstanceSet getInstances();
 
         @JSONField(name="Instances")
-        public void setInstances(final InstanceAttributesType[] instances);
+        public void setInstances(final InstanceSet instanceSet);
     }
 
     public Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId);

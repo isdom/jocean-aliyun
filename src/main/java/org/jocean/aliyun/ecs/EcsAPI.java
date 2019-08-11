@@ -148,16 +148,16 @@ public interface EcsAPI {
         public void setKeyPairName(final String keyPairName);
 
         @JSONField(name="LocalStorageAmount")
-        public int getLocalStorageAmount();
+        public Integer getLocalStorageAmount();
 
         @JSONField(name="LocalStorageAmount")
-        public void setLocalStorageAmount(final int localStorageAmount);
+        public void setLocalStorageAmount(final Integer localStorageAmount);
 
         @JSONField(name="LocalStorageCapacity")
-        public long getLocalStorageCapacity();
+        public Long getLocalStorageCapacity();
 
         @JSONField(name="LocalStorageCapacity")
-        public void setLocalStorageCapacity(final long localStorageCapacity);
+        public void setLocalStorageCapacity(final Long localStorageCapacity);
 
         @JSONField(name="Memory")
         public int getMemory();
@@ -212,6 +212,15 @@ public interface EcsAPI {
 
         @JSONField(name="SaleCycle")
         public void setSaleCycle(final String saleCycle);
+
+//        SecurityGroupIds        sg-securitygroupid1
+//        实例所属安全组集合。
+//
+//        "SecurityGroupIds":{
+//            "SecurityGroupId":[
+//                "sg-2ze7v8o1cbogte75c8xz"
+//            ]
+//        },
 
         @JSONField(name="SerialNumber")
         public String getSerialNumber();

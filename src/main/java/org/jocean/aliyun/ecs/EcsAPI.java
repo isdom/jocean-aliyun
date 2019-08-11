@@ -25,6 +25,51 @@ public interface EcsAPI {
         public void setLockReason(final String lockReason);
     }
 
+//  "VpcAttributes":{
+//  "NatIpAddress":"",
+//  "PrivateIpAddress":{
+//      "IpAddress":[
+//          "172.22.174.249"
+//      ]
+//  },
+//  "VSwitchId":"vsw-2zebudaamrzr8u2oi3bkz",
+//  "VpcId":"vpc-2ze3ekg08hfc97uo72p50"
+//},
+
+    public interface IpAddress {
+        @JSONField(name="IpAddress")
+        public String[] getIpAddressArray();
+
+        @JSONField(name="IpAddress")
+        public void setIpAddressArray(final String[] ipAddressArray);
+    }
+
+    public interface VpcAttributes {
+        @JSONField(name="NatIpAddress")
+        public String getNatIpAddress();
+
+        @JSONField(name="NatIpAddress")
+        public void setNatIpAddress(final String natIpAddress);
+
+        @JSONField(name="PrivateIpAddress")
+        public IpAddress getPrivateIpAddress();
+
+        @JSONField(name="PrivateIpAddress")
+        public void setPrivateIpAddress(final IpAddress privateIpAddress);
+
+        @JSONField(name="VSwitchId")
+        public String getVSwitchId();
+
+        @JSONField(name="VSwitchId")
+        public void setVSwitchId(final String vSwitchId);
+
+        @JSONField(name="VpcId")
+        public String getVpcId();
+
+        @JSONField(name="VpcId")
+        public void setVpcId(final String vpcId);
+    }
+
     public interface InstanceAttributesType {
 
         @JSONField(name="AutoReleaseTime")
@@ -263,6 +308,12 @@ public interface EcsAPI {
 //
 //        @JSONField(name="Tags")
 //        public void setTags(final String tags);
+
+        @JSONField(name="VpcAttributes")
+        public VpcAttributes getVpcAttributes();
+
+        @JSONField(name="VpcAttributes")
+        public void setVpcAttributes(final VpcAttributes vpcAttributes);
 
         @JSONField(name="ZoneId")
         public String getZoneId();

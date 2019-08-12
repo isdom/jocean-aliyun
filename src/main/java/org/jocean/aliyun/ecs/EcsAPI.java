@@ -24,6 +24,43 @@ public interface EcsAPI {
         @JSONField(name="LockReason")
         public void setLockReason(final String lockReason);
     }
+//    "NetworkInterfaces":{
+//        "NetworkInterface":[
+//            {
+//                "MacAddress":"00:16:3e:14:1c:4b",
+//                "PrimaryIpAddress":"172.22.174.249",
+//                "NetworkInterfaceId":"eni-2ze0ls028rmgcg5l74r2"
+//            }
+//        ]
+//    },
+
+    public interface NetworkInterface {
+        @JSONField(name="MacAddress")
+        public String getMacAddress();
+
+        @JSONField(name="MacAddress")
+        public void setMacAddress(final String macAddress);
+
+        @JSONField(name="PrimaryIpAddress")
+        public String getPrimaryIpAddress();
+
+        @JSONField(name="PrimaryIpAddress")
+        public void setPrimaryIpAddress(final String primaryIpAddress);
+
+        @JSONField(name="NetworkInterfaceId")
+        public String getNetworkInterfaceId();
+
+        @JSONField(name="NetworkInterfaceId")
+        public void setNetworkInterfaceId(final String networkInterfaceId);
+    }
+
+    public interface NetworkInterfaces {
+        @JSONField(name="NetworkInterface")
+        public NetworkInterface[] getNetworkInterfaceArray();
+
+        @JSONField(name="NetworkInterface")
+        public void setNetworkInterfaceArray(final NetworkInterface[] networkInterface);
+    }
 
 //  "VpcAttributes":{
 //  "NatIpAddress":"",
@@ -209,6 +246,12 @@ public interface EcsAPI {
 
         @JSONField(name="Memory")
         public void setMemory(final int memory);
+
+        @JSONField(name="NetworkInterfaces")
+        public NetworkInterfaces getNetworkInterfaces();
+
+        @JSONField(name="NetworkInterfaces")
+        public void setNetworkInterfaces(final NetworkInterfaces networkInterfaces);
 
         @JSONField(name="OSName")
         public String getOSName();

@@ -10,6 +10,18 @@ import rx.Observable.Transformer;
 
 public interface EcsAPI {
 
+//    "SecurityGroupIds":{
+//    "SecurityGroupId":[
+//        "sg-2ze7v8o1cbogte75c8xz"
+//        ]
+//    },
+    public interface SecurityGroupIds {
+        @JSONField(name="SecurityGroupId")
+        public String[] getSecurityGroupIdArray();
+
+        @JSONField(name="SecurityGroupId")
+        public void setSecurityGroupIdArray(final String[] securityGroupIdArray);
+    }
 
     public interface OperationLocks {
         @JSONField(name="LockMsg")
@@ -19,10 +31,10 @@ public interface EcsAPI {
         public void setLockMsg(final String lockMsg);
 
         @JSONField(name="LockReason")
-        public String getLockReason();
+        public String[] getLockReason();
 
         @JSONField(name="LockReason")
-        public void setLockReason(final String lockReason);
+        public void setLockReason(final String[] lockReason);
     }
 //    "NetworkInterfaces":{
 //        "NetworkInterface":[
@@ -151,6 +163,12 @@ public interface EcsAPI {
         @JSONField(name="Description")
         public void setDescription(final String description);
 
+        @JSONField(name="DeviceAvailable")
+        public boolean getDeviceAvailable();
+
+        @JSONField(name="DeviceAvailable")
+        public void setDeviceAvailable(final boolean deviceAvailable);
+
         @JSONField(name="ExpiredTime")
         public String getExpiredTime();
 
@@ -170,10 +188,10 @@ public interface EcsAPI {
         public void setImageId(final String imageId);
 
         @JSONField(name="InnerIpAddress")
-        public String getInnerIpAddress();
+        public IpAddress getInnerIpAddress();
 
         @JSONField(name="InnerIpAddress")
-        public void setInnerIpAddress(final String innerIpAddress);
+        public void setInnerIpAddress(final IpAddress innerIpAddress);
 
         @JSONField(name="InstanceChargeType")
         public String getInstanceChargeType();
@@ -277,6 +295,12 @@ public interface EcsAPI {
         @JSONField(name="OperationLocks")
         public void setOperationLocks(final OperationLocks operationLocks);
 
+        @JSONField(name="PublicIpAddress")
+        public IpAddress getPublicIpAddress();
+
+        @JSONField(name="PublicIpAddress")
+        public void setPublicIpAddress(final IpAddress publicIpAddress);
+
         @JSONField(name="Recyclable")
         public boolean getRecyclable();
 
@@ -301,14 +325,11 @@ public interface EcsAPI {
         @JSONField(name="SaleCycle")
         public void setSaleCycle(final String saleCycle);
 
-//        SecurityGroupIds        sg-securitygroupid1
-//        实例所属安全组集合。
-//
-//        "SecurityGroupIds":{
-//            "SecurityGroupId":[
-//                "sg-2ze7v8o1cbogte75c8xz"
-//            ]
-//        },
+        @JSONField(name="SecurityGroupIds")
+        public SecurityGroupIds getSecurityGroupIds();
+
+        @JSONField(name="SecurityGroupIds")
+        public void setSecurityGroupIds(final SecurityGroupIds securityGroupIds);
 
         @JSONField(name="SerialNumber")
         public String getSerialNumber();

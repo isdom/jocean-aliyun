@@ -175,6 +175,18 @@ public interface EcsAPI {
         @JSONField(name="ExpiredTime")
         public void setExpiredTime(final String expiredTime);
 
+        @JSONField(name="GPUAmount")
+        public int getGPUAmount();
+
+        @JSONField(name="GPUAmount")
+        public void setGPUAmount(final int gpuAmount);
+
+        @JSONField(name="GPUSpec")
+        public String getGPUSpec();
+
+        @JSONField(name="GPUSpec")
+        public void setGPUSpec(final String gpuSpec);
+
         @JSONField(name="HostName")
         public String getHostName();
 

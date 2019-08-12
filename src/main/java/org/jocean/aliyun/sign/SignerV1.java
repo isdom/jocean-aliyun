@@ -31,10 +31,17 @@ public class SignerV1 {
     private static final String[] EMPTY_STRS = new String[0];
     private static final Logger LOG = LoggerFactory.getLogger(SignerV1.class);
 
-    public static Action1<Object> signRequest(final String region,  final String ak_id, final String ak_secret){
+    public static Action1<Object> signRequest(final String region,  final String ak_id, final String ak_secret) {
         return obj -> {
             if (obj instanceof HttpRequest) {
-                doSign((HttpRequest) obj, region, ak_id, ak_secret);
+                doSign((HttpRequest) obj, region, ak_id, ak_secret, null);
+            }};
+    }
+
+    public static Action1<Object> signRequest(final String region,  final String ak_id, final String ak_secret, final String ststoken) {
+        return obj -> {
+            if (obj instanceof HttpRequest) {
+                doSign((HttpRequest) obj, region, ak_id, ak_secret, ststoken);
             }};
     }
 
@@ -108,7 +115,8 @@ public class SignerV1 {
         }
     }
 
-    private static void doSign(final HttpRequest req, final String region,  final String ak_id, final String ak_secret) {
+    private static void doSign(final HttpRequest req, final String region,  final String ak_id, final String ak_secret,
+            final String ststoken) {
         final QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
 
         final Map<String, String> paramsToSign = new HashMap<String, String>();
@@ -127,6 +135,9 @@ public class SignerV1 {
 
         paramsToSign.put("RegionId", region);
 //        paramsToSign.putAll(bodyParams);
+        if (null != ststoken) {
+            paramsToSign.put("SecurityToken", ststoken);
+        }
 
         final String strToSign = composeStringToSign(req.method(), paramsToSign);
         final String signature = signStringByHmacSHA1(strToSign, ak_secret + "&");

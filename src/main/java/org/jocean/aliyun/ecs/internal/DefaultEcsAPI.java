@@ -74,6 +74,13 @@ public class DefaultEcsAPI implements EcsAPI {
         ));
     }
 
+    @Override
+    public Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> describeSpotPriceHistory(
+            final DescribeSpotPriceHistoryBuilder builder) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     @Value("${ak_id}")
     String _ak_id = null;
 

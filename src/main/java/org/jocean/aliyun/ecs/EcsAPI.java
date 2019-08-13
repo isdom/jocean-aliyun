@@ -441,4 +441,86 @@ public interface EcsAPI {
     public Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId,
             final String vpcId,
             final String InstanceName);
+
+    public interface SpotPriceType {
+        @JSONField(name="InstanceType")
+        public String getInstanceType();
+
+        @JSONField(name="InstanceType")
+        public void setInstanceType(final String instanceType);
+
+        @JSONField(name="IoOptimized")
+        public String getIoOptimized();
+
+        @JSONField(name="IoOptimized")
+        public void setIoOptimized(final String ioOptimized);
+
+        @JSONField(name="NetworkType")
+        public String getNetworkType();
+
+        @JSONField(name="NetworkType")
+        public void setNetworkType(final String networkType);
+
+        @JSONField(name="OriginPrice")
+        public float getOriginPrice();
+
+        @JSONField(name="OriginPrice")
+        public void setOriginPrice(final float originPrice);
+
+        @JSONField(name="SpotPrice")
+        public float getSpotPrice();
+
+        @JSONField(name="SpotPrice")
+        public void setSpotPrice(final float spotPrice);
+
+        @JSONField(name="Timestamp")
+        public String getTimestamp();
+
+        @JSONField(name="Timestamp")
+        public void setTimestamp(final String timestamp);
+
+        @JSONField(name="ZoneId")
+        public String getZoneId();
+
+        @JSONField(name="ZoneId")
+        public void setZoneId(final String zoneId);
+    }
+
+    public interface DescribeSpotPriceHistoryResponse {
+        @JSONField(name="RequestId")
+        public String getRequestId();
+
+        @JSONField(name="RequestId")
+        public void setRequestId(final String requestId);
+
+        @JSONField(name="Currency")
+        public String getCurrency();
+
+        @JSONField(name="Currency")
+        public void setCurrency(final String currency);
+
+        @JSONField(name="NextOffset")
+        public int getNextOffset();
+
+        @JSONField(name="NextOffset")
+        public void setNextOffset(final int nextOffset);
+
+        @JSONField(name="SpotPrices")
+        public SpotPriceType[] getSpotPrices();
+
+        @JSONField(name="SpotPrices")
+        public void setSpotPrices(final SpotPriceType[] spotPrices);
+    }
+
+    public static class DescribeSpotPriceHistoryBuilder {
+        public DescribeSpotPriceHistoryBuilder instanceType(final String instanceType) {
+            return this;
+        }
+
+        public DescribeSpotPriceHistoryBuilder networkType(final String networkType) {
+            return this;
+        }
+    }
+
+    public Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> describeSpotPriceHistory(final DescribeSpotPriceHistoryBuilder builder);
 }

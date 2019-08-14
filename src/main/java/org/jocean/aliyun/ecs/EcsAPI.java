@@ -508,10 +508,10 @@ public interface EcsAPI {
         public void setCurrency(final String currency);
 
         @JSONField(name="NextOffset")
-        public int getNextOffset();
+        public Integer getNextOffset();
 
         @JSONField(name="NextOffset")
-        public void setNextOffset(final int nextOffset);
+        public void setNextOffset(final Integer nextOffset);
 
         @JSONField(name="SpotPrices")
         public SpotPrices getSpotPrices();

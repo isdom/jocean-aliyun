@@ -512,15 +512,13 @@ public interface EcsAPI {
         public void setSpotPrices(final SpotPriceType[] spotPrices);
     }
 
-    public static class DescribeSpotPriceHistoryBuilder {
-        public DescribeSpotPriceHistoryBuilder instanceType(final String instanceType) {
-            return this;
-        }
+    public interface DescribeSpotPriceHistoryBuilder {
+        public DescribeSpotPriceHistoryBuilder instanceType(final String instanceType);
 
-        public DescribeSpotPriceHistoryBuilder networkType(final String networkType) {
-            return this;
-        }
+        public DescribeSpotPriceHistoryBuilder networkType(final String networkType);
+
+        public Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> build(final String regionId);
     }
 
-    public Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> describeSpotPriceHistory(final DescribeSpotPriceHistoryBuilder builder);
+    public DescribeSpotPriceHistoryBuilder describeSpotPriceHistory();
 }

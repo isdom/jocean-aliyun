@@ -486,6 +486,14 @@ public interface EcsAPI {
         public void setZoneId(final String zoneId);
     }
 
+    public interface SpotPrices {
+        @JSONField(name="SpotPriceType")
+        public SpotPriceType[] getSpotPriceTypeArray();
+
+        @JSONField(name="SpotPriceType")
+        public void setSpotPriceTypeArray(final SpotPriceType[] spotPriceTypeArray);
+    }
+
     public interface DescribeSpotPriceHistoryResponse {
         @JSONField(name="RequestId")
         public String getRequestId();
@@ -506,10 +514,10 @@ public interface EcsAPI {
         public void setNextOffset(final int nextOffset);
 
         @JSONField(name="SpotPrices")
-        public SpotPriceType[] getSpotPrices();
+        public SpotPrices getSpotPrices();
 
         @JSONField(name="SpotPrices")
-        public void setSpotPrices(final SpotPriceType[] spotPrices);
+        public void setSpotPrices(final SpotPrices spotPrices);
     }
 
     public interface DescribeSpotPriceHistoryBuilder {

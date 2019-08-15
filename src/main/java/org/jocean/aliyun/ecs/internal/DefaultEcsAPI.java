@@ -1,9 +1,13 @@
 package org.jocean.aliyun.ecs.internal;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.ws.rs.QueryParam;
 
 import org.jocean.aliyun.ecs.EcsAPI;
 import org.jocean.aliyun.ecs.MetadataAPI;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import io.netty.handler.codec.http.HttpMethod;
 import rx.Observable;
 import rx.Observable.Transformer;
+import rx.functions.Func1;
 
 public class DefaultEcsAPI implements EcsAPI {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEcsAPI.class);
@@ -118,6 +123,60 @@ public class DefaultEcsAPI implements EcsAPI {
                         }
                 ));
             }};
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, R> T delegate(final Class<T> intf, final Func1<Map<String, Object>, R> api) {
+        final Map<String, Object> params = new HashMap<>();
+
+        return (T) Proxy.newProxyInstance(
+            Thread.currentThread().getContextClassLoader(),
+            new Class<?>[]{intf},
+            new InvocationHandler() {
+                @Override
+                public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+                    if (args.length == 1) {
+                        final QueryParam queryParam = method.getAnnotation(QueryParam.class);
+                        if (null != queryParam) {
+                            params.put(queryParam.value(), args[0]);
+                        }
+                        return null;
+                    }
+                    else if (args.length == 0) {
+                        return api.call(params);
+                    }
+
+                    return null;
+                }});
+    }
+
+    @Override
+    public CreateInstanceBuilder createInstance() {
+        return delegate(CreateInstanceBuilder.class, new Func1<Map<String, Object>, Transformer<RpcRunner, CreateInstanceResponse>>() {
+                    @Override
+                    public Transformer<RpcRunner, CreateInstanceResponse> call(final Map<String, Object> params) {
+                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.createInstanceResponse").execute(
+                                interact -> {
+                                    interact = interact.method(HttpMethod.GET)
+                                        .uri("https://ecs.aliyuncs.com")
+                                        .path("/")
+                                        .paramAsQuery("Action", "CreateInstance")
+                                        .paramAsQuery("Version", "2014-05-26");
+
+                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
+                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
+                                    }
+//                                    if (null != ststoken) {
+//                                        return interact.onrequest(SignerV1.signRequest(regionId, _ak_id, ak_secret, ststoken))
+//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
+//                                    }
+//                                    else {
+                                        return interact.onrequest(SignerV1.signRequest(params.get("RegionId").toString(), _ak_id, _ak_secret))
+                                                .responseAs(ContentUtil.ASJSON, CreateInstanceResponse.class);
+//                                    }
+                                }));
+                    }}
+            );
     }
 
     @Value("${ak_id}")

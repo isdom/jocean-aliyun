@@ -1,5 +1,7 @@
 package org.jocean.aliyun.ecs;
 
+import javax.ws.rs.QueryParam;
+
 import org.jocean.http.RpcRunner;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -529,4 +531,165 @@ public interface EcsAPI {
     }
 
     public DescribeSpotPriceHistoryBuilder describeSpotPriceHistory();
+
+    public interface CreateInstanceResponse {
+        @JSONField(name="RequestId")
+        public String getRequestId();
+
+        @JSONField(name="RequestId")
+        public void setRequestId(final String requestId);
+
+        @JSONField(name="InstanceId")
+        public String getInstanceId();
+
+        @JSONField(name="InstanceId")
+        public void setInstanceId(final String instanceId);
+    }
+
+    public interface CreateInstanceBuilder {
+        @QueryParam("ClientToken")
+        public CreateInstanceBuilder clientToken(final String clientToken);
+
+        @QueryParam("DryRun")
+        public CreateInstanceBuilder dryRun(final boolean dryRun);
+
+        @QueryParam("ImageId")
+        public CreateInstanceBuilder imageId(final String imageId);
+
+        @QueryParam("InstanceType")
+        public CreateInstanceBuilder instanceType(final String instanceType);
+
+        @QueryParam("RegionId")
+        public CreateInstanceBuilder regionId(final String regionId);
+
+        @QueryParam("SecurityGroupId")
+        public CreateInstanceBuilder securityGroupId(final String securityGroupId);
+
+        @QueryParam("InstanceName")
+        public CreateInstanceBuilder instanceName(final String instanceName);
+
+        @QueryParam("AutoRenew")
+        public CreateInstanceBuilder autoRenew(final boolean autoRenew);
+
+        @QueryParam("AutoRenewPeriod")
+        public CreateInstanceBuilder autoRenewPeriod(final int autoRenewPeriod);
+
+        @QueryParam("InternetChargeType")
+        public CreateInstanceBuilder internetChargeType(final boolean internetChargeType);
+
+        @QueryParam("InternetMaxBandwidthIn")
+        public CreateInstanceBuilder internetMaxBandwidthIn(final int internetMaxBandwidthIn);
+
+        @QueryParam("InternetMaxBandwidthOut")
+        public CreateInstanceBuilder internetMaxBandwidthOut(final int internetMaxBandwidthOut);
+
+        @QueryParam("HostName")
+        public CreateInstanceBuilder hostName(final String hostName);
+
+        @QueryParam("Password")
+        public CreateInstanceBuilder password(final String password);
+
+        @QueryParam("PasswordInherit")
+        public CreateInstanceBuilder passwordInherit(final boolean passwordInherit);
+
+        @QueryParam("DeploymentSetId")
+        public CreateInstanceBuilder deploymentSetId(final String deploymentSetId);
+
+        @QueryParam("ZoneId")
+        public CreateInstanceBuilder zoneId(final String zoneId);
+
+        @QueryParam("ClusterId")
+        public CreateInstanceBuilder clusterId(final String clusterId);
+
+        @QueryParam("VlanId")
+        public CreateInstanceBuilder vlanId(final String vlanId);
+
+        @QueryParam("InnerIpAddress")
+        public CreateInstanceBuilder innerIpAddress(final String innerIpAddress);
+
+        @QueryParam("SystemDisk.Size")
+        public CreateInstanceBuilder systemDiskSize(final int systemDiskSize);
+
+        @QueryParam("SystemDisk.Category")
+        public CreateInstanceBuilder systemDiskCategory(final String systemDiskCategory);
+
+        @QueryParam("SystemDisk.DiskName")
+        public CreateInstanceBuilder systemDiskDiskName(final String systemDiskDiskName);
+
+        @QueryParam("SystemDisk.Description")
+        public CreateInstanceBuilder systemDiskDescription(final String systemDiskDescription);
+
+        @QueryParam("Description")
+        public CreateInstanceBuilder description(final String description);
+
+        @QueryParam("VSwitchId")
+        public CreateInstanceBuilder vSwitchId(final String vSwitchId);
+
+        @QueryParam("PrivateIpAddress")
+        public CreateInstanceBuilder privateIpAddress(final String privateIpAddress);
+
+        @QueryParam("IoOptimized")
+        public CreateInstanceBuilder ioOptimized(final String ioOptimized);
+
+        @QueryParam("UseAdditionalService")
+        public CreateInstanceBuilder useAdditionalService(final boolean useAdditionalService);
+
+        @QueryParam("InstanceChargeType")
+        public CreateInstanceBuilder instanceChargeType(final String instanceChargeType);
+
+        @QueryParam("Period")
+        public CreateInstanceBuilder period(final int period);
+
+        @QueryParam("PeriodUnit")
+        public CreateInstanceBuilder periodUnit(final String periodUnit);
+
+        @QueryParam("UserData")
+        public CreateInstanceBuilder userData(final String userData);
+
+        @QueryParam("SpotStrategy")
+        public CreateInstanceBuilder spotStrategy(final String spotStrategy);
+
+        @QueryParam("SpotPriceLimit")
+        public CreateInstanceBuilder spotPriceLimit(final float spotPriceLimit);
+
+        @QueryParam("KeyPairName")
+        public CreateInstanceBuilder keyPairName(final String keyPairName);
+
+        @QueryParam("SpotInterruptionBehavior")
+        public CreateInstanceBuilder spotInterruptionBehavior(final String spotInterruptionBehavior);
+
+        @QueryParam("RamRoleName")
+        public CreateInstanceBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("SecurityEnhancementStrategy")
+        public CreateInstanceBuilder securityEnhancementStrategy(final String securityEnhancementStrategy);
+
+        @QueryParam("ResourceGroupId")
+        public CreateInstanceBuilder resourceGroupId(final String resourceGroupId);
+
+        @QueryParam("HpcClusterId")
+        public CreateInstanceBuilder hpcClusterId(final String hpcClusterId);
+
+        @QueryParam("DedicatedHostId")
+        public CreateInstanceBuilder dedicatedHostId(final String dedicatedHostId);
+
+        @QueryParam("CreditSpecification")
+        public CreateInstanceBuilder creditSpecification(final String creditSpecification);
+
+        @QueryParam("DeletionProtection")
+        public CreateInstanceBuilder deletionProtection(final boolean deletionProtection);
+
+        @QueryParam("SystemDisk.PerformanceLevel")
+        public CreateInstanceBuilder systemDiskPerformanceLevel(final String systemDiskPerformanceLevel);
+
+        @QueryParam("Affinity")
+        public CreateInstanceBuilder affinity(final String affinity);
+
+        @QueryParam("Tenancy")
+        public CreateInstanceBuilder tenancy(final String tenancy);
+
+        public Transformer<RpcRunner, CreateInstanceResponse> call();
+    }
+
+    public CreateInstanceBuilder createInstance();
 }

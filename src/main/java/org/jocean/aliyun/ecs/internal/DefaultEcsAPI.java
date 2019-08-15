@@ -123,14 +123,14 @@ public class DefaultEcsAPI implements EcsAPI {
             new InvocationHandler() {
                 @Override
                 public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-                    if (args.length == 1) {
+                    if (null != args && args.length == 1) {
                         final QueryParam queryParam = method.getAnnotation(QueryParam.class);
                         if (null != queryParam) {
                             params.put(queryParam.value(), args[0]);
                         }
                         return proxy;
                     }
-                    else if (args.length == 0) {
+                    else if (null == args || args.length == 0) {
                         return api.call(params);
                     }
 

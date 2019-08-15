@@ -71,11 +71,11 @@ public class DefaultEcsAPI implements EcsAPI {
                     }
 
                     if (null != ststoken) {
-                        return interact.onrequest(SignerV1.signRequest(regionId, ak_id, ak_secret, ststoken))
+                        return interact.onrequest(SignerV1.signRequest(ak_id, ak_secret, ststoken))
                                 .responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class);
                     }
                     else {
-                        return interact.onrequest(SignerV1.signRequest(regionId, ak_id, ak_secret))
+                        return interact.onrequest(SignerV1.signRequest(ak_id, ak_secret))
                                 .responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class);
                     }
                 }
@@ -100,11 +100,11 @@ public class DefaultEcsAPI implements EcsAPI {
                                         interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
                                     }
 //                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(regionId, _ak_id, ak_secret, ststoken))
+//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
 //                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
 //                                    }
 //                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(params.get("RegionId").toString(), _ak_id, _ak_secret))
+                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
                                                 .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
 //                                    }
                                 }
@@ -156,11 +156,11 @@ public class DefaultEcsAPI implements EcsAPI {
                                         interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
                                     }
 //                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(regionId, _ak_id, ak_secret, ststoken))
+//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
 //                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
 //                                    }
 //                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(params.get("RegionId").toString(), _ak_id, _ak_secret))
+                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
                                                 .responseAs(ContentUtil.ASJSON, CreateInstanceResponse.class);
 //                                    }
                                 }));

@@ -94,12 +94,13 @@ public class DefaultIvisionAPI implements IvisionAPI {
             runner.name("ivision.predictImage").execute(interact -> interact.method(HttpMethod.GET)
                 .uri("http://ivision.cn-beijing.aliyuncs.com")
                 .path("/")
+                .paramAsQuery("RegionId", _region)
                 .paramAsQuery("Action", "PredictImage")
                 .paramAsQuery("Version", "2019-03-08")
                 .paramAsQuery("ProjectId", projectId)
                 .paramAsQuery("IterationId", iterationId)
                 .paramAsQuery("DataUrls", imgurl)
-                .onrequest(SignerV1.signRequest(_region, _ak_id, _ak_secret))
+                .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
                 .responseAs(ContentUtil.ASJSON, PredictImageResponse.class)
             ));
     }
@@ -110,12 +111,13 @@ public class DefaultIvisionAPI implements IvisionAPI {
             runner.name("ivision.describePredictDatas").execute(interact -> interact.method(HttpMethod.GET)
                     .uri("http://ivision.cn-beijing.aliyuncs.com")
                     .path("/")
+                    .paramAsQuery("RegionId", _region)
                     .paramAsQuery("Action", "DescribePredictDatas")
                     .paramAsQuery("Version", "2019-03-08")
                     .paramAsQuery("ProjectId", projectId)
                     .paramAsQuery("IterationId", iterationId)
                     .paramAsQuery("DataIds", dataIds)
-                    .onrequest(SignerV1.signRequest(_region, _ak_id, _ak_secret))
+                    .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
                     .responseAs(ContentUtil.ASJSON, DescribePredictDatasResponse.class)
             ));
     }

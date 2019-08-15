@@ -27,9 +27,10 @@ public class DefaultNlsAPI implements NlsAPI {
         runner.name("nls.createToken").execute(interact -> interact.method(HttpMethod.GET)
             .uri("http://nls-meta.cn-shanghai.aliyuncs.com")
             .path("/")
+            .paramAsQuery("RegionId", _region)
             .paramAsQuery("Action", "CreateToken")
             .paramAsQuery("Version", "2019-02-28")
-            .onrequest(SignerV1.signRequest(_region, _ak_id, _ak_secret))
+            .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
             .responseAs(ContentUtil.ASJSON, CreateTokenResponse.class)
         ));
     }

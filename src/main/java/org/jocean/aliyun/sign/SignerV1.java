@@ -31,17 +31,17 @@ public class SignerV1 {
     private static final String[] EMPTY_STRS = new String[0];
     private static final Logger LOG = LoggerFactory.getLogger(SignerV1.class);
 
-    public static Action1<Object> signRequest(final String region,  final String ak_id, final String ak_secret) {
+    public static Action1<Object> signRequest(final String ak_id, final String ak_secret) {
         return obj -> {
             if (obj instanceof HttpRequest) {
-                doSign((HttpRequest) obj, region, ak_id, ak_secret, null);
+                doSign((HttpRequest) obj, ak_id, ak_secret, null);
             }};
     }
 
-    public static Action1<Object> signRequest(final String region,  final String ak_id, final String ak_secret, final String ststoken) {
+    public static Action1<Object> signRequest(final String ak_id, final String ak_secret, final String ststoken) {
         return obj -> {
             if (obj instanceof HttpRequest) {
-                doSign((HttpRequest) obj, region, ak_id, ak_secret, ststoken);
+                doSign((HttpRequest) obj, ak_id, ak_secret, ststoken);
             }};
     }
 
@@ -115,7 +115,7 @@ public class SignerV1 {
         }
     }
 
-    private static void doSign(final HttpRequest req, final String region,  final String ak_id, final String ak_secret,
+    private static void doSign(final HttpRequest req, final String ak_id, final String ak_secret,
             final String ststoken) {
         final QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
 
@@ -133,7 +133,7 @@ public class SignerV1 {
         paramsToSign.put("Format", "json"); // TBD: or "application/json" ?
 //        immutableMap.put("SignatureType", signer.getSignerType());
 
-        paramsToSign.put("RegionId", region);
+//        paramsToSign.put("RegionId", region); // set RegionId before sign
 //        paramsToSign.putAll(bodyParams);
         if (null != ststoken) {
             paramsToSign.put("SecurityToken", ststoken);

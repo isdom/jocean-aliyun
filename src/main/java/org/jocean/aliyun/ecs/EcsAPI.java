@@ -444,6 +444,8 @@ public interface EcsAPI {
             final String vpcId,
             final String InstanceName);
 
+    // DescribeSpotPriceHistory: https://help.aliyun.com/document_detail/60400.html?spm=a2c4g.11186623.6.1099.74662eafdAxS1p
+
     public interface SpotPriceType {
         @JSONField(name="InstanceType")
         public String getInstanceType();
@@ -523,15 +525,29 @@ public interface EcsAPI {
     }
 
     public interface DescribeSpotPriceHistoryBuilder {
+        //  String   是   cn-hangzhou
+        //  实例所属的地域ID。您可以调用DescribeRegions查看最新的阿里云地域列表。
+        @QueryParam("RegionId")
+        public DescribeSpotPriceHistoryBuilder regionId(final String regionId);
+
+        //  String  是   ecs.t1.xsmall
+        //  实例规格。
+        @QueryParam("InstanceType")
         public DescribeSpotPriceHistoryBuilder instanceType(final String instanceType);
 
+        //  String  是   vpc
+        //  抢占式实例网络类型。取值范围：
+        //  classic：表示抢占式实例的网络类型为经典网络。
+        //  vpc：表示抢占式实例的网络类型为专有网络。
+        @QueryParam("NetworkType")
         public DescribeSpotPriceHistoryBuilder networkType(final String networkType);
 
-        public Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> build(final String regionId);
+        public Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> call();
     }
 
     public DescribeSpotPriceHistoryBuilder describeSpotPriceHistory();
 
+    // CreateInstance: https://help.aliyun.com/document_detail/25499.html?spm=a2c4g.11186623.6.1083.73643ff5dezPxV
     public interface CreateInstanceResponse {
         @JSONField(name="RequestId")
         public String getRequestId();

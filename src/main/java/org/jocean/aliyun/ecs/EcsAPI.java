@@ -17,7 +17,7 @@ public interface EcsAPI {
 //        "sg-2ze7v8o1cbogte75c8xz"
 //        ]
 //    },
-interface SecurityGroupIds {
+    interface SecurityGroupIds {
         @JSONField(name="SecurityGroupId")
         String[] getSecurityGroupIdArray();
 

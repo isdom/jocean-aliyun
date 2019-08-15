@@ -114,7 +114,7 @@ public class DefaultEcsAPI implements EcsAPI {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T, R> T delegate(final Class<T> intf, final Func1<Map<String, Object>, R> api) {
+    private static <T, R> T delegate(final Class<T> intf, final Func1<Map<String, Object>, R> api) {
         final Map<String, Object> params = new HashMap<>();
 
         return (T) Proxy.newProxyInstance(
@@ -128,7 +128,7 @@ public class DefaultEcsAPI implements EcsAPI {
                         if (null != queryParam) {
                             params.put(queryParam.value(), args[0]);
                         }
-                        return null;
+                        return proxy;
                     }
                     else if (args.length == 0) {
                         return api.call(params);

@@ -561,6 +561,12 @@ public interface EcsAPI {
         @JSONField(name="Code")
         void setCode(final String code);
 
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
+
         @JSONField(name="InstanceId")
         String getInstanceId();
 

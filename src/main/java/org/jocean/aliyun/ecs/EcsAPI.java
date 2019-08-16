@@ -591,7 +591,7 @@ public interface EcsAPI {
         CreateInstanceBuilder autoRenewPeriod(final int autoRenewPeriod);
 
         @QueryParam("InternetChargeType")
-        CreateInstanceBuilder internetChargeType(final boolean internetChargeType);
+        CreateInstanceBuilder internetChargeType(final String internetChargeType);
 
         @QueryParam("InternetMaxBandwidthIn")
         CreateInstanceBuilder internetMaxBandwidthIn(final int internetMaxBandwidthIn);

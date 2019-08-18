@@ -720,4 +720,10 @@ public interface EcsAPI {
     }
 
     CreateInstanceBuilder createInstance();
+
+    interface StartInstanceBuilder {
+
+    }
+
+    StartInstanceBuilder startInstance();
 }

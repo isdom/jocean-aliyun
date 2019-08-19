@@ -727,18 +727,6 @@ public interface EcsAPI {
 
         @JSONField(name="RequestId")
         void setRequestId(final String requestId);
-
-        @JSONField(name="Code")
-        String getCode();
-
-        @JSONField(name="Code")
-        void setCode(final String code);
-
-        @JSONField(name="Message")
-        String getMessage();
-
-        @JSONField(name="Message")
-        void setMessage(final String message);
     }
 
     interface StartInstanceBuilder {

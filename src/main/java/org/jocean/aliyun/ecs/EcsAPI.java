@@ -744,6 +744,44 @@ public interface EcsAPI {
 
     StartInstanceBuilder startInstance();
 
+    interface StopInstanceResponse {
+        @JSONField(name="RequestId")
+        String getRequestId();
+
+        @JSONField(name="RequestId")
+        void setRequestId(final String requestId);
+
+        @JSONField(name="Code")
+        String getCode();
+
+        @JSONField(name="Code")
+        void setCode(final String code);
+
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
+    }
+
+    interface StopInstanceBuilder {
+        @QueryParam("InstanceId")
+        StopInstanceBuilder instanceId(final String instanceId);
+
+        @QueryParam("StoppedMode")
+        StopInstanceBuilder stoppedMode(final String stoppedMode);
+
+        @QueryParam("ForceStop")
+        StopInstanceBuilder forceStop(final boolean forceStop);
+
+        @QueryParam("ConfirmStop")
+        StopInstanceBuilder confirmStop(final boolean confirmStop);
+
+        Transformer<RpcRunner, StopInstanceResponse> call();
+    }
+
+    StopInstanceBuilder stopInstance();
+
     interface DeleteInstanceResponse {
         @JSONField(name="RequestId")
         String getRequestId();

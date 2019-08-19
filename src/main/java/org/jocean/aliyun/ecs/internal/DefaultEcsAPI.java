@@ -144,7 +144,7 @@ public class DefaultEcsAPI implements EcsAPI {
                 new Func1<Map<String, Object>, Transformer<RpcRunner, CreateInstanceResponse>>() {
                     @Override
                     public Transformer<RpcRunner, CreateInstanceResponse> call(final Map<String, Object> params) {
-                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.createInstanceResponse").execute(
+                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.createInstance").execute(
                                 interact -> {
                                     interact = interact.method(HttpMethod.GET)
                                         .uri("https://ecs.aliyuncs.com")
@@ -170,8 +170,32 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public StartInstanceBuilder startInstance() {
-        // TODO Auto-generated method stub
-        return null;
+        return delegate(StartInstanceBuilder.class,
+                new Func1<Map<String, Object>, Transformer<RpcRunner, StartInstanceResponse>>() {
+                    @Override
+                    public Transformer<RpcRunner, StartInstanceResponse> call(final Map<String, Object> params) {
+                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.startInstance").execute(
+                                interact -> {
+                                    interact = interact.method(HttpMethod.GET)
+                                        .uri("https://ecs.aliyuncs.com")
+                                        .path("/")
+                                        .paramAsQuery("Action", "StartInstance")
+                                        .paramAsQuery("Version", "2014-05-26");
+
+                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
+                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
+                                    }
+//                                    if (null != ststoken) {
+//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
+//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
+//                                    }
+//                                    else {
+                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
+                                                .responseAs(ContentUtil.ASJSON, StartInstanceResponse.class);
+//                                    }
+                                }));
+                    }}
+            );
     }
 
     @Value("${ak_id}")

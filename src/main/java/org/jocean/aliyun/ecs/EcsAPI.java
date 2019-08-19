@@ -721,8 +721,37 @@ public interface EcsAPI {
 
     CreateInstanceBuilder createInstance();
 
-    interface StartInstanceBuilder {
+    interface StartInstanceResponse {
+        @JSONField(name="RequestId")
+        String getRequestId();
 
+        @JSONField(name="RequestId")
+        void setRequestId(final String requestId);
+
+        @JSONField(name="Code")
+        String getCode();
+
+        @JSONField(name="Code")
+        void setCode(final String code);
+
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
+    }
+
+    interface StartInstanceBuilder {
+        @QueryParam("InstanceId")
+        CreateInstanceBuilder instanceId(final String clientToken);
+
+        @QueryParam("InitLocalDisk")
+        CreateInstanceBuilder initLocalDisk(final boolean init);
+
+        @QueryParam("OwnerAccount")
+        CreateInstanceBuilder ownerAccount(final String ownerAccount);
+
+        Transformer<RpcRunner, StartInstanceResponse> call();
     }
 
     StartInstanceBuilder startInstance();

@@ -743,13 +743,13 @@ public interface EcsAPI {
 
     interface StartInstanceBuilder {
         @QueryParam("InstanceId")
-        CreateInstanceBuilder instanceId(final String instanceId);
+        StartInstanceBuilder instanceId(final String instanceId);
 
         @QueryParam("InitLocalDisk")
-        CreateInstanceBuilder initLocalDisk(final boolean init);
+        StartInstanceBuilder initLocalDisk(final boolean init);
 
         @QueryParam("OwnerAccount")
-        CreateInstanceBuilder ownerAccount(final String ownerAccount);
+        StartInstanceBuilder ownerAccount(final String ownerAccount);
 
         Transformer<RpcRunner, StartInstanceResponse> call();
     }

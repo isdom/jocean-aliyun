@@ -743,7 +743,7 @@ public interface EcsAPI {
 
     interface StartInstanceBuilder {
         @QueryParam("InstanceId")
-        CreateInstanceBuilder instanceId(final String clientToken);
+        CreateInstanceBuilder instanceId(final String instanceId);
 
         @QueryParam("InitLocalDisk")
         CreateInstanceBuilder initLocalDisk(final boolean init);

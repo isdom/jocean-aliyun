@@ -743,4 +743,27 @@ public interface EcsAPI {
     }
 
     StartInstanceBuilder startInstance();
+
+    interface DeleteInstanceResponse {
+        @JSONField(name="RequestId")
+        String getRequestId();
+
+        @JSONField(name="RequestId")
+        void setRequestId(final String requestId);
+    }
+
+    interface DeleteInstanceBuilder {
+        @QueryParam("InstanceId")
+        DeleteInstanceBuilder instanceId(final String instanceId);
+
+        @QueryParam("Force")
+        DeleteInstanceBuilder force(final boolean force);
+
+        @QueryParam("TerminateSubscription")
+        DeleteInstanceBuilder terminateSubscription(final boolean terminateSubscription);
+
+        Transformer<RpcRunner, DeleteInstanceResponse> call();
+    }
+
+    DeleteInstanceBuilder deleteInstance();
 }

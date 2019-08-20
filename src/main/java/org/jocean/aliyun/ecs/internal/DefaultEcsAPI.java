@@ -46,26 +46,14 @@ public class DefaultEcsAPI implements EcsAPI {
                         return proxy;
                     }
                     else if (null == args || args.length == 0) {
-//                        return new Transformer<RpcRunner, R>() {
-//                            @Override
-//                            public Observable<R> call(final Observable<RpcRunner> runners) {
-//                                return runners.flatMap(runner -> runner.name(apiname).execute(
-//                                        interact -> {
-//                                            for (final Map.Entry<String, Object> entry : params.entrySet()) {
-//                                                interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-//                                            }
-//                                            return api.call(interact);
-//                                        }
-//                                ));
-//                            }};
-                            return (Transformer<RpcRunner, R>)runners -> runners.flatMap(runner -> runner.name(apiname).execute(
-                                            interact -> {
-                                                for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                                    interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                                }
-                                                return api.call(interact);
+                        return (Transformer<RpcRunner, R>)runners -> runners.flatMap(runner -> runner.name(apiname).execute(
+                                        interact -> {
+                                            for (final Map.Entry<String, Object> entry : params.entrySet()) {
+                                                interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
                                             }
-                                    ));
+                                            return api.call(interact);
+                                        }
+                                ));
                     }
 
                     return null;
@@ -86,8 +74,10 @@ public class DefaultEcsAPI implements EcsAPI {
             else if (null != _roleName) {
                 LOG.info("using roleName:{} execute describeInstances", _roleName);
                 return _finder.find(MetadataAPI.class).flatMap(metaapi -> runners.compose(metaapi.getSTSToken(_roleName)))
-                        .flatMap(stsresp -> doDescribeInstances(stsresp.getAccessKeyId(),
-                                stsresp.getAccessKeySecret(), stsresp.getSecurityToken(),
+                        .flatMap(stsresp -> doDescribeInstances(
+                                stsresp.getAccessKeyId(),
+                                stsresp.getAccessKeySecret(),
+                                stsresp.getSecurityToken(),
                                 regionId, vpcId, instanceName, runners));
             }
             else {

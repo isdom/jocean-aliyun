@@ -12,6 +12,26 @@ import rx.Observable.Transformer;
 
 public interface EcsAPI {
 
+    interface ECSAPIResponse {
+        @JSONField(name="RequestId")
+        String getRequestId();
+
+        @JSONField(name="RequestId")
+        void setRequestId(final String requestId);
+
+        @JSONField(name="Code")
+        String getCode();
+
+        @JSONField(name="Code")
+        void setCode(final String code);
+
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
+    }
+
 //    "SecurityGroupIds":{
 //    "SecurityGroupId":[
 //        "sg-2ze7v8o1cbogte75c8xz"
@@ -408,13 +428,7 @@ public interface EcsAPI {
         void setInstance(final InstanceAttributesType[] instances);
     }
 
-    interface DescribeInstancesResponse {
-        @JSONField(name="RequestId")
-        String getRequestId();
-
-        @JSONField(name="RequestId")
-        void setRequestId(final String requestId);
-
+    interface DescribeInstancesResponse extends ECSAPIResponse {
         @JSONField(name="PageNumber")
         int getPageNumber();
 
@@ -498,13 +512,7 @@ public interface EcsAPI {
         void setSpotPriceTypeArray(final SpotPriceType[] spotPriceTypeArray);
     }
 
-    interface DescribeSpotPriceHistoryResponse {
-        @JSONField(name="RequestId")
-        String getRequestId();
-
-        @JSONField(name="RequestId")
-        void setRequestId(final String requestId);
-
+    interface DescribeSpotPriceHistoryResponse extends ECSAPIResponse {
         @JSONField(name="Currency")
         String getCurrency();
 
@@ -548,25 +556,7 @@ public interface EcsAPI {
     DescribeSpotPriceHistoryBuilder describeSpotPriceHistory();
 
     // CreateInstance: https://help.aliyun.com/document_detail/25499.html?spm=a2c4g.11186623.6.1083.73643ff5dezPxV
-    interface CreateInstanceResponse {
-        @JSONField(name="RequestId")
-        String getRequestId();
-
-        @JSONField(name="RequestId")
-        void setRequestId(final String requestId);
-
-        @JSONField(name="Code")
-        String getCode();
-
-        @JSONField(name="Code")
-        void setCode(final String code);
-
-        @JSONField(name="Message")
-        String getMessage();
-
-        @JSONField(name="Message")
-        void setMessage(final String message);
-
+    interface CreateInstanceResponse extends ECSAPIResponse {
         @JSONField(name="InstanceId")
         String getInstanceId();
 
@@ -721,24 +711,7 @@ public interface EcsAPI {
 
     CreateInstanceBuilder createInstance();
 
-    interface StartInstanceResponse {
-        @JSONField(name="RequestId")
-        String getRequestId();
-
-        @JSONField(name="RequestId")
-        void setRequestId(final String requestId);
-
-        @JSONField(name="Code")
-        String getCode();
-
-        @JSONField(name="Code")
-        void setCode(final String code);
-
-        @JSONField(name="Message")
-        String getMessage();
-
-        @JSONField(name="Message")
-        void setMessage(final String message);
+    interface StartInstanceResponse extends ECSAPIResponse {
     }
 
     interface StartInstanceBuilder {
@@ -756,24 +729,7 @@ public interface EcsAPI {
 
     StartInstanceBuilder startInstance();
 
-    interface RebootInstanceResponse {
-        @JSONField(name="RequestId")
-        String getRequestId();
-
-        @JSONField(name="RequestId")
-        void setRequestId(final String requestId);
-
-        @JSONField(name="Code")
-        String getCode();
-
-        @JSONField(name="Code")
-        void setCode(final String code);
-
-        @JSONField(name="Message")
-        String getMessage();
-
-        @JSONField(name="Message")
-        void setMessage(final String message);
+    interface RebootInstanceResponse extends ECSAPIResponse {
     }
 
     interface RebootInstanceBuilder {
@@ -791,24 +747,7 @@ public interface EcsAPI {
 
     RebootInstanceBuilder rebootInstance();
 
-    interface StopInstanceResponse {
-        @JSONField(name="RequestId")
-        String getRequestId();
-
-        @JSONField(name="RequestId")
-        void setRequestId(final String requestId);
-
-        @JSONField(name="Code")
-        String getCode();
-
-        @JSONField(name="Code")
-        void setCode(final String code);
-
-        @JSONField(name="Message")
-        String getMessage();
-
-        @JSONField(name="Message")
-        void setMessage(final String message);
+    interface StopInstanceResponse extends ECSAPIResponse {
     }
 
     interface StopInstanceBuilder {
@@ -829,24 +768,7 @@ public interface EcsAPI {
 
     StopInstanceBuilder stopInstance();
 
-    interface DeleteInstanceResponse {
-        @JSONField(name="RequestId")
-        String getRequestId();
-
-        @JSONField(name="RequestId")
-        void setRequestId(final String requestId);
-
-        @JSONField(name="Code")
-        String getCode();
-
-        @JSONField(name="Code")
-        void setCode(final String code);
-
-        @JSONField(name="Message")
-        String getMessage();
-
-        @JSONField(name="Message")
-        void setMessage(final String message);
+    interface DeleteInstanceResponse extends ECSAPIResponse {
     }
 
     interface DeleteInstanceBuilder {

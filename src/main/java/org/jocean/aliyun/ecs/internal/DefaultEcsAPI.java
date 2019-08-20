@@ -13,6 +13,7 @@ import org.jocean.aliyun.ecs.EcsAPI;
 import org.jocean.aliyun.ecs.MetadataAPI;
 import org.jocean.aliyun.sign.SignerV1;
 import org.jocean.http.ContentUtil;
+import org.jocean.http.Interact;
 import org.jocean.http.RpcRunner;
 import org.jocean.idiom.BeanFinder;
 import org.slf4j.Logger;
@@ -26,6 +27,50 @@ import rx.functions.Func1;
 
 public class DefaultEcsAPI implements EcsAPI {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEcsAPI.class);
+
+    @SuppressWarnings("unchecked")
+    private static <T, R> T delegate2(final Class<T> intf, final String apiname, final Func1<Interact, Observable<R>> api) {
+        final Map<String, Object> params = new HashMap<>();
+
+        return (T) Proxy.newProxyInstance(
+            Thread.currentThread().getContextClassLoader(),
+            new Class<?>[]{intf},
+            new InvocationHandler() {
+                @Override
+                public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+                    if (null != args && args.length == 1) {
+                        final QueryParam queryParam = method.getAnnotation(QueryParam.class);
+                        if (null != queryParam) {
+                            params.put(queryParam.value(), args[0]);
+                        }
+                        return proxy;
+                    }
+                    else if (null == args || args.length == 0) {
+//                        return new Transformer<RpcRunner, R>() {
+//                            @Override
+//                            public Observable<R> call(final Observable<RpcRunner> runners) {
+//                                return runners.flatMap(runner -> runner.name(apiname).execute(
+//                                        interact -> {
+//                                            for (final Map.Entry<String, Object> entry : params.entrySet()) {
+//                                                interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
+//                                            }
+//                                            return api.call(interact);
+//                                        }
+//                                ));
+//                            }};
+                            return (Transformer<RpcRunner, R>)runners -> runners.flatMap(runner -> runner.name(apiname).execute(
+                                            interact -> {
+                                                for (final Map.Entry<String, Object> entry : params.entrySet()) {
+                                                    interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
+                                                }
+                                                return api.call(interact);
+                                            }
+                                    ));
+                    }
+
+                    return null;
+                }});
+    }
 
     // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
     @Override
@@ -84,33 +129,23 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public DescribeSpotPriceHistoryBuilder describeSpotPriceHistory() {
-        return delegate(DescribeSpotPriceHistoryBuilder.class,
-                new Func1<Map<String, Object>, Transformer<RpcRunner, DescribeSpotPriceHistoryResponse>>() {
-                    @Override
-                    public Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> call(final Map<String, Object> params) {
-                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.describeSpotPriceHistory").execute(
-                                interact -> {
-                                    interact = interact.method(HttpMethod.GET)
-                                        .uri("https://ecs.aliyuncs.com")
-                                        .path("/")
-                                        .paramAsQuery("Action", "DescribeSpotPriceHistory")
-                                        .paramAsQuery("Version", "2014-05-26");
-
-                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                    }
+        return delegate2(DescribeSpotPriceHistoryBuilder.class,
+                "aliyun.ecs.describeSpotPriceHistory",
+                interact ->
 //                                    if (null != ststoken) {
 //                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
 //                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
 //                                    }
 //                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
+                        interact.method(HttpMethod.GET)
+                                .uri("https://ecs.aliyuncs.com")
+                                .path("/")
+                                .paramAsQuery("Action", "DescribeSpotPriceHistory")
+                                .paramAsQuery("Version", "2014-05-26")
+                                .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
+                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class)
 //                                    }
-                                }
-                        ));
-                    }
-        });
+                );
     }
 
     @SuppressWarnings("unchecked")

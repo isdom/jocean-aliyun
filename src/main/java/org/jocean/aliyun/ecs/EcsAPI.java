@@ -727,6 +727,18 @@ public interface EcsAPI {
 
         @JSONField(name="RequestId")
         void setRequestId(final String requestId);
+
+        @JSONField(name="Code")
+        String getCode();
+
+        @JSONField(name="Code")
+        void setCode(final String code);
+
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
     }
 
     interface StartInstanceBuilder {
@@ -743,6 +755,41 @@ public interface EcsAPI {
     }
 
     StartInstanceBuilder startInstance();
+
+    interface RebootInstanceResponse {
+        @JSONField(name="RequestId")
+        String getRequestId();
+
+        @JSONField(name="RequestId")
+        void setRequestId(final String requestId);
+
+        @JSONField(name="Code")
+        String getCode();
+
+        @JSONField(name="Code")
+        void setCode(final String code);
+
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
+    }
+
+    interface RebootInstanceBuilder {
+        @QueryParam("InstanceId")
+        RebootInstanceBuilder instanceId(final String instanceId);
+
+        @QueryParam("DryRun")
+        RebootInstanceBuilder dryRun(final boolean dryRun);
+
+        @QueryParam("ForceStop")
+        RebootInstanceBuilder forceStop(final boolean forceStop);
+
+        Transformer<RpcRunner, RebootInstanceResponse> call();
+    }
+
+    RebootInstanceBuilder rebootInstance();
 
     interface StopInstanceResponse {
         @JSONField(name="RequestId")

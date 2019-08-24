@@ -785,4 +785,22 @@ public interface EcsAPI {
     }
 
     DeleteInstanceBuilder deleteInstance();
+
+    interface AttachInstanceRamRoleResponse extends ECSAPIResponse {
+    }
+
+    interface AttachInstanceRamRoleBuilder {
+        @QueryParam("InstanceIds")
+        AttachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        AttachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        AttachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, AttachInstanceRamRoleResponse> call();
+    }
+
+    AttachInstanceRamRoleBuilder attachInstanceRamRole();
 }

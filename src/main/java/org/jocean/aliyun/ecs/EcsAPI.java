@@ -787,6 +787,23 @@ public interface EcsAPI {
     DeleteInstanceBuilder deleteInstance();
 
     interface AttachInstanceRamRoleResponse extends ECSAPIResponse {
+        @JSONField(name="RamRoleName")
+        String getRamRoleName();
+
+        @JSONField(name="RamRoleName")
+        void setRamRoleName(final String ramRoleName);
+
+        @JSONField(name="FailCount")
+        Integer getFailCount();
+
+        @JSONField(name="FailCount")
+        void setFailCount(final Integer failCount);
+
+        @JSONField(name="TotalCount")
+        Integer getTotalCount();
+
+        @JSONField(name="TotalCount")
+        void setTotalCount(final Integer totalCount);
     }
 
     interface AttachInstanceRamRoleBuilder {

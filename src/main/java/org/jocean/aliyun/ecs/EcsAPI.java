@@ -786,7 +786,40 @@ public interface EcsAPI {
 
     DeleteInstanceBuilder deleteInstance();
 
+
+    interface AttachInstanceRamRoleResult {
+        @JSONField(name="Success")
+        String getSuccess();
+
+        @JSONField(name="Success")
+        void setSuccess(final boolean success);
+
+        @JSONField(name="Code")
+        String getCode();
+
+        @JSONField(name="Code")
+        void setCode(final String code);
+
+        @JSONField(name="InstanceId")
+        String getInstanceId();
+
+        @JSONField(name="InstanceId")
+        void setInstanceId(final String instanceId);
+
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
+    }
+
     interface AttachInstanceRamRoleResponse extends ECSAPIResponse {
+        @JSONField(name="AttachInstanceRamRoleResults")
+        AttachInstanceRamRoleResult[] getAttachInstanceRamRoleResults();
+
+        @JSONField(name="AttachInstanceRamRoleResults")
+        void setAttachInstanceRamRoleResults(final AttachInstanceRamRoleResult[] attachInstanceRamRoleResults);
+
         @JSONField(name="RamRoleName")
         String getRamRoleName();
 

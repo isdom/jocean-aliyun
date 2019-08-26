@@ -319,6 +319,12 @@ public class DefaultEcsAPI implements EcsAPI {
         return null;
     }
 
+    @Override
+    public DetachInstanceRamRoleBuilder detachInstanceRamRole() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
     @Value("${ak_id}")
     String _ak_id = null;
 

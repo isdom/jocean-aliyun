@@ -22,7 +22,7 @@ dependencies {
     compile('org.jocean:jocean-j2se:0.0.4-SNAPSHOT') { transitive = false }
     
     compile 'javax.inject:javax.inject:1'
-    compile 'com.google.guava:guava:20.0'
+    compile 'com.google.guava:guava:28.0-jre'
     
     compile 'com.aliyun:aliyun-java-sdk-core:4.3.3'
     

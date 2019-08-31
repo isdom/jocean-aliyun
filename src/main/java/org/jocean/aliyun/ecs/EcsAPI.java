@@ -454,9 +454,22 @@ public interface EcsAPI {
         void setInstances(final InstanceSet instanceSet);
     }
 
-    Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId,
-                                                                        final String vpcId,
-                                                                        final String InstanceName);
+    interface DescribeInstancesBuilder {
+        //  String   是   cn-hangzhou
+        //  实例所属的地域ID。您可以调用DescribeRegions查看最新的阿里云地域列表。
+        @QueryParam("RegionId")
+        DescribeInstancesBuilder regionId(final String regionId);
+
+        @QueryParam("VpcId")
+        DescribeInstancesBuilder vpcId(final String vpcId);
+
+        @QueryParam("InstanceName")
+        DescribeInstancesBuilder instanceName(final String instanceName);
+
+        Transformer<RpcRunner, DescribeInstancesResponse> call();
+    }
+
+    DescribeInstancesBuilder describeInstances();
 
     // DescribeSpotPriceHistory: https://help.aliyun.com/document_detail/60400.html?spm=a2c4g.11186623.6.1099.74662eafdAxS1p
 

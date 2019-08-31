@@ -6,19 +6,14 @@ import java.lang.reflect.Proxy;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.aliyun.ecs.EcsAPI;
-import org.jocean.aliyun.ecs.MetadataAPI;
-import org.jocean.aliyun.sign.SignerV1;
 import org.jocean.http.ContentUtil;
 import org.jocean.http.Interact;
 import org.jocean.http.RpcRunner;
-import org.jocean.idiom.BeanFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import io.netty.handler.codec.http.HttpMethod;
 import rx.Observable;
@@ -29,40 +24,152 @@ public class DefaultEcsAPI implements EcsAPI {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEcsAPI.class);
 
     @SuppressWarnings("unchecked")
-    private static <T, R> T delegate2(final Class<T> intf, final String apiname, final Func1<Interact, Observable<R>> api) {
+    private static <T, R> T delegate(final Class<T> intf, final String apiname,
+            final Func1<Interact, Observable<R>> api) {
         final Map<String, Object> params = new HashMap<>();
 
-        return (T) Proxy.newProxyInstance(
-            Thread.currentThread().getContextClassLoader(),
-            new Class<?>[]{intf},
-            new InvocationHandler() {
-                @Override
-                public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-                    if (null != args && args.length == 1) {
-                        final QueryParam queryParam = method.getAnnotation(QueryParam.class);
-                        if (null != queryParam) {
-                            params.put(queryParam.value(), args[0]);
+        return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class<?>[] { intf },
+                new InvocationHandler() {
+                    @Override
+                    public Object invoke(final Object proxy, final Method method, final Object[] args)
+                            throws Throwable {
+                        if (null != args && args.length == 1) {
+                            final QueryParam queryParam = method.getAnnotation(QueryParam.class);
+                            if (null != queryParam) {
+                                params.put(queryParam.value(), args[0]);
+                            }
+                            return proxy;
+                        } else if (null == args || args.length == 0) {
+                            return callapi(apiname, api, params);
                         }
-                        return proxy;
-                    }
-                    else if (null == args || args.length == 0) {
-                        return (Transformer<RpcRunner, R>)runners -> runners.flatMap(runner -> runner.name(apiname).execute(
-                                        interact -> {
-                                            for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                                interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                            }
-                                            return api.call(interact);
-                                        }
-                                ));
-                    }
 
-                    return null;
-                }});
+                        return null;
+                    }
+                });
+    }
+
+    private static <R> Transformer<RpcRunner, R> callapi(final String apiname,
+            final Func1<Interact, Observable<R>> api,
+            final Map<String, Object> params) {
+        return (Transformer<RpcRunner, R>) runners -> runners.flatMap(runner -> runner.name(apiname).execute(
+                interact -> {
+                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
+                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
+                    }
+                    return api.call(interact);
+                }));
     }
 
     // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
     @Override
-    public Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId,
+    public DescribeInstancesBuilder describeInstances() {
+        return delegate(DescribeInstancesBuilder.class,
+                "aliyun.ecs.describeInstances",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DescribeInstances")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
+                );
+
+    }
+
+    @Override
+    public DescribeSpotPriceHistoryBuilder describeSpotPriceHistory() {
+        return delegate(DescribeSpotPriceHistoryBuilder.class,
+                "aliyun.ecs.describeSpotPriceHistory",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DescribeSpotPriceHistory")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class)
+                );
+    }
+
+    @Override
+    public CreateInstanceBuilder createInstance() {
+        return delegate(CreateInstanceBuilder.class,
+                "aliyun.ecs.createInstance",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "CreateInstance")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, CreateInstanceResponse.class)
+            );
+    }
+
+    @Override
+    public StartInstanceBuilder startInstance() {
+        return delegate(StartInstanceBuilder.class,
+                "aliyun.ecs.startInstance",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "StartInstance")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, StartInstanceResponse.class)
+            );
+    }
+
+    @Override
+    public RebootInstanceBuilder rebootInstance() {
+        return delegate(RebootInstanceBuilder.class,
+                "aliyun.ecs.rebootInstance",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "RebootInstance")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, RebootInstanceResponse.class)
+            );
+    }
+
+    @Override
+    public StopInstanceBuilder stopInstance() {
+        return delegate(StopInstanceBuilder.class,
+                "aliyun.ecs.stopInstance",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "StopInstance")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, StopInstanceResponse.class)
+            );
+    }
+
+    @Override
+    public DeleteInstanceBuilder deleteInstance() {
+        return delegate(DeleteInstanceBuilder.class,
+                "aliyun.ecs.deleteInstance",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DeleteInstance")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, DeleteInstanceResponse.class)
+            );
+    }
+
+    @Override
+    public AttachInstanceRamRoleBuilder attachInstanceRamRole() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public DetachInstanceRamRoleBuilder detachInstanceRamRole() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+//    @Value("${role}")
+//    String _roleName = null;
+
+    /*
+    Transformer<RpcRunner, DescribeInstancesResponse> describeInstances(final String regionId,
             final String vpcId,
             final String instanceName
             ) {
@@ -116,224 +223,5 @@ public class DefaultEcsAPI implements EcsAPI {
                 }
         ));
     }
-
-    @Override
-    public DescribeSpotPriceHistoryBuilder describeSpotPriceHistory() {
-        return delegate2(DescribeSpotPriceHistoryBuilder.class,
-                "aliyun.ecs.describeSpotPriceHistory",
-                interact ->
-//                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
-//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
-//                                    }
-//                                    else {
-                        interact.method(HttpMethod.GET)
-                                .uri("https://ecs.aliyuncs.com")
-                                .path("/")
-                                .paramAsQuery("Action", "DescribeSpotPriceHistory")
-                                .paramAsQuery("Version", "2014-05-26")
-                                .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class)
-//                                    }
-                );
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <T, R> T delegate(final Class<T> intf, final Func1<Map<String, Object>, R> api) {
-        final Map<String, Object> params = new HashMap<>();
-
-        return (T) Proxy.newProxyInstance(
-            Thread.currentThread().getContextClassLoader(),
-            new Class<?>[]{intf},
-            new InvocationHandler() {
-                @Override
-                public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
-                    if (null != args && args.length == 1) {
-                        final QueryParam queryParam = method.getAnnotation(QueryParam.class);
-                        if (null != queryParam) {
-                            params.put(queryParam.value(), args[0]);
-                        }
-                        return proxy;
-                    }
-                    else if (null == args || args.length == 0) {
-                        return api.call(params);
-                    }
-
-                    return null;
-                }});
-    }
-
-    @Override
-    public CreateInstanceBuilder createInstance() {
-        return delegate(CreateInstanceBuilder.class,
-                new Func1<Map<String, Object>, Transformer<RpcRunner, CreateInstanceResponse>>() {
-                    @Override
-                    public Transformer<RpcRunner, CreateInstanceResponse> call(final Map<String, Object> params) {
-                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.createInstance").execute(
-                                interact -> {
-                                    interact = interact.method(HttpMethod.GET)
-                                        .uri("https://ecs.aliyuncs.com")
-                                        .path("/")
-                                        .paramAsQuery("Action", "CreateInstance")
-                                        .paramAsQuery("Version", "2014-05-26");
-
-                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                    }
-//                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
-//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
-//                                    }
-//                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                                                .responseAs(ContentUtil.ASJSON, CreateInstanceResponse.class);
-//                                    }
-                                }));
-                    }}
-            );
-    }
-
-    @Override
-    public StartInstanceBuilder startInstance() {
-        return delegate(StartInstanceBuilder.class,
-                new Func1<Map<String, Object>, Transformer<RpcRunner, StartInstanceResponse>>() {
-                    @Override
-                    public Transformer<RpcRunner, StartInstanceResponse> call(final Map<String, Object> params) {
-                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.startInstance").execute(
-                                interact -> {
-                                    interact = interact.method(HttpMethod.GET)
-                                        .uri("https://ecs.aliyuncs.com")
-                                        .path("/")
-                                        .paramAsQuery("Action", "StartInstance")
-                                        .paramAsQuery("Version", "2014-05-26");
-
-                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                    }
-//                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
-//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
-//                                    }
-//                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                                                .responseAs(ContentUtil.ASJSON, StartInstanceResponse.class);
-//                                    }
-                                }));
-                    }}
-            );
-    }
-
-    @Override
-    public RebootInstanceBuilder rebootInstance() {
-        return delegate(RebootInstanceBuilder.class,
-                new Func1<Map<String, Object>, Transformer<RpcRunner, RebootInstanceResponse>>() {
-                    @Override
-                    public Transformer<RpcRunner, RebootInstanceResponse> call(final Map<String, Object> params) {
-                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.rebootInstance").execute(
-                                interact -> {
-                                    interact = interact.method(HttpMethod.GET)
-                                        .uri("https://ecs.aliyuncs.com")
-                                        .path("/")
-                                        .paramAsQuery("Action", "RebootInstance")
-                                        .paramAsQuery("Version", "2014-05-26");
-
-                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                    }
-//                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
-//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
-//                                    }
-//                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                                                .responseAs(ContentUtil.ASJSON, RebootInstanceResponse.class);
-//                                    }
-                                }));
-                    }}
-            );
-    }
-
-    @Override
-    public StopInstanceBuilder stopInstance() {
-        return delegate(StopInstanceBuilder.class,
-                new Func1<Map<String, Object>, Transformer<RpcRunner, StopInstanceResponse>>() {
-                    @Override
-                    public Transformer<RpcRunner, StopInstanceResponse> call(final Map<String, Object> params) {
-                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.deleteInstance").execute(
-                                interact -> {
-                                    interact = interact.method(HttpMethod.GET)
-                                        .uri("https://ecs.aliyuncs.com")
-                                        .path("/")
-                                        .paramAsQuery("Action", "StopInstance")
-                                        .paramAsQuery("Version", "2014-05-26");
-
-                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                    }
-//                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
-//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
-//                                    }
-//                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                                                .responseAs(ContentUtil.ASJSON, StopInstanceResponse.class);
-//                                    }
-                                }));
-                    }}
-            );
-    }
-
-    @Override
-    public DeleteInstanceBuilder deleteInstance() {
-        return delegate(DeleteInstanceBuilder.class,
-                new Func1<Map<String, Object>, Transformer<RpcRunner, DeleteInstanceResponse>>() {
-                    @Override
-                    public Transformer<RpcRunner, DeleteInstanceResponse> call(final Map<String, Object> params) {
-                        return runners -> runners.flatMap(runner -> runner.name("aliyun.ecs.deleteInstance").execute(
-                                interact -> {
-                                    interact = interact.method(HttpMethod.GET)
-                                        .uri("https://ecs.aliyuncs.com")
-                                        .path("/")
-                                        .paramAsQuery("Action", "DeleteInstance")
-                                        .paramAsQuery("Version", "2014-05-26");
-
-                                    for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
-                                    }
-//                                    if (null != ststoken) {
-//                                        return interact.onrequest(SignerV1.signRequest(_ak_id, ak_secret, ststoken))
-//                                                .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class);
-//                                    }
-//                                    else {
-                                        return interact.onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                                                .responseAs(ContentUtil.ASJSON, DeleteInstanceResponse.class);
-//                                    }
-                                }));
-                    }}
-            );
-    }
-
-    @Override
-    public AttachInstanceRamRoleBuilder attachInstanceRamRole() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public DetachInstanceRamRoleBuilder detachInstanceRamRole() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Value("${ak_id}")
-    String _ak_id = null;
-
-    @Value("${ak_secret}")
-    String _ak_secret = null;
-
-    @Inject
-    BeanFinder _finder;
-
-    @Value("${role}")
-    String _roleName = null;
+    */
 }

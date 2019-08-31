@@ -54,7 +54,9 @@ public class DefaultEcsAPI implements EcsAPI {
         return (Transformer<RpcRunner, R>) runners -> runners.flatMap(runner -> runner.name(apiname).execute(
                 interact -> {
                     for (final Map.Entry<String, Object> entry : params.entrySet()) {
-                        interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
+                        if (entry.getKey() != null && entry.getValue() != null) {
+                            interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
+                        }
                     }
                     return api.call(interact);
                 }));

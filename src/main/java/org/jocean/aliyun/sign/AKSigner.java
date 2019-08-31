@@ -3,9 +3,7 @@ package org.jocean.aliyun.sign;
 import org.jocean.http.RpcRunner;
 import org.springframework.beans.factory.annotation.Value;
 
-import rx.functions.Action1;
-
-public class AKSigner implements Action1<RpcRunner> {
+public class AKSigner implements AliyunSigner {
 
     @Override
     public void call(final RpcRunner runner) {

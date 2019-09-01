@@ -1,5 +1,8 @@
 package org.jocean.aliyun.ivision;
 
+import javax.ws.rs.QueryParam;
+
+import org.jocean.aliyun.ecs.EcsAPI.RebootInstanceBuilder;
 import org.jocean.http.RpcRunner;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -204,7 +207,20 @@ public interface IvisionAPI {
         public void setPredictDatas(final PredictDatas datas);
     }
 
-    public Transformer<RpcRunner, PredictImageResponse> predictImage(final String projectId, final String iterationId, final String imgurl);
+    interface PredictImageBuilder {
+        @QueryParam("ProjectId")
+        PredictImageBuilder projectId(final String projectId);
+
+        @QueryParam("IterationId")
+        PredictImageBuilder iterationId(final String iterationId);
+
+        @QueryParam("DataUrls")
+        RebootInstanceBuilder imgurls(final String imgurls);
+
+        Transformer<RpcRunner, PredictImageResponse> call();
+    }
+
+    public PredictImageBuilder predictImage();
 
     public interface DescribePredictDatasResponse extends IvisionResponse {
         @JSONField(name="PredictDatas")

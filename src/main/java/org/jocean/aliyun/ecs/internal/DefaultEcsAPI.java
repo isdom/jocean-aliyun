@@ -24,7 +24,7 @@ public class DefaultEcsAPI implements EcsAPI {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEcsAPI.class);
 
     @SuppressWarnings("unchecked")
-    private static <T, R> T delegate(final Class<T> intf, final String apiname,
+    public static <T, R> T delegate(final Class<T> intf, final String apiname,
             final Func1<Interact, Observable<R>> api) {
         final Map<String, Object> params = new HashMap<>();
 

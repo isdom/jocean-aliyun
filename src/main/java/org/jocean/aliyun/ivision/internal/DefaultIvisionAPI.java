@@ -1,5 +1,6 @@
 package org.jocean.aliyun.ivision.internal;
 
+import org.jocean.aliyun.ecs.internal.DefaultEcsAPI;
 import org.jocean.aliyun.ivision.IvisionAPI;
 import org.jocean.aliyun.sign.SignerV1;
 import org.jocean.http.ContentUtil;
@@ -89,20 +90,17 @@ public class DefaultIvisionAPI implements IvisionAPI {
     }
 
     @Override
-    public Transformer<RpcRunner, PredictImageResponse> predictImage(final String projectId, final String iterationId, final String imgurl) {
-        return runners -> runners.flatMap(runner ->
-            runner.name("ivision.predictImage").execute(interact -> interact.method(HttpMethod.GET)
-                .uri("http://ivision.cn-beijing.aliyuncs.com")
-                .path("/")
-                .paramAsQuery("RegionId", _region)
-                .paramAsQuery("Action", "PredictImage")
-                .paramAsQuery("Version", "2019-03-08")
-                .paramAsQuery("ProjectId", projectId)
-                .paramAsQuery("IterationId", iterationId)
-                .paramAsQuery("DataUrls", imgurl)
-                .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-                .responseAs(ContentUtil.ASJSON, PredictImageResponse.class)
-            ));
+    public PredictImageBuilder predictImage() {
+        return DefaultEcsAPI.delegate(PredictImageBuilder.class,
+                "aliyun.ivision.predictImage",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("http://ivision.cn-beijing.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("RegionId", _region)
+                    .paramAsQuery("Action", "PredictImage")
+                    .paramAsQuery("Version", "2019-03-08")
+                    .responseAs(ContentUtil.ASJSON, PredictImageResponse.class)
+            );
     }
 
     @Override

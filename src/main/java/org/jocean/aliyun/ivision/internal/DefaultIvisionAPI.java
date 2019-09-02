@@ -2,7 +2,6 @@ package org.jocean.aliyun.ivision.internal;
 
 import org.jocean.aliyun.ecs.internal.DefaultEcsAPI;
 import org.jocean.aliyun.ivision.IvisionAPI;
-import org.jocean.aliyun.sign.SignerV1;
 import org.jocean.http.ContentUtil;
 import org.jocean.http.RpcRunner;
 import org.slf4j.Logger;
@@ -104,20 +103,17 @@ public class DefaultIvisionAPI implements IvisionAPI {
     }
 
     @Override
-    public Transformer<RpcRunner, DescribePredictDatasResponse> describePredictDatas(final String projectId, final String iterationId, final String dataIds) {
-        return runners -> runners.flatMap(runner ->
-            runner.name("ivision.describePredictDatas").execute(interact -> interact.method(HttpMethod.GET)
+    public DescribePredictDatasBuilder describePredictDatas() {
+        return DefaultEcsAPI.delegate(DescribePredictDatasBuilder.class,
+                "aliyun.ivision.describePredictDatas",
+                interact -> interact.method(HttpMethod.GET)
                     .uri("http://ivision.cn-beijing.aliyuncs.com")
                     .path("/")
                     .paramAsQuery("RegionId", _region)
                     .paramAsQuery("Action", "DescribePredictDatas")
                     .paramAsQuery("Version", "2019-03-08")
-                    .paramAsQuery("ProjectId", projectId)
-                    .paramAsQuery("IterationId", iterationId)
-                    .paramAsQuery("DataIds", dataIds)
-                    .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
                     .responseAs(ContentUtil.ASJSON, DescribePredictDatasResponse.class)
-            ));
+            );
     }
 
     @Override

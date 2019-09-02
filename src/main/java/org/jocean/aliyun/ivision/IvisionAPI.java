@@ -230,7 +230,20 @@ public interface IvisionAPI {
         public void setPredictDatas(final PredictDatas datas);
     }
 
-    public Transformer<RpcRunner, DescribePredictDatasResponse> describePredictDatas(final String projectId, final String iterationId, final String dataIds);
+    interface DescribePredictDatasBuilder {
+        @QueryParam("ProjectId")
+        DescribePredictDatasBuilder projectId(final String projectId);
+
+        @QueryParam("IterationId")
+        DescribePredictDatasBuilder iterationId(final String iterationId);
+
+        @QueryParam("DataIds")
+        DescribePredictDatasBuilder DataIds(final String dataIds);
+
+        Transformer<RpcRunner, DescribePredictDatasResponse> call();
+    }
+
+    public DescribePredictDatasBuilder describePredictDatas();
 
     public Transformer<RpcRunner, DeletePredictDatasResponse> deletePredictDatas(final String projectId, final String dataIds);
 

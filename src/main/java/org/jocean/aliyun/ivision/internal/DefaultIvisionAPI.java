@@ -14,8 +14,6 @@ import com.aliyuncs.ivision.model.v20190308.CreateProjectRequest;
 import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
 import com.aliyuncs.ivision.model.v20190308.DeleteIterationRequest;
 import com.aliyuncs.ivision.model.v20190308.DeleteIterationResponse;
-import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasRequest;
-import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasResponse;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsRequest;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
 import com.aliyuncs.profile.DefaultProfile;
@@ -117,24 +115,17 @@ public class DefaultIvisionAPI implements IvisionAPI {
     }
 
     @Override
-    public Transformer<RpcRunner, DeletePredictDatasResponse> deletePredictDatas(final String projectId, final String dataIds) {
-        return runners -> runners.flatMap(runner -> {
-            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
-
-            final DeletePredictDatasRequest request = new DeletePredictDatasRequest();
-            request.setAcceptFormat(FormatType.JSON);
-
-            request.setProjectId(projectId);
-            request.setDataIds(dataIds);
-
-            // If an error occurs, a ClientException or ServerException may be thrown.
-            try {
-                final DeletePredictDatasResponse response = client.getAcsResponse(request);
-                return Observable.just(response);
-            } catch (final Exception e) {
-                return Observable.error(e);
-            }
-        });
+    public DeletePredictDatasBuilder deletePredictDatas() {
+        return DefaultEcsAPI.delegate(DeletePredictDatasBuilder.class,
+                "aliyun.ivision.deletePredictDatas",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("http://ivision.cn-beijing.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("RegionId", _region)
+                    .paramAsQuery("Action", "DeletePredictDatas")
+                    .paramAsQuery("Version", "2019-03-08")
+                    .responseAs(ContentUtil.ASJSON, DeletePredictDatasResponse.class)
+            );
     }
 
     @Value("${regionid}")

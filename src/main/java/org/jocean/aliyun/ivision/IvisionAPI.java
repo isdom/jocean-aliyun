@@ -8,7 +8,6 @@ import org.jocean.http.RpcRunner;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
 import com.aliyuncs.ivision.model.v20190308.DeleteIterationResponse;
-import com.aliyuncs.ivision.model.v20190308.DeletePredictDatasResponse;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
 
 import rx.Observable.Transformer;
@@ -238,13 +237,28 @@ public interface IvisionAPI {
         DescribePredictDatasBuilder iterationId(final String iterationId);
 
         @QueryParam("DataIds")
-        DescribePredictDatasBuilder DataIds(final String dataIds);
+        DescribePredictDatasBuilder dataIds(final String dataIds);
 
         Transformer<RpcRunner, DescribePredictDatasResponse> call();
     }
 
     public DescribePredictDatasBuilder describePredictDatas();
 
-    public Transformer<RpcRunner, DeletePredictDatasResponse> deletePredictDatas(final String projectId, final String dataIds);
+    public interface DeletePredictDatasResponse extends IvisionResponse {
+    }
 
+    interface DeletePredictDatasBuilder {
+        @QueryParam("ProjectId")
+        DeletePredictDatasBuilder projectId(final String projectId);
+
+        @QueryParam("IterationId")
+        DeletePredictDatasBuilder iterationId(final String iterationId);
+
+        @QueryParam("DataIds")
+        DeletePredictDatasBuilder dataIds(final String dataIds);
+
+        Transformer<RpcRunner, DeletePredictDatasResponse> call();
+    }
+
+    public DeletePredictDatasBuilder deletePredictDatas();
 }

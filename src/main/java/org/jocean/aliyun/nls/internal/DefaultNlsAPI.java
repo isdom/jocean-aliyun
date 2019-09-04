@@ -72,12 +72,6 @@ public class DefaultNlsAPI implements NlsAPI {
     @Value("${regionid}")
     String _region;
 
-    @Value("${ak_id}")
-    String _ak_id;
-
-    @Value("${ak_secret}")
-    String _ak_secret;
-
     @Value("${appkey}")
     String _appkey;
 }

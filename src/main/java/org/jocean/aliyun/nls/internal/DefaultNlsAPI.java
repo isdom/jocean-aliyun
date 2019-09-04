@@ -1,7 +1,7 @@
 package org.jocean.aliyun.nls.internal;
 
+import org.jocean.aliyun.ecs.internal.DefaultEcsAPI;
 import org.jocean.aliyun.nls.NlsAPI;
-import org.jocean.aliyun.sign.SignerV1;
 import org.jocean.http.ContentUtil;
 import org.jocean.http.MessageBody;
 import org.jocean.http.RpcRunner;
@@ -22,24 +22,24 @@ public class DefaultNlsAPI implements NlsAPI {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultNlsAPI.class);
 
     @Override
-    public Transformer<RpcRunner, CreateTokenResponse> createToken() {
-        return runners -> runners.flatMap(runner ->
-        runner.name("nls.createToken").execute(interact -> interact.method(HttpMethod.GET)
-            .uri("http://nls-meta.cn-shanghai.aliyuncs.com")
-            .path("/")
-            .paramAsQuery("RegionId", _region)
-            .paramAsQuery("Action", "CreateToken")
-            .paramAsQuery("Version", "2019-02-28")
-            .onrequest(SignerV1.signRequest(_ak_id, _ak_secret))
-            .responseAs(ContentUtil.ASJSON, CreateTokenResponse.class)
-        ));
+    public CreateTokenBuilder createToken() {
+        return DefaultEcsAPI.delegate(CreateTokenBuilder.class,
+                "aliyun.nls.createToken",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("http://nls-meta.cn-shanghai.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("RegionId", _region)
+                    .paramAsQuery("Action", "CreateToken")
+                    .paramAsQuery("Version", "2019-02-28")
+                    .responseAs(ContentUtil.ASJSON, CreateTokenResponse.class)
+            );
     }
 
     @Override
     public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content,
             final String format,
             final int sample_rate) {
-        return runners -> runners.compose(createToken()).flatMap(resp ->
+        return runners -> runners.compose(createToken().call()).flatMap(resp ->
             runners.flatMap(runner -> runner.name("nls.streamAsrV1").execute(
                 interact -> {
                     interact = interact.method(HttpMethod.POST)

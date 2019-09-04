@@ -82,7 +82,11 @@ public interface NlsAPI {
         public void setResult(final String result);
     }
 
-    public Transformer<RpcRunner, CreateTokenResponse> createToken();
+    interface CreateTokenBuilder {
+        Transformer<RpcRunner, CreateTokenResponse> call();
+    }
+
+    public CreateTokenBuilder createToken();
     public Transformer<RpcRunner, AsrResponse> streamAsrV1(final MessageBody content,
             final String format,
             final int sample_rate);

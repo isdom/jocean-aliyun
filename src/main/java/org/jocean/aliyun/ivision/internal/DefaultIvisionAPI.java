@@ -12,8 +12,6 @@ import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.http.FormatType;
 import com.aliyuncs.ivision.model.v20190308.CreateProjectRequest;
 import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
-import com.aliyuncs.ivision.model.v20190308.DeleteIterationRequest;
-import com.aliyuncs.ivision.model.v20190308.DeleteIterationResponse;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsRequest;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
 import com.aliyuncs.profile.DefaultProfile;
@@ -67,23 +65,17 @@ public class DefaultIvisionAPI implements IvisionAPI {
     }
 
     @Override
-    public Transformer<RpcRunner, DeleteIterationResponse> deleteIteration(final String projectId, final String iterationId) {
-        return runners -> runners.flatMap(runner -> {
-            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
-            final DeleteIterationRequest request = new DeleteIterationRequest();
-
-            request.setAcceptFormat(FormatType.JSON);
-            request.setProjectId(projectId);
-            request.setIterationId(iterationId);
-
-            // If an error occurs, a ClientException or ServerException may be thrown.
-            try {
-                final DeleteIterationResponse response = client.getAcsResponse(request);
-                return Observable.just(response);
-            } catch (final Exception e) {
-                return Observable.error(e);
-            }
-        });
+    public DeleteIterationBuilder deleteIteration() {
+        return DefaultEcsAPI.delegate(DeleteIterationBuilder.class,
+                "aliyun.ivision.deleteIteration",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("http://ivision.cn-beijing.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("RegionId", _region)
+                    .paramAsQuery("Action", "DeleteIteration")
+                    .paramAsQuery("Version", "2019-03-08")
+                    .responseAs(ContentUtil.ASJSON, DeleteIterationResponse.class)
+            );
     }
 
     @Override

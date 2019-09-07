@@ -7,7 +7,6 @@ import org.jocean.http.RpcRunner;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
-import com.aliyuncs.ivision.model.v20190308.DeleteIterationResponse;
 import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
 
 import rx.Observable.Transformer;
@@ -167,7 +166,25 @@ public interface IvisionAPI {
 
     public Transformer<RpcRunner, DescribeIterationsResponse> describeIterations(final String projectId);
 
-    public Transformer<RpcRunner, DeleteIterationResponse> deleteIteration(final String projectId, final String iterationId);
+    public interface DeleteIterationResponse extends IvisionResponse {
+        @JSONField(name="IterationId")
+        public String getIterationId();
+
+        @JSONField(name="IterationId")
+        public void setIterationId(final String iterationId);
+    }
+
+    interface DeleteIterationBuilder {
+        @QueryParam("ProjectId")
+        DeleteIterationBuilder projectId(final String projectId);
+
+        @QueryParam("IterationId")
+        DeleteIterationBuilder iterationId(final String iterationId);
+
+        Transformer<RpcRunner, DeleteIterationResponse> call();
+    }
+
+    public DeleteIterationBuilder deleteIteration();
 
 /*
     |00000170| 2e 76 32 30 31 30 31 32 30 35 29 0d 0a 0d 0a 7b |.v20101205)....{|

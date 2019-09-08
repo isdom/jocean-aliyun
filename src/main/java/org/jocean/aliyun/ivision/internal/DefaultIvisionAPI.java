@@ -3,65 +3,42 @@ package org.jocean.aliyun.ivision.internal;
 import org.jocean.aliyun.ecs.internal.DefaultEcsAPI;
 import org.jocean.aliyun.ivision.IvisionAPI;
 import org.jocean.http.ContentUtil;
-import org.jocean.http.RpcRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
-import com.aliyuncs.DefaultAcsClient;
-import com.aliyuncs.http.FormatType;
-import com.aliyuncs.ivision.model.v20190308.CreateProjectRequest;
-import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
-import com.aliyuncs.ivision.model.v20190308.DescribeIterationsRequest;
-import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
-import com.aliyuncs.profile.DefaultProfile;
-
 import io.netty.handler.codec.http.HttpMethod;
-import rx.Observable;
-import rx.Observable.Transformer;
 
 public class DefaultIvisionAPI implements IvisionAPI {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultIvisionAPI.class);
 
     @Override
-    public Transformer<RpcRunner, CreateProjectResponse> createProject(final String name, final String description, final String type) {
-
-        return runners -> runners.flatMap(runner -> {
-            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
-            final CreateProjectRequest request = new CreateProjectRequest();
-            request.setAcceptFormat(FormatType.JSON);
-            request.setName(name);
-            request.setDescription(description);
-            request.setProType(type);
-
-            // If an error occurs, a ClientException or ServerException may be thrown.
-            try {
-                final CreateProjectResponse response = client.getAcsResponse(request);
-                return Observable.just(response);
-            } catch (final Exception e) {
-                return Observable.error(e);
-            }
-        });
+    public CreateProjectBuilder createProject() {
+        return DefaultEcsAPI.delegate(CreateProjectBuilder.class,
+                "aliyun.ivision.createProject",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("http://ivision.cn-beijing.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("RegionId", _region)
+                    .paramAsQuery("Action", "CreateProject")
+                    .paramAsQuery("Version", "2019-03-08")
+                    .responseAs(ContentUtil.ASJSON, CreateProjectResponse.class)
+            );
     }
 
     @Override
-    public Transformer<RpcRunner, DescribeIterationsResponse> describeIterations(final String projectId) {
-
-        return runners -> runners.flatMap(runner -> {
-            final DefaultAcsClient client = new DefaultAcsClient(DefaultProfile.getProfile(_region, _ak_id, _ak_secret));
-            final DescribeIterationsRequest request = new DescribeIterationsRequest();
-            request.setAcceptFormat(FormatType.JSON);
-            request.setProjectId(projectId);
-
-            // If an error occurs, a ClientException or ServerException may be thrown.
-            try {
-                final DescribeIterationsResponse response = client.getAcsResponse(request);
-                return Observable.just(response);
-            } catch (final Exception e) {
-                return Observable.error(e);
-            }
-        });
+    public DescribeIterationsBuilder describeIterations() {
+        return DefaultEcsAPI.delegate(DescribeIterationsBuilder.class,
+                "aliyun.ivision.describeIterations",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("http://ivision.cn-beijing.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("RegionId", _region)
+                    .paramAsQuery("Action", "DescribeIterations")
+                    .paramAsQuery("Version", "2019-03-08")
+                    .responseAs(ContentUtil.ASJSON, DescribeIterationsResponse.class)
+            );
     }
 
     @Override

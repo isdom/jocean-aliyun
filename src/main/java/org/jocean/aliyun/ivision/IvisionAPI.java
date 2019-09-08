@@ -2,12 +2,9 @@ package org.jocean.aliyun.ivision;
 
 import javax.ws.rs.QueryParam;
 
-import org.jocean.aliyun.ecs.EcsAPI.RebootInstanceBuilder;
 import org.jocean.http.RpcRunner;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.aliyuncs.ivision.model.v20190308.CreateProjectResponse;
-import com.aliyuncs.ivision.model.v20190308.DescribeIterationsResponse;
 
 import rx.Observable.Transformer;
 
@@ -162,9 +159,48 @@ public interface IvisionAPI {
         public void setPredictData(final PredictData[] datas);
     }
 
-    public Transformer<RpcRunner, CreateProjectResponse> createProject(final String name, final String description, final String type);
+    public interface CreateProjectResponse extends IvisionResponse {
+        @JSONField(name="IterationId")
+        public String getIterationId();
 
-    public Transformer<RpcRunner, DescribeIterationsResponse> describeIterations(final String projectId);
+        @JSONField(name="IterationId")
+        public void setIterationId(final String iterationId);
+    }
+
+    interface CreateProjectBuilder {
+        @QueryParam("Name")
+        CreateProjectBuilder name(final String name);
+
+        @QueryParam("Description")
+        CreateProjectBuilder description(final String description);
+
+        @QueryParam("ProType")
+        CreateProjectBuilder proType(final String proType);
+
+        Transformer<RpcRunner, CreateProjectResponse> call();
+    }
+
+    public CreateProjectBuilder createProject();
+
+    public interface DescribeIterationsResponse extends IvisionResponse {
+        @JSONField(name="IterationId")
+        public String getIterationId();
+
+        @JSONField(name="IterationId")
+        public void setIterationId(final String iterationId);
+    }
+
+    interface DescribeIterationsBuilder {
+        @QueryParam("ProjectId")
+        DescribeIterationsBuilder projectId(final String projectId);
+
+        @QueryParam("IterationIds")
+        DescribeIterationsBuilder iterationIds(final String iterationIds);
+
+        Transformer<RpcRunner, DescribeIterationsResponse> call();
+    }
+
+    public DescribeIterationsBuilder describeIterations();
 
     public interface DeleteIterationResponse extends IvisionResponse {
         @JSONField(name="IterationId")
@@ -231,7 +267,7 @@ public interface IvisionAPI {
         PredictImageBuilder iterationId(final String iterationId);
 
         @QueryParam("DataUrls")
-        RebootInstanceBuilder imgurls(final String imgurls);
+        PredictImageBuilder imgurls(final String imgurls);
 
         Transformer<RpcRunner, PredictImageResponse> call();
     }

@@ -159,12 +159,56 @@ public interface IvisionAPI {
         public void setPredictData(final PredictData[] datas);
     }
 
-    public interface CreateProjectResponse extends IvisionResponse {
-        @JSONField(name="IterationId")
-        public String getIterationId();
+    public interface Project {
+        @JSONField(name="ProjectId")
+        public String getProjectId();
 
-        @JSONField(name="IterationId")
-        public void setIterationId(final String iterationId);
+        @JSONField(name="ProjectId")
+        public void setProjectId(final String projectId);
+
+        @JSONField(name="Name")
+        public String getName();
+
+        @JSONField(name="Name")
+        public void setName(final String name);
+
+        @JSONField(name="Description")
+        public String getDescription();
+
+        @JSONField(name="Description")
+        public void setDescription(final String description);
+
+        @JSONField(name="ProType")
+        public String getProType();
+
+        @JSONField(name="ProType")
+        public void setProType(final String proType);
+
+        @JSONField(name="IterCount")
+        public String getIterCount();
+
+        @JSONField(name="IterCount")
+        public void setIterCount(final String iterCount);
+
+        @JSONField(name="CreationTime")
+        public String getCreationTime();
+
+        @JSONField(name="CreationTime")
+        public void setCreationTime(final String creationTime);
+
+        @JSONField(name="Status")
+        public String getStatus();
+
+        @JSONField(name="Status")
+        public void setStatus(final String status);
+    }
+
+    public interface CreateProjectResponse extends IvisionResponse {
+        @JSONField(name="Project")
+        public Project getProject();
+
+        @JSONField(name="Project")
+        public void setProject(final Project project);
     }
 
     interface CreateProjectBuilder {
@@ -174,6 +218,7 @@ public interface IvisionAPI {
         @QueryParam("Description")
         CreateProjectBuilder description(final String description);
 
+        // "Classification" or "ObjectDetection"
         @QueryParam("ProType")
         CreateProjectBuilder proType(final String proType);
 

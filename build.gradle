@@ -24,10 +24,10 @@ dependencies {
     compile 'javax.inject:javax.inject:1'
     compile 'com.google.guava:guava:28.1-jre'
     
-    compile 'com.aliyun:aliyun-java-sdk-core:4.3.3'
+    compile 'com.aliyun:aliyun-java-sdk-core:4.4.5'
     
     /*aliyun ecs*/
-    compile 'com.aliyun:aliyun-java-sdk-ecs:4.17.1'
+    compile 'com.aliyun:aliyun-java-sdk-ecs:4.17.5'
     
     /*aliyun ivision*/
     compile 'com.aliyun:aliyun-java-sdk-ivision:1.0.1'

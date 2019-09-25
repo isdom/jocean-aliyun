@@ -881,4 +881,23 @@ public interface EcsAPI {
     }
 
     DetachInstanceRamRoleBuilder detachInstanceRamRole();
+
+    interface DescribeInstanceStatusResponse extends ECSAPIResponse {
+
+    }
+
+    interface DescribeInstanceStatusBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
+    }
+
+    DescribeInstanceStatusBuilder describeInstanceStatus();
 }

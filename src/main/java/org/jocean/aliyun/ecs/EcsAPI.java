@@ -900,4 +900,23 @@ public interface EcsAPI {
     }
 
     DescribeInstanceStatusBuilder describeInstanceStatus();
+
+    interface RenewInstanceResponse extends ECSAPIResponse {
+
+    }
+
+    interface RenewInstanceBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
+    }
+
+    RenewInstanceBuilder renewInstance();
 }

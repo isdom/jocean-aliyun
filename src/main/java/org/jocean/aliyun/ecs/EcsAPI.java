@@ -915,8 +915,27 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachInstanceRamRoleBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
+        Transformer<RpcRunner, RenewInstanceResponse> call();
     }
 
     RenewInstanceBuilder renewInstance();
+
+    interface ReactivateInstancesResponse extends ECSAPIResponse {
+
+    }
+
+    interface ReactivateInstancesBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ReactivateInstancesResponse> call();
+    }
+
+    ReactivateInstancesBuilder reactivateInstances();
 }

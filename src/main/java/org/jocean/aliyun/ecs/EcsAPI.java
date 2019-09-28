@@ -938,4 +938,23 @@ public interface EcsAPI {
     }
 
     ReactivateInstancesBuilder reactivateInstances();
+
+    interface RedeployInstanceResponse extends ECSAPIResponse {
+
+    }
+
+    interface RedeployInstanceBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, RedeployInstanceResponse> call();
+    }
+
+    RedeployInstanceBuilder redeployInstance();
 }

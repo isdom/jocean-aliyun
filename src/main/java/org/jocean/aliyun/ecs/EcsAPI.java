@@ -957,4 +957,23 @@ public interface EcsAPI {
     }
 
     RedeployInstanceBuilder redeployInstance();
+
+    interface DescribeInstanceVncUrlResponse extends ECSAPIResponse {
+
+    }
+
+    interface DescribeInstanceVncUrlBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeInstanceVncUrlResponse> call();
+    }
+
+    DescribeInstanceVncUrlBuilder describeInstanceVncUrl();
 }

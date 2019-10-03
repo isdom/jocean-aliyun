@@ -1030,4 +1030,23 @@ public interface EcsAPI {
     }
 
     DescribeInstanceRamRoleBuilder describeInstanceRamRole();
+
+    interface DescribeInstanceTypeFamiliesResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeInstanceTypeFamiliesBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeInstanceTypeFamiliesResponse> call();
+    }
+
+    DescribeInstanceTypeFamiliesBuilder describeInstanceTypeFamilies();
+
 }

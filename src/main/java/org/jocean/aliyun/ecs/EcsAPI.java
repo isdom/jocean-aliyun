@@ -1084,4 +1084,22 @@ public interface EcsAPI {
     }
 
     ModifyInstanceVpcAttributeBuilder modifyInstanceVpcAttribute();
+
+    interface ModifyInstanceAttributeResponse extends ECSAPIResponse {
+    }
+
+    interface ModifyInstanceAttributeBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ModifyInstanceAttributeResponse> call();
+    }
+
+    ModifyInstanceAttributeBuilder modifyInstanceAttribute();
 }

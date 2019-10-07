@@ -1102,4 +1102,22 @@ public interface EcsAPI {
     }
 
     ModifyInstanceAttributeBuilder modifyInstanceAttribute();
+
+    interface ModifyInstanceVncPasswdResponse extends ECSAPIResponse {
+    }
+
+    interface ModifyInstanceVncPasswdBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ModifyInstanceVncPasswdResponse> call();
+    }
+
+    ModifyInstanceVncPasswdBuilder modifyInstanceVncPasswd();
 }

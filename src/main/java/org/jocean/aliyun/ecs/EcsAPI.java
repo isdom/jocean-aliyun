@@ -1120,4 +1120,22 @@ public interface EcsAPI {
     }
 
     ModifyInstanceVncPasswdBuilder modifyInstanceVncPasswd();
+
+    interface ModifyInstanceAutoReleaseTimeResponse extends ECSAPIResponse {
+    }
+
+    interface ModifyInstanceAutoReleaseTimeBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ModifyInstanceAutoReleaseTimeResponse> call();
+    }
+
+    ModifyInstanceAutoReleaseTimeBuilder modifyInstanceAutoReleaseTime();
 }

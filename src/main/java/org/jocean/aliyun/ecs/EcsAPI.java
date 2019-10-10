@@ -1156,4 +1156,22 @@ public interface EcsAPI {
     }
 
     ModifyInstanceAutoRenewAttributeBuilder modifyInstanceAutoRenewAttribute();
+
+    interface ModifyInstanceChargeTypeResponse extends ECSAPIResponse {
+    }
+
+    interface ModifyInstanceChargeTypeBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ModifyInstanceChargeTypeResponse> call();
+    }
+
+    ModifyInstanceChargeTypeBuilder modifyInstanceChargeType();
 }

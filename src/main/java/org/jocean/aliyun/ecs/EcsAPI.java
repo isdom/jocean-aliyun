@@ -1210,4 +1210,22 @@ public interface EcsAPI {
     }
 
     ModifyPrepayInstanceSpecBuilder modifyPrepayInstanceSpec();
+
+    interface DescribeInstancesFullStatusResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeInstancesFullStatusBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeInstancesFullStatusResponse> call();
+    }
+
+    DescribeInstancesFullStatusBuilder describeInstancesFullStatus();
 }

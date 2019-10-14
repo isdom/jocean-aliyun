@@ -1228,4 +1228,24 @@ public interface EcsAPI {
     }
 
     DescribeInstancesFullStatusBuilder describeInstancesFullStatus();
+
+    //  TBD: https://help.aliyun.com/document_detail/63962.html?spm=a2c4g.11186623.6.1295.496db95cVFgyMa
+    interface DescribeInstanceHistoryEventsResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeInstanceHistoryEventsBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeInstanceHistoryEventsResponse> call();
+    }
+
+    DescribeInstanceHistoryEventsBuilder describeInstanceHistoryEvents();
+
 }

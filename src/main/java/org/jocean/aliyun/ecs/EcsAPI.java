@@ -1285,4 +1285,23 @@ public interface EcsAPI {
     }
 
     CancelSimulatedSystemEventsBuilder cancelSimulatedSystemEvents();
+
+    //  TBD: https://help.aliyun.com/document_detail/88814.html?spm=a2c4g.11186623.6.1302.5e286918lljOHg
+    interface CreateSimulatedSystemEventsResponse extends ECSAPIResponse {
+    }
+
+    interface CreateSimulatedSystemEventsBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CreateSimulatedSystemEventsResponse> call();
+    }
+
+    CreateSimulatedSystemEventsBuilder createSimulatedSystemEvents();
 }

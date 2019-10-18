@@ -1304,4 +1304,24 @@ public interface EcsAPI {
     }
 
     CreateSimulatedSystemEventsBuilder createSimulatedSystemEvents();
+
+    // 运维与监控
+    //  TBD: https://help.aliyun.com/document_detail/87546.html?spm=a2c4g.11186623.6.1304.2dbc355fzGeV1i
+    interface DescribeEniMonitorDataResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeEniMonitorDataBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeEniMonitorDataResponse> call();
+    }
+
+    DescribeEniMonitorDataBuilder describeEniMonitorData();
 }

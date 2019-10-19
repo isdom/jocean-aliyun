@@ -1324,4 +1324,23 @@ public interface EcsAPI {
     }
 
     DescribeEniMonitorDataBuilder describeEniMonitorData();
+
+    //  TBD: https://help.aliyun.com/document_detail/25614.html?spm=a2c4g.11186623.6.1306.102251f4UVVrfx
+    interface DescribeDiskMonitorDataResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeDiskMonitorDataBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeDiskMonitorDataResponse> call();
+    }
+
+    DescribeDiskMonitorDataBuilder describeDiskMonitorData();
 }

@@ -1381,4 +1381,23 @@ public interface EcsAPI {
     }
 
     GetInstanceScreenshotBuilder getInstanceScreenshot();
+
+    //  TBD: https://help.aliyun.com/document_detail/85922.html?spm=a2c4g.11186623.6.1310.701959f6mJRm1N
+    interface GetInstanceConsoleOutputResponse extends ECSAPIResponse {
+    }
+
+    interface GetInstanceConsoleOutputBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, GetInstanceConsoleOutputResponse> call();
+    }
+
+    GetInstanceConsoleOutputBuilder getInstanceConsoleOutput();
 }

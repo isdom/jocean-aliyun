@@ -1419,4 +1419,23 @@ public interface EcsAPI {
     }
 
     DescribeSnapshotMonitorDataBuilder describeSnapshotMonitorData();
+
+    //  TBD: https://help.aliyun.com/document_detail/25609.html?spm=a2c4g.11186623.6.1333.785b798dNB8QEy
+    interface DescribeRegionsResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeRegionsBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeRegionsResponse> call();
+    }
+
+    DescribeRegionsBuilder describeRegions();
 }

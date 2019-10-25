@@ -347,6 +347,12 @@ public class DefaultEcsAPI implements EcsAPI {
         return null;
     }
 
+    @Override
+    public DescribeZonesBuilder describeZones() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 //    @Value("${role}")
 //    String _roleName = null;
 

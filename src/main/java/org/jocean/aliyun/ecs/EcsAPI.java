@@ -1457,4 +1457,23 @@ public interface EcsAPI {
     }
 
     DescribeZonesBuilder describeZones();
+
+    //  TBD: https://help.aliyun.com/document_detail/66187.html?spm=a2c4g.11186623.6.1335.6be3448aCjxWid
+    interface DescribeResourcesModificationResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeResourcesModificationBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeResourcesModificationResponse> call();
+    }
+
+    DescribeResourcesModificationBuilder describeResourcesModification();
 }

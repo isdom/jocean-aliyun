@@ -1495,4 +1495,24 @@ public interface EcsAPI {
     }
 
     DescribeAvailableResourceBuilder describeAvailableResource();
+
+    // SSH 密钥对 相关
+    //  TBD: https://help.aliyun.com/document_detail/51771.html?spm=a2c4g.11186623.6.1274.1c2f263aA2hveO
+    interface CreateKeyPairResponse extends ECSAPIResponse {
+    }
+
+    interface CreateKeyPairBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CreateKeyPairResponse> call();
+    }
+
+    CreateKeyPairBuilder createKeyPair();
 }

@@ -1515,4 +1515,23 @@ public interface EcsAPI {
     }
 
     CreateKeyPairBuilder createKeyPair();
+
+    //  TBD: https://help.aliyun.com/document_detail/51774.html?spm=a2c4g.11186623.6.1275.513a2e9eVOSUgn
+    interface ImportKeyPairResponse extends ECSAPIResponse {
+    }
+
+    interface ImportKeyPairBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ImportKeyPairResponse> call();
+    }
+
+    ImportKeyPairBuilder importKeyPair();
 }

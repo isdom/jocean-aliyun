@@ -1553,4 +1553,23 @@ public interface EcsAPI {
     }
 
     AttachKeyPairBuilder attachKeyPair();
+
+    //  TBD: https://help.aliyun.com/document_detail/51776.html?spm=a2c4g.11186623.6.1283.61ba1f7bCJDkKl
+    interface DetachKeyPairResponse extends ECSAPIResponse {
+    }
+
+    interface DetachKeyPairBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DetachKeyPairResponse> call();
+    }
+
+    DetachKeyPairBuilder detachKeyPair();
 }

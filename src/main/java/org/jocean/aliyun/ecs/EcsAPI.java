@@ -1610,4 +1610,24 @@ public interface EcsAPI {
     }
 
     DescribeKeyPairsBuilder describeKeyPairs();
+
+    // 网络 相关
+    //  TBD: https://help.aliyun.com/document_detail/25544.html?spm=a2c4g.11186623.6.1286.513d41ddMaHI1A
+    interface AllocatePublicIpAddressResponse extends ECSAPIResponse {
+    }
+
+    interface AllocatePublicIpAddressBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, AllocatePublicIpAddressResponse> call();
+    }
+
+    AllocatePublicIpAddressBuilder allocatePublicIpAddress();
 }

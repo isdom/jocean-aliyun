@@ -1630,4 +1630,23 @@ public interface EcsAPI {
     }
 
     AllocatePublicIpAddressBuilder allocatePublicIpAddress();
+
+    //  TBD: https://help.aliyun.com/document_detail/60738.html?spm=a2c4g.11186623.6.1287.c0692fa8twN2Kr
+    interface ConvertNatPublicIpToEipResponse extends ECSAPIResponse {
+    }
+
+    interface ConvertNatPublicIpToEipBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ConvertNatPublicIpToEipResponse> call();
+    }
+
+    ConvertNatPublicIpToEipBuilder convertNatPublicIpToEip();
 }

@@ -1649,4 +1649,23 @@ public interface EcsAPI {
     }
 
     ConvertNatPublicIpToEipBuilder convertNatPublicIpToEip();
+
+    //  TBD: https://help.aliyun.com/document_detail/59021.html?spm=a2c4g.11186623.6.1288.79f523f5JWyZou
+    interface AttachClassicLinkVpcResponse extends ECSAPIResponse {
+    }
+
+    interface AttachClassicLinkVpcBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, AttachClassicLinkVpcResponse> call();
+    }
+
+    AttachClassicLinkVpcBuilder attachClassicLinkVpc();
 }

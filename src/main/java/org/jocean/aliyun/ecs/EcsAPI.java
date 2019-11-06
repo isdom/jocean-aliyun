@@ -1668,4 +1668,23 @@ public interface EcsAPI {
     }
 
     AttachClassicLinkVpcBuilder attachClassicLinkVpc();
+
+    //  TBD: https://help.aliyun.com/document_detail/59028.html?spm=a2c4g.11186623.6.1289.4275660f7GMRMC
+    interface DetachClassicLinkVpcResponse extends ECSAPIResponse {
+    }
+
+    interface DetachClassicLinkVpcBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DetachClassicLinkVpcResponse> call();
+    }
+
+    DetachClassicLinkVpcBuilder detachClassicLinkVpc();
 }

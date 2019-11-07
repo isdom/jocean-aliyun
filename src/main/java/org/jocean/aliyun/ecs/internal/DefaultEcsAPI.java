@@ -425,6 +425,12 @@ public class DefaultEcsAPI implements EcsAPI {
         return null;
     }
 
+    @Override
+    public DescribeBandwidthLimitationBuilder describeBandwidthLimitation() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 //    @Value("${role}")
 //    String _roleName = null;
 

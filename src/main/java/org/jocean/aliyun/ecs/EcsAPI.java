@@ -1706,4 +1706,23 @@ public interface EcsAPI {
     }
 
     DescribeBandwidthLimitationBuilder describeBandwidthLimitation();
+
+    //  TBD: https://help.aliyun.com/document_detail/59018.html?spm=a2c4g.11186623.6.1291.709a75acnjHVjZ
+    interface DescribeClassicLinkInstancesResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeClassicLinkInstancesBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeClassicLinkInstancesResponse> call();
+    }
+
+    DescribeClassicLinkInstancesBuilder describeClassicLinkInstances();
 }

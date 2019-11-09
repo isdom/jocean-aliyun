@@ -1725,4 +1725,23 @@ public interface EcsAPI {
     }
 
     DescribeClassicLinkInstancesBuilder describeClassicLinkInstances();
+
+    //  TBD: https://help.aliyun.com/document_detail/25545.html?spm=a2c4g.11186623.6.1294.a58e4358wzaZKU
+    interface ModifyInstanceNetworkSpecResponse extends ECSAPIResponse {
+    }
+
+    interface ModifyInstanceNetworkSpecBuilder {
+        @QueryParam("InstanceIds")
+        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachInstanceRamRoleBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ModifyInstanceNetworkSpecResponse> call();
+    }
+
+    ModifyInstanceNetworkSpecBuilder modifyInstanceNetworkSpec();
 }

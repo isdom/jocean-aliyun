@@ -1783,4 +1783,23 @@ public interface EcsAPI {
     }
 
     AuthorizeSecurityGroupBuilder authorizeSecurityGroup();
+
+    //  TBD: https://help.aliyun.com/document_detail/25554.html?spm=a2c4g.11186623.6.1260.5c6827aftAJ8nn
+    interface AuthorizeSecurityGroupEgressResponse extends ECSAPIResponse {
+    }
+
+    interface AuthorizeSecurityGroupEgressBuilder {
+        @QueryParam("InstanceIds")
+        AuthorizeSecurityGroupEgressBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        AuthorizeSecurityGroupEgressBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        AuthorizeSecurityGroupEgressBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, AuthorizeSecurityGroupEgressResponse> call();
+    }
+
+    AuthorizeSecurityGroupEgressBuilder authorizeSecurityGroupEgress();
 }

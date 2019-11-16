@@ -1859,4 +1859,23 @@ public interface EcsAPI {
     }
 
     JoinSecurityGroupBuilder joinSecurityGroup();
+
+    //  TBD: https://help.aliyun.com/document_detail/25509.html?spm=a2c4g.11186623.6.1268.249f3474eU4KG7
+    interface LeaveSecurityGroupResponse extends ECSAPIResponse {
+    }
+
+    interface LeaveSecurityGroupBuilder {
+        @QueryParam("InstanceIds")
+        LeaveSecurityGroupBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        LeaveSecurityGroupBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        LeaveSecurityGroupBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, LeaveSecurityGroupResponse> call();
+    }
+
+    LeaveSecurityGroupBuilder leaveSecurityGroup();
 }

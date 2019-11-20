@@ -1935,4 +1935,23 @@ public interface EcsAPI {
     }
 
     DescribeSecurityGroupsBuilder describeSecurityGroups();
+
+    //  TBD: https://help.aliyun.com/document_detail/57320.html?spm=a2c4g.11186623.6.1276.7607480cX0bJvj
+    interface DescribeSecurityGroupReferencesResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeSecurityGroupReferencesBuilder {
+        @QueryParam("InstanceIds")
+        DescribeSecurityGroupReferencesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeSecurityGroupReferencesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeSecurityGroupReferencesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeSecurityGroupReferencesResponse> call();
+    }
+
+    DescribeSecurityGroupReferencesBuilder describeSecurityGroupReferences();
 }

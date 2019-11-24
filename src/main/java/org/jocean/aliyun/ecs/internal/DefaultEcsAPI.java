@@ -527,6 +527,12 @@ public class DefaultEcsAPI implements EcsAPI {
         return null;
     }
 
+    @Override
+    public ModifySecurityGroupRuleBuilder modifySecurityGroupRule() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 //    @Value("${role}")
 //    String _roleName = null;
 

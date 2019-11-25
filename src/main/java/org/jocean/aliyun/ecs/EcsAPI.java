@@ -2030,4 +2030,24 @@ public interface EcsAPI {
     }
 
     ModifySecurityGroupRuleBuilder modifySecurityGroupRule();
+
+    //  镜像  相关
+    //  TBD: https://help.aliyun.com/document_detail/25535.html?spm=a2c4g.11186623.6.1244.2a1796fc3mrFHx
+    interface CreateImageResponse extends ECSAPIResponse {
+    }
+
+    interface CreateImageBuilder {
+        @QueryParam("InstanceIds")
+        CreateImageBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        CreateImageBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        CreateImageBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CreateImageResponse> call();
+    }
+
+    CreateImageBuilder createImage();
 }

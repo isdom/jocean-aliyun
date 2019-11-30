@@ -2069,4 +2069,23 @@ public interface EcsAPI {
     }
 
     ImportImageBuilder importImage();
+
+    //  TBD: https://help.aliyun.com/document_detail/25538.html?spm=a2c4g.11186623.6.1246.7d6045bae8eEGf
+    interface CopyImageResponse extends ECSAPIResponse {
+    }
+
+    interface CopyImageBuilder {
+        @QueryParam("InstanceIds")
+        CopyImageBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        CopyImageBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        CopyImageBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CopyImageResponse> call();
+    }
+
+    CopyImageBuilder copyImage();
 }

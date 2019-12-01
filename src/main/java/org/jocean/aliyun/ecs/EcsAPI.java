@@ -2088,4 +2088,23 @@ public interface EcsAPI {
     }
 
     CopyImageBuilder copyImage();
+
+    //  TBD: https://help.aliyun.com/document_detail/25539.html?spm=a2c4g.11186623.6.1248.13d44921TTk9JH
+    interface CancelCopyImageResponse extends ECSAPIResponse {
+    }
+
+    interface CancelCopyImageBuilder {
+        @QueryParam("InstanceIds")
+        CancelCopyImageBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        CancelCopyImageBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        CancelCopyImageBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CancelCopyImageResponse> call();
+    }
+
+    CancelCopyImageBuilder cancelCopyImage();
 }

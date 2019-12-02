@@ -888,13 +888,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceStatusBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceStatusBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceStatusBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceStatusBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
     }
@@ -907,13 +907,13 @@ public interface EcsAPI {
 
     interface RenewInstanceBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        RenewInstanceBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        RenewInstanceBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        RenewInstanceBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, RenewInstanceResponse> call();
     }
@@ -926,13 +926,13 @@ public interface EcsAPI {
 
     interface ReactivateInstancesBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ReactivateInstancesBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ReactivateInstancesBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ReactivateInstancesBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ReactivateInstancesResponse> call();
     }
@@ -945,13 +945,13 @@ public interface EcsAPI {
 
     interface RedeployInstanceBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        RedeployInstanceBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        RedeployInstanceBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        RedeployInstanceBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, RedeployInstanceResponse> call();
     }
@@ -964,13 +964,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceVncUrlBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceVncUrlBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceVncUrlBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceVncUrlBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceVncUrlResponse> call();
     }
@@ -982,13 +982,13 @@ public interface EcsAPI {
 
     interface DescribeUserDataBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeUserDataBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeUserDataBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeUserDataBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeUserDataResponse> call();
     }
@@ -1000,13 +1000,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceAutoRenewAttributeBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceAutoRenewAttributeBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceAutoRenewAttributeBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceAutoRenewAttributeBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceAutoRenewAttributeResponse> call();
     }
@@ -1018,13 +1018,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceRamRoleBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceRamRoleBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceRamRoleResponse> call();
     }
@@ -1036,13 +1036,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceTypeFamiliesBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceTypeFamiliesBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceTypeFamiliesBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceTypeFamiliesBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceTypeFamiliesResponse> call();
     }
@@ -1054,13 +1054,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceTypesBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceTypesBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceTypesBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceTypesBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceTypesResponse> call();
     }
@@ -1072,13 +1072,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceVpcAttributeBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceVpcAttributeBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceVpcAttributeBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceVpcAttributeBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceVpcAttributeResponse> call();
     }
@@ -1090,13 +1090,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceAttributeBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceAttributeBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceAttributeBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceAttributeBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceAttributeResponse> call();
     }
@@ -1108,13 +1108,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceVncPasswdBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceVncPasswdBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceVncPasswdBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceVncPasswdBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceVncPasswdResponse> call();
     }
@@ -1126,13 +1126,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceAutoReleaseTimeBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceAutoReleaseTimeBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceAutoReleaseTimeBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceAutoReleaseTimeBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceAutoReleaseTimeResponse> call();
     }
@@ -1144,13 +1144,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceAutoRenewAttributeBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceAutoRenewAttributeBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceAutoRenewAttributeBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceAutoRenewAttributeBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceAutoRenewAttributeResponse> call();
     }
@@ -1162,13 +1162,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceChargeTypeBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceChargeTypeBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceChargeTypeBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceChargeTypeBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceChargeTypeResponse> call();
     }
@@ -1180,13 +1180,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceSpecBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceSpecBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceSpecBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceSpecBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceSpecResponse> call();
     }
@@ -1198,13 +1198,13 @@ public interface EcsAPI {
 
     interface ModifyPrepayInstanceSpecBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyPrepayInstanceSpecBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyPrepayInstanceSpecBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyPrepayInstanceSpecBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyPrepayInstanceSpecResponse> call();
     }
@@ -1216,13 +1216,13 @@ public interface EcsAPI {
 
     interface DescribeInstancesFullStatusBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstancesFullStatusBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstancesFullStatusBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstancesFullStatusBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstancesFullStatusResponse> call();
     }
@@ -1235,13 +1235,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceHistoryEventsBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceHistoryEventsBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceHistoryEventsBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceHistoryEventsBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceHistoryEventsResponse> call();
     }
@@ -1254,13 +1254,13 @@ public interface EcsAPI {
 
     interface DescribeDisksFullStatusBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeDisksFullStatusBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeDisksFullStatusBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeDisksFullStatusBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeDisksFullStatusResponse> call();
     }
@@ -1273,13 +1273,13 @@ public interface EcsAPI {
 
     interface CancelSimulatedSystemEventsBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        CancelSimulatedSystemEventsBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        CancelSimulatedSystemEventsBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        CancelSimulatedSystemEventsBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, CancelSimulatedSystemEventsResponse> call();
     }
@@ -1292,13 +1292,13 @@ public interface EcsAPI {
 
     interface CreateSimulatedSystemEventsBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        CreateSimulatedSystemEventsBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        CreateSimulatedSystemEventsBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        CreateSimulatedSystemEventsBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, CreateSimulatedSystemEventsResponse> call();
     }
@@ -1312,13 +1312,13 @@ public interface EcsAPI {
 
     interface DescribeEniMonitorDataBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeEniMonitorDataBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeEniMonitorDataBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeEniMonitorDataBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeEniMonitorDataResponse> call();
     }
@@ -1331,13 +1331,13 @@ public interface EcsAPI {
 
     interface DescribeDiskMonitorDataBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeDiskMonitorDataBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeDiskMonitorDataBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeDiskMonitorDataBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeDiskMonitorDataResponse> call();
     }
@@ -1350,13 +1350,13 @@ public interface EcsAPI {
 
     interface DescribeInstanceMonitorDataBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeInstanceMonitorDataBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeInstanceMonitorDataBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeInstanceMonitorDataBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeInstanceMonitorDataResponse> call();
     }
@@ -1369,13 +1369,13 @@ public interface EcsAPI {
 
     interface GetInstanceScreenshotBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        GetInstanceScreenshotBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        GetInstanceScreenshotBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        GetInstanceScreenshotBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, GetInstanceScreenshotResponse> call();
     }
@@ -1388,13 +1388,13 @@ public interface EcsAPI {
 
     interface GetInstanceConsoleOutputBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        GetInstanceConsoleOutputBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        GetInstanceConsoleOutputBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        GetInstanceConsoleOutputBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, GetInstanceConsoleOutputResponse> call();
     }
@@ -1407,13 +1407,13 @@ public interface EcsAPI {
 
     interface DescribeSnapshotMonitorDataBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeSnapshotMonitorDataBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeSnapshotMonitorDataBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeSnapshotMonitorDataBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeSnapshotMonitorDataResponse> call();
     }
@@ -1426,13 +1426,13 @@ public interface EcsAPI {
 
     interface DescribeRegionsBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeRegionsBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeRegionsBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeRegionsBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeRegionsResponse> call();
     }
@@ -1445,13 +1445,13 @@ public interface EcsAPI {
 
     interface DescribeZonesBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeZonesBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeZonesBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeZonesBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeZonesResponse> call();
     }
@@ -1464,13 +1464,13 @@ public interface EcsAPI {
 
     interface DescribeResourcesModificationBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeResourcesModificationBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeResourcesModificationBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeResourcesModificationBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeResourcesModificationResponse> call();
     }
@@ -1483,13 +1483,13 @@ public interface EcsAPI {
 
     interface DescribeAvailableResourceBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeAvailableResourceBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeAvailableResourceBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeAvailableResourceBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeAvailableResourceResponse> call();
     }
@@ -1503,13 +1503,13 @@ public interface EcsAPI {
 
     interface CreateKeyPairBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        CreateKeyPairBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        CreateKeyPairBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        CreateKeyPairBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, CreateKeyPairResponse> call();
     }
@@ -1522,13 +1522,13 @@ public interface EcsAPI {
 
     interface ImportKeyPairBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ImportKeyPairBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ImportKeyPairBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ImportKeyPairBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ImportKeyPairResponse> call();
     }
@@ -1541,13 +1541,13 @@ public interface EcsAPI {
 
     interface AttachKeyPairBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        AttachKeyPairBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        AttachKeyPairBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        AttachKeyPairBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, AttachKeyPairResponse> call();
     }
@@ -1560,13 +1560,13 @@ public interface EcsAPI {
 
     interface DetachKeyPairBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DetachKeyPairBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DetachKeyPairBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DetachKeyPairBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DetachKeyPairResponse> call();
     }
@@ -1579,13 +1579,13 @@ public interface EcsAPI {
 
     interface DeleteKeyPairsBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DeleteKeyPairsBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DeleteKeyPairsBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DeleteKeyPairsBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DeleteKeyPairsResponse> call();
     }
@@ -1598,13 +1598,13 @@ public interface EcsAPI {
 
     interface DescribeKeyPairsBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeKeyPairsBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeKeyPairsBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeKeyPairsBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeKeyPairsResponse> call();
     }
@@ -1618,13 +1618,13 @@ public interface EcsAPI {
 
     interface AllocatePublicIpAddressBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        AllocatePublicIpAddressBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        AllocatePublicIpAddressBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        AllocatePublicIpAddressBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, AllocatePublicIpAddressResponse> call();
     }
@@ -1637,13 +1637,13 @@ public interface EcsAPI {
 
     interface ConvertNatPublicIpToEipBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ConvertNatPublicIpToEipBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ConvertNatPublicIpToEipBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ConvertNatPublicIpToEipBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ConvertNatPublicIpToEipResponse> call();
     }
@@ -1656,13 +1656,13 @@ public interface EcsAPI {
 
     interface AttachClassicLinkVpcBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        AttachClassicLinkVpcBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        AttachClassicLinkVpcBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        AttachClassicLinkVpcBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, AttachClassicLinkVpcResponse> call();
     }
@@ -1675,13 +1675,13 @@ public interface EcsAPI {
 
     interface DetachClassicLinkVpcBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DetachClassicLinkVpcBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DetachClassicLinkVpcBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DetachClassicLinkVpcBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DetachClassicLinkVpcResponse> call();
     }
@@ -1694,13 +1694,13 @@ public interface EcsAPI {
 
     interface DescribeBandwidthLimitationBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeBandwidthLimitationBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeBandwidthLimitationBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeBandwidthLimitationBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeBandwidthLimitationResponse> call();
     }
@@ -1713,13 +1713,13 @@ public interface EcsAPI {
 
     interface DescribeClassicLinkInstancesBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        DescribeClassicLinkInstancesBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        DescribeClassicLinkInstancesBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        DescribeClassicLinkInstancesBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, DescribeClassicLinkInstancesResponse> call();
     }
@@ -1732,13 +1732,13 @@ public interface EcsAPI {
 
     interface ModifyInstanceNetworkSpecBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        ModifyInstanceNetworkSpecBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        ModifyInstanceNetworkSpecBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        ModifyInstanceNetworkSpecBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, ModifyInstanceNetworkSpecResponse> call();
     }
@@ -1752,13 +1752,13 @@ public interface EcsAPI {
 
     interface CreateSecurityGroupBuilder {
         @QueryParam("InstanceIds")
-        DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+        CreateSecurityGroupBuilder instanceIds(final String[] instanceIds);
 
         @QueryParam("RamRoleName")
-        DetachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
+        CreateSecurityGroupBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
-        DetachInstanceRamRoleBuilder regionId(final String regionId);
+        CreateSecurityGroupBuilder regionId(final String regionId);
 
         Transformer<RpcRunner, CreateSecurityGroupResponse> call();
     }
@@ -2107,4 +2107,23 @@ public interface EcsAPI {
     }
 
     CancelCopyImageBuilder cancelCopyImage();
+
+    //  TBD: https://help.aliyun.com/document_detail/58216.html?spm=a2c4g.11186623.6.1249.495f33a9UVhFaq
+    interface ExportImageResponse extends ECSAPIResponse {
+    }
+
+    interface ExportImageBuilder {
+        @QueryParam("InstanceIds")
+        ExportImageBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        ExportImageBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        ExportImageBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ExportImageResponse> call();
+    }
+
+    ExportImageBuilder exportImage();
 }

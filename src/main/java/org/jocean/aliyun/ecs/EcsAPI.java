@@ -2126,4 +2126,23 @@ public interface EcsAPI {
     }
 
     ExportImageBuilder exportImage();
+
+    //  TBD: https://help.aliyun.com/document_detail/25534.html?spm=a2c4g.11186623.6.1252.1fd345ba3e0f5f
+    interface DescribeImagesResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeImagesBuilder {
+        @QueryParam("InstanceIds")
+        DescribeImagesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeImagesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeImagesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeImagesResponse> call();
+    }
+
+    DescribeImagesBuilder describeImages();
 }

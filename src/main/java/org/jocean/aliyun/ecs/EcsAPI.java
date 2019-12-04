@@ -2145,4 +2145,23 @@ public interface EcsAPI {
     }
 
     DescribeImagesBuilder describeImages();
+
+    //  TBD: https://help.aliyun.com/document_detail/25537.html?spm=a2c4g.11186623.6.1253.55c674ddK0RWt8
+    interface DeleteImageResponse extends ECSAPIResponse {
+    }
+
+    interface DeleteImageBuilder {
+        @QueryParam("InstanceIds")
+        DeleteImageBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DeleteImageBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DeleteImageBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DeleteImageResponse> call();
+    }
+
+    DeleteImageBuilder deleteImage();
 }

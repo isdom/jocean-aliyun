@@ -2164,4 +2164,23 @@ public interface EcsAPI {
     }
 
     DeleteImageBuilder deleteImage();
+
+    //  TBD: https://help.aliyun.com/document_detail/25541.html?spm=a2c4g.11186623.6.1254.756c21f7BOfxMg
+    interface DescribeImageSharePermissionResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeImageSharePermissionBuilder {
+        @QueryParam("InstanceIds")
+        DescribeImageSharePermissionBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeImageSharePermissionBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeImageSharePermissionBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeImageSharePermissionResponse> call();
+    }
+
+    DescribeImageSharePermissionBuilder describeImageSharePermission();
 }

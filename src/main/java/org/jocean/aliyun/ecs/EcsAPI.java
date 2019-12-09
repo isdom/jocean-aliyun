@@ -2221,4 +2221,23 @@ public interface EcsAPI {
     }
 
     ModifyImageSharePermissionBuilder modifyImageSharePermission();
+
+    //  TBD: https://help.aliyun.com/document_detail/95504.html?spm=a2c4g.11186623.6.1257.7d1372feZtmu4J
+    interface DescribeImageSupportInstanceTypesResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeImageSupportInstanceTypesBuilder {
+        @QueryParam("InstanceIds")
+        DescribeImageSupportInstanceTypesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeImageSupportInstanceTypesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeImageSupportInstanceTypesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeImageSupportInstanceTypesResponse> call();
+    }
+
+    DescribeImageSupportInstanceTypesBuilder describeImageSupportInstanceTypes();
 }

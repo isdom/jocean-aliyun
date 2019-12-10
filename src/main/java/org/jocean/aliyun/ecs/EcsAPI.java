@@ -2240,4 +2240,24 @@ public interface EcsAPI {
     }
 
     DescribeImageSupportInstanceTypesBuilder describeImageSupportInstanceTypes();
+
+    //   快照  相关
+    //  TBD: https://help.aliyun.com/document_detail/25524.html?spm=a2c4g.11186623.6.1260.34125980ffTomq
+    interface CreateSnapshotResponse extends ECSAPIResponse {
+    }
+
+    interface CreateSnapshotBuilder {
+        @QueryParam("InstanceIds")
+        CreateSnapshotBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        CreateSnapshotBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        CreateSnapshotBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CreateSnapshotResponse> call();
+    }
+
+    CreateSnapshotBuilder createSnapshot();
 }

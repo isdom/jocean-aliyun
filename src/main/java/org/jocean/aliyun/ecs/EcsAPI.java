@@ -2260,4 +2260,23 @@ public interface EcsAPI {
     }
 
     CreateSnapshotBuilder createSnapshot();
+
+    //  TBD: https://help.aliyun.com/document_detail/25525.html?spm=a2c4g.11186623.6.1261.3bce2c8elgVuIA
+    interface DeleteSnapshotResponse extends ECSAPIResponse {
+    }
+
+    interface DeleteSnapshotBuilder {
+        @QueryParam("InstanceIds")
+        DeleteSnapshotBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DeleteSnapshotBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DeleteSnapshotBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DeleteSnapshotResponse> call();
+    }
+
+    DeleteSnapshotBuilder deleteSnapshot();
 }

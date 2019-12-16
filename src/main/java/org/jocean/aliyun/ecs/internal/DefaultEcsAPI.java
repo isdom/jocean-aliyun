@@ -629,6 +629,12 @@ public class DefaultEcsAPI implements EcsAPI {
         return null;
     }
 
+    @Override
+    public DescribeSnapshotLinksBuilder describeSnapshotLinks() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 //    @Value("${role}")
 //    String _roleName = null;
 

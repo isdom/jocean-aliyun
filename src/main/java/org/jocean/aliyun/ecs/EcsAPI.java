@@ -2355,4 +2355,23 @@ public interface EcsAPI {
     }
 
     DescribeSnapshotLinksBuilder describeSnapshotLinks();
+
+    //  TBD: https://help.aliyun.com/document_detail/127734.html?spm=a2c4g.11186623.6.1266.76b0d74fSiZQnY
+    interface ModifySnapshotAttributeResponse extends ECSAPIResponse {
+    }
+
+    interface ModifySnapshotAttributeBuilder {
+        @QueryParam("InstanceIds")
+        ModifySnapshotAttributeBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        ModifySnapshotAttributeBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        ModifySnapshotAttributeBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ModifySnapshotAttributeResponse> call();
+    }
+
+    ModifySnapshotAttributeBuilder modifySnapshotAttribute();
 }

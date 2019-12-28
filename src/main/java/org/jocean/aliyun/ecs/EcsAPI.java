@@ -2450,4 +2450,23 @@ public interface EcsAPI {
     }
 
     DeleteAutoSnapshotPolicyBuilder deleteAutoSnapshotPolicy();
+
+    //  TBD: https://help.aliyun.com/document_detail/25530.html?spm=a2c4g.11186623.6.1277.2d4c6238FywcJH
+    interface DescribeAutoSnapshotPolicyEXResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeAutoSnapshotPolicyEXBuilder {
+        @QueryParam("InstanceIds")
+        DescribeAutoSnapshotPolicyEXBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeAutoSnapshotPolicyEXBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeAutoSnapshotPolicyEXBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeAutoSnapshotPolicyEXResponse> call();
+    }
+
+    DescribeAutoSnapshotPolicyEXBuilder describeAutoSnapshotPolicyEX();
 }

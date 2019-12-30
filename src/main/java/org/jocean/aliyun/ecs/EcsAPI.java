@@ -2488,4 +2488,24 @@ public interface EcsAPI {
     }
 
     ModifyAutoSnapshotPolicyExBuilder modifyAutoSnapshotPolicyEx();
+
+    //   标签  相关
+    //  TBD: https://help.aliyun.com/document_detail/110425.html?spm=a2c4g.11186623.6.1358.488635bdamSbBO
+    interface ListTagResourcesResponse extends ECSAPIResponse {
+    }
+
+    interface ListTagResourcesBuilder {
+        @QueryParam("InstanceIds")
+        ListTagResourcesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        ListTagResourcesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        ListTagResourcesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ListTagResourcesResponse> call();
+    }
+
+    ListTagResourcesBuilder listTagResources();
 }

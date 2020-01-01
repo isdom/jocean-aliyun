@@ -2527,4 +2527,23 @@ public interface EcsAPI {
     }
 
     TagResourcesBuilder tagResources();
+
+    //  TBD: https://help.aliyun.com/document_detail/110426.html?spm=a2c4g.11186623.6.1361.1d574ae9OfdcPJ
+    interface UntagResourcesResponse extends ECSAPIResponse {
+    }
+
+    interface UntagResourcesBuilder {
+        @QueryParam("InstanceIds")
+        UntagResourcesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        UntagResourcesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        UntagResourcesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, UntagResourcesResponse> call();
+    }
+
+    UntagResourcesBuilder untagResources();
 }

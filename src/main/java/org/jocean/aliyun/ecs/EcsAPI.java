@@ -2546,4 +2546,24 @@ public interface EcsAPI {
     }
 
     UntagResourcesBuilder untagResources();
+
+    //   其他接口  相关
+    //  TBD: https://help.aliyun.com/document_detail/25624.html?spm=a2c4g.11186623.6.1368.2a3635bdxZ4dUa
+    interface CancelTaskResponse extends ECSAPIResponse {
+    }
+
+    interface CancelTaskBuilder {
+        @QueryParam("InstanceIds")
+        CancelTaskBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        CancelTaskBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        CancelTaskBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CancelTaskResponse> call();
+    }
+
+    CancelTaskBuilder cancelTask();
 }

@@ -2604,4 +2604,23 @@ public interface EcsAPI {
     }
 
     DescribeTaskAttributeBuilder describeTaskAttribute();
+
+    //  TBD: https://help.aliyun.com/document_detail/73772.html?spm=a2c4g.11186623.6.1371.709c7a75eBme4B
+    interface DescribeAccountAttributesResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeAccountAttributesBuilder {
+        @QueryParam("InstanceIds")
+        DescribeAccountAttributesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeAccountAttributesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeAccountAttributesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeAccountAttributesResponse> call();
+    }
+
+    DescribeAccountAttributesBuilder describeAccountAttributes();
 }

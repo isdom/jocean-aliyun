@@ -2623,4 +2623,23 @@ public interface EcsAPI {
     }
 
     DescribeAccountAttributesBuilder describeAccountAttributes();
+
+    //  TBD: https://help.aliyun.com/document_detail/107829.html?spm=a2c4g.11186623.6.1372.4a895e37VRbOZi
+    interface DescribePriceResponse extends ECSAPIResponse {
+    }
+
+    interface DescribePriceBuilder {
+        @QueryParam("InstanceIds")
+        DescribePriceBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribePriceBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribePriceBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribePriceResponse> call();
+    }
+
+    DescribePriceBuilder describePrice();
 }

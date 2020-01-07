@@ -2642,4 +2642,23 @@ public interface EcsAPI {
     }
 
     DescribePriceBuilder describePrice();
+
+    //  TBD: https://help.aliyun.com/document_detail/92260.html?spm=a2c4g.11186623.6.1373.72cf263anSGODT
+    interface JoinResourceGroupResponse extends ECSAPIResponse {
+    }
+
+    interface JoinResourceGroupBuilder {
+        @QueryParam("InstanceIds")
+        JoinResourceGroupBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        JoinResourceGroupBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        JoinResourceGroupBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, JoinResourceGroupResponse> call();
+    }
+
+    JoinResourceGroupBuilder joinResourceGroup();
 }

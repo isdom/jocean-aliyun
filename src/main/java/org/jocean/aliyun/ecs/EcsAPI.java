@@ -2661,4 +2661,24 @@ public interface EcsAPI {
     }
 
     JoinResourceGroupBuilder joinResourceGroup();
+
+    //   云助手  相关
+    //  TBD: https://help.aliyun.com/document_detail/64844.html?spm=a2c4g.11186623.6.1343.7a9f6d8eLIV8qe
+    interface CreateCommandResponse extends ECSAPIResponse {
+    }
+
+    interface CreateCommandBuilder {
+        @QueryParam("InstanceIds")
+        CreateCommandBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        CreateCommandBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        CreateCommandBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CreateCommandResponse> call();
+    }
+
+    CreateCommandBuilder createCommand();
 }

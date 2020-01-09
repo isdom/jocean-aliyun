@@ -2681,4 +2681,23 @@ public interface EcsAPI {
     }
 
     CreateCommandBuilder createCommand();
+
+    //  TBD: https://help.aliyun.com/document_detail/85916.html?spm=a2c4g.11186623.6.1344.1276472eUDg498
+    interface InstallCloudAssistantResponse extends ECSAPIResponse {
+    }
+
+    interface InstallCloudAssistantBuilder {
+        @QueryParam("InstanceIds")
+        InstallCloudAssistantBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        InstallCloudAssistantBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        InstallCloudAssistantBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, InstallCloudAssistantResponse> call();
+    }
+
+    InstallCloudAssistantBuilder installCloudAssistant();
 }

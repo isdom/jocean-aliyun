@@ -2719,4 +2719,23 @@ public interface EcsAPI {
     }
 
     InvokeCommandBuilder invokeCommand();
+
+    //  TBD: https://help.aliyun.com/document_detail/64838.html?spm=a2c4g.11186623.6.1349.51561926IyfD8o
+    interface StopInvocationResponse extends ECSAPIResponse {
+    }
+
+    interface StopInvocationBuilder {
+        @QueryParam("InstanceIds")
+        StopInvocationBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        StopInvocationBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        StopInvocationBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, StopInvocationResponse> call();
+    }
+
+    StopInvocationBuilder stopInvocation();
 }

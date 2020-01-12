@@ -2738,4 +2738,23 @@ public interface EcsAPI {
     }
 
     StopInvocationBuilder stopInvocation();
+
+    //  TBD: https://help.aliyun.com/document_detail/64842.html?spm=a2c4g.11186623.6.1350.133cb4b0Zdhimm
+    interface DeleteCommandResponse extends ECSAPIResponse {
+    }
+
+    interface DeleteCommandBuilder {
+        @QueryParam("InstanceIds")
+        DeleteCommandBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DeleteCommandBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DeleteCommandBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DeleteCommandResponse> call();
+    }
+
+    DeleteCommandBuilder deleteCommand();
 }

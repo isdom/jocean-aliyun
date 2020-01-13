@@ -2757,4 +2757,23 @@ public interface EcsAPI {
     }
 
     DeleteCommandBuilder deleteCommand();
+
+    //  TBD: https://help.aliyun.com/document_detail/87346.html?spm=a2c4g.11186623.6.1351.103c47d4xMvPxL
+    interface DescribeCloudAssistantStatusResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeCloudAssistantStatusBuilder {
+        @QueryParam("InstanceIds")
+        DescribeCloudAssistantStatusBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeCloudAssistantStatusBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeCloudAssistantStatusBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeCloudAssistantStatusResponse> call();
+    }
+
+    DescribeCloudAssistantStatusBuilder describeCloudAssistantStatus();
 }

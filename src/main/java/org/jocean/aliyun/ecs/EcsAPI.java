@@ -2795,4 +2795,23 @@ public interface EcsAPI {
     }
 
     DescribeCommandsBuilder describeCommands();
+
+    //  TBD: https://help.aliyun.com/document_detail/64840.html?spm=a2c4g.11186623.6.1345.35513a7b1zmzIp
+    interface DescribeInvocationsResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeInvocationsBuilder {
+        @QueryParam("InstanceIds")
+        DescribeInvocationsBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeInvocationsBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeInvocationsBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeInvocationsResponse> call();
+    }
+
+    DescribeInvocationsBuilder describeInvocations();
 }

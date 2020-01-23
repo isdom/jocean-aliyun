@@ -2852,4 +2852,24 @@ public interface EcsAPI {
     }
 
     RunCommandBuilder runCommand();
+
+    //  弹性网卡  相关
+    //  TBD: https://help.aliyun.com/document_detail/58504.html?spm=a2c4g.11186623.6.1327.51aa86e9El1PHv
+    interface CreateNetworkInterfaceResponse extends ECSAPIResponse {
+    }
+
+    interface CreateNetworkInterfaceBuilder {
+        @QueryParam("InstanceIds")
+        CreateNetworkInterfaceBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        CreateNetworkInterfaceBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        CreateNetworkInterfaceBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, CreateNetworkInterfaceResponse> call();
+    }
+
+    CreateNetworkInterfaceBuilder createNetworkInterface();
 }

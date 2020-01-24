@@ -2872,4 +2872,23 @@ public interface EcsAPI {
     }
 
     CreateNetworkInterfaceBuilder createNetworkInterface();
+
+    //  TBD: https://help.aliyun.com/document_detail/58515.html?spm=a2c4g.11186623.6.1329.2a067a72ZhM51R
+    interface AttachNetworkInterfaceResponse extends ECSAPIResponse {
+    }
+
+    interface AttachNetworkInterfaceBuilder {
+        @QueryParam("InstanceIds")
+        AttachNetworkInterfaceBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        AttachNetworkInterfaceBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        AttachNetworkInterfaceBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, AttachNetworkInterfaceResponse> call();
+    }
+
+    AttachNetworkInterfaceBuilder attachNetworkInterface();
 }

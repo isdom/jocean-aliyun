@@ -2891,4 +2891,23 @@ public interface EcsAPI {
     }
 
     AttachNetworkInterfaceBuilder attachNetworkInterface();
+
+    //  TBD: https://help.aliyun.com/document_detail/85917.html?spm=a2c4g.11186623.6.1330.dd634f39HKBh0v
+    interface AssignPrivateIpAddressesResponse extends ECSAPIResponse {
+    }
+
+    interface AssignPrivateIpAddressesBuilder {
+        @QueryParam("InstanceIds")
+        AssignPrivateIpAddressesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        AssignPrivateIpAddressesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        AssignPrivateIpAddressesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, AssignPrivateIpAddressesResponse> call();
+    }
+
+    AssignPrivateIpAddressesBuilder assignPrivateIpAddresses();
 }

@@ -2910,4 +2910,23 @@ public interface EcsAPI {
     }
 
     AssignPrivateIpAddressesBuilder assignPrivateIpAddresses();
+
+    //  TBD: https://help.aliyun.com/document_detail/85919.html?spm=a2c4g.11186623.6.1331.6bf94965QWRawg
+    interface UnassignPrivateIpAddressesResponse extends ECSAPIResponse {
+    }
+
+    interface UnassignPrivateIpAddressesBuilder {
+        @QueryParam("InstanceIds")
+        UnassignPrivateIpAddressesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        UnassignPrivateIpAddressesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        UnassignPrivateIpAddressesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, UnassignPrivateIpAddressesResponse> call();
+    }
+
+    UnassignPrivateIpAddressesBuilder unassignPrivateIpAddresses();
 }

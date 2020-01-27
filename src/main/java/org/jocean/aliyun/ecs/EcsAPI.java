@@ -2929,4 +2929,23 @@ public interface EcsAPI {
     }
 
     UnassignPrivateIpAddressesBuilder unassignPrivateIpAddresses();
+
+    //  TBD: https://help.aliyun.com/document_detail/58514.html?spm=a2c4g.11186623.6.1332.50a81790DO2d8g
+    interface DetachNetworkInterfaceResponse extends ECSAPIResponse {
+    }
+
+    interface DetachNetworkInterfaceBuilder {
+        @QueryParam("InstanceIds")
+        DetachNetworkInterfaceBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DetachNetworkInterfaceBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DetachNetworkInterfaceBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DetachNetworkInterfaceResponse> call();
+    }
+
+    DetachNetworkInterfaceBuilder detachNetworkInterface();
 }

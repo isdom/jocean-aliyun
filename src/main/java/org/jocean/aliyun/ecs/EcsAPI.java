@@ -2967,4 +2967,23 @@ public interface EcsAPI {
     }
 
     DeleteNetworkInterfaceBuilder deleteNetworkInterface();
+
+    //  TBD: https://help.aliyun.com/document_detail/58512.html?spm=a2c4g.11186623.6.1334.ea547a6dhDqTYn
+    interface DescribeNetworkInterfacesResponse extends ECSAPIResponse {
+    }
+
+    interface DescribeNetworkInterfacesBuilder {
+        @QueryParam("InstanceIds")
+        DescribeNetworkInterfacesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        DescribeNetworkInterfacesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        DescribeNetworkInterfacesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, DescribeNetworkInterfacesResponse> call();
+    }
+
+    DescribeNetworkInterfacesBuilder describeNetworkInterfaces();
 }

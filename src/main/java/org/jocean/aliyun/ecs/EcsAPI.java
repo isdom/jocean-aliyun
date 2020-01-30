@@ -2986,4 +2986,23 @@ public interface EcsAPI {
     }
 
     DescribeNetworkInterfacesBuilder describeNetworkInterfaces();
+
+    //  TBD: https://help.aliyun.com/document_detail/58513.html?spm=a2c4g.11186623.6.1335.2c3360e0bTySBa
+    interface ModifyNetworkInterfaceAttributeResponse extends ECSAPIResponse {
+    }
+
+    interface ModifyNetworkInterfaceAttributeBuilder {
+        @QueryParam("InstanceIds")
+        ModifyNetworkInterfaceAttributeBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        ModifyNetworkInterfaceAttributeBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        ModifyNetworkInterfaceAttributeBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, ModifyNetworkInterfaceAttributeResponse> call();
+    }
+
+    ModifyNetworkInterfaceAttributeBuilder modifyNetworkInterfaceAttribute();
 }

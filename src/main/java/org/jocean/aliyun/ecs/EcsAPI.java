@@ -3024,4 +3024,23 @@ public interface EcsAPI {
     }
 
     AssignIpv6AddressesBuilder assignIpv6Addresses();
+
+    //  TBD: https://help.aliyun.com/document_detail/98611.html?spm=a2c4g.11186623.6.1337.2e0278ecncWwUb
+    interface UnassignIpv6AddressesResponse extends ECSAPIResponse {
+    }
+
+    interface UnassignIpv6AddressesBuilder {
+        @QueryParam("InstanceIds")
+        UnassignIpv6AddressesBuilder instanceIds(final String[] instanceIds);
+
+        @QueryParam("RamRoleName")
+        UnassignIpv6AddressesBuilder ramRoleName(final String ramRoleName);
+
+        @QueryParam("RegionId")
+        UnassignIpv6AddressesBuilder regionId(final String regionId);
+
+        Transformer<RpcRunner, UnassignIpv6AddressesResponse> call();
+    }
+
+    UnassignIpv6AddressesBuilder unassignIpv6Addresses();
 }

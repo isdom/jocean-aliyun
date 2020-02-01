@@ -845,6 +845,12 @@ public class DefaultEcsAPI implements EcsAPI {
         return null;
     }
 
+    @Override
+    public UnassignIpv6AddressesBuilder unassignIpv6Addresses() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 //    @Value("${role}")
 //    String _roleName = null;
 

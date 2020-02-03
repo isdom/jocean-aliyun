@@ -886,15 +886,23 @@ public interface EcsAPI {
 
     }
 
+    // https://help.aliyun.com/document_detail/25505.html?spm=a2c4g.11186623.6.1204.7c3f649fZpm8hA
     interface DescribeInstanceStatusBuilder {
-        @QueryParam("InstanceIds")
-        DescribeInstanceStatusBuilder instanceIds(final String[] instanceIds);
-
-        @QueryParam("RamRoleName")
-        DescribeInstanceStatusBuilder ramRoleName(final String ramRoleName);
 
         @QueryParam("RegionId")
         DescribeInstanceStatusBuilder regionId(final String regionId);
+
+        @QueryParam("ClusterId")
+        DescribeInstanceStatusBuilder clusterId(final String clusterId);
+
+        @QueryParam("ZoneId")
+        DescribeInstanceStatusBuilder zoneId(final String zoneId);
+
+        @QueryParam("PageNumber")
+        DescribeInstanceStatusBuilder pageNumber(final Integer pageNumber);
+
+        @QueryParam("PageSize")
+        DescribeInstanceStatusBuilder pageSize(final Integer pageSize);
 
         Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
     }

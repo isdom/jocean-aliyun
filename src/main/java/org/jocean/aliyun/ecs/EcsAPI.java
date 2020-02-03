@@ -882,8 +882,26 @@ public interface EcsAPI {
 
     DetachInstanceRamRoleBuilder detachInstanceRamRole();
 
-    interface DescribeInstanceStatusResponse extends ECSAPIResponse {
+    interface InstanceStatus {
+        @JSONField(name="InstanceId")
+        String getInstanceId();
 
+        @JSONField(name="InstanceId")
+        void setInstanceId(final String instanceId);
+
+        @JSONField(name="Status")
+        String getStatus();
+
+        @JSONField(name="Status")
+        void setStatus(final String status);
+    }
+
+    interface DescribeInstanceStatusResponse extends ECSAPIResponse {
+        @JSONField(name="InstanceStatuses")
+        InstanceStatus[] getInstanceStatuses();
+
+        @JSONField(name="InstanceStatuses")
+        void setInstanceStatuses(final InstanceStatus[] instanceStatuses);
     }
 
     // https://help.aliyun.com/document_detail/25505.html?spm=a2c4g.11186623.6.1204.7c3f649fZpm8hA

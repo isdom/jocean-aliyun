@@ -896,12 +896,20 @@ public interface EcsAPI {
         void setStatus(final String status);
     }
 
+    interface InstanceStatuses  {
+        @JSONField(name="InstanceStatus")
+        InstanceStatus[] getInstanceStatus();
+
+        @JSONField(name="InstanceStatus")
+        void setInstanceStatus(final InstanceStatus[] instanceStatuses);
+    }
+
     interface DescribeInstanceStatusResponse extends ECSAPIResponse {
         @JSONField(name="InstanceStatuses")
-        InstanceStatus[] getInstanceStatuses();
+        InstanceStatuses getInstanceStatuses();
 
         @JSONField(name="InstanceStatuses")
-        void setInstanceStatuses(final InstanceStatus[] instanceStatuses);
+        void setInstanceStatuses(final InstanceStatuses instanceStatuses);
     }
 
     // https://help.aliyun.com/document_detail/25505.html?spm=a2c4g.11186623.6.1204.7c3f649fZpm8hA

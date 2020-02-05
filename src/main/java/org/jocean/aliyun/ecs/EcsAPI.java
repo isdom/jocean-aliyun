@@ -942,14 +942,26 @@ public interface EcsAPI {
     }
 
     interface RenewInstanceBuilder {
-        @QueryParam("InstanceIds")
-        RenewInstanceBuilder instanceIds(final String[] instanceIds);
+        // 必选    i-bp67acfmxazb4ph***            需要续费的实例ID。
+        @QueryParam("InstanceId")
+        RenewInstanceBuilder instanceId(final String instanceId);
 
-        @QueryParam("RamRoleName")
-        RenewInstanceBuilder ramRoleName(final String ramRoleName);
+        /* 必选
+        包年包月续费时长。一旦指定了DedicatedHostId，则取值范围不能超过专有宿主机的订阅时长。取值范围：
 
-        @QueryParam("RegionId")
-        RenewInstanceBuilder regionId(final String regionId);
+        PeriodUnit=Week时，Period取值：1~4
+        PeriodUnit=Month时，Period取值：1~12, 24, 36, 48, 60
+        */
+        @QueryParam("Period")
+        RenewInstanceBuilder period(final int period);
+
+        // 可选    Month                          续费时长的时间单位，即参数Period的单位。取值范围： Week / Month（默认）
+        @QueryParam("PeriodUnit")
+        RenewInstanceBuilder periodUnit(final String periodUnit);
+
+        // 可选    0c593ea1-3bea-11e9-b96b-88e9fe637760   保证请求幂等性。从您的客户端生成一个参数值，确保不同请求间该参数值唯一。ClientToken只支持ASCII字符，且不能超过64个字符。
+        @QueryParam("ClientToken")
+        RenewInstanceBuilder clientToken(final String clientToken);
 
         Transformer<RpcRunner, RenewInstanceResponse> call();
     }

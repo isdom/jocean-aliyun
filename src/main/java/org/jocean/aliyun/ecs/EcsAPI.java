@@ -32,6 +32,26 @@ public interface EcsAPI {
         void setMessage(final String message);
     }
 
+    interface Pageable {
+        @JSONField(name="PageNumber")
+        int getPageNumber();
+
+        @JSONField(name="PageNumber")
+        void setPageNumber(final int pageNumber);
+
+        @JSONField(name="PageSize")
+        int getPageSize();
+
+        @JSONField(name="PageSize")
+        void setPageSize(final int pageSize);
+
+        @JSONField(name="TotalCount")
+        int getTotalCount();
+
+        @JSONField(name="TotalCount")
+        void setTotalCount(final int totalCount);
+    }
+
 //    "SecurityGroupIds":{
 //    "SecurityGroupId":[
 //        "sg-2ze7v8o1cbogte75c8xz"
@@ -428,25 +448,7 @@ public interface EcsAPI {
         void setInstance(final InstanceAttributesType[] instances);
     }
 
-    interface DescribeInstancesResponse extends ECSAPIResponse {
-        @JSONField(name="PageNumber")
-        int getPageNumber();
-
-        @JSONField(name="PageNumber")
-        void setPageNumber(final int pageNumber);
-
-        @JSONField(name="PageSize")
-        int getPageSize();
-
-        @JSONField(name="PageSize")
-        void setPageSize(final int pageSize);
-
-        @JSONField(name="TotalCount")
-        int getTotalCount();
-
-        @JSONField(name="TotalCount")
-        void setTotalCount(final int totalCount);
-
+    interface DescribeInstancesResponse extends ECSAPIResponse, Pageable {
         @JSONField(name="Instances")
         InstanceSet getInstances();
 
@@ -904,7 +906,7 @@ public interface EcsAPI {
         void setInstanceStatus(final InstanceStatus[] instanceStatuses);
     }
 
-    interface DescribeInstanceStatusResponse extends ECSAPIResponse {
+    interface DescribeInstanceStatusResponse extends ECSAPIResponse, Pageable {
         @JSONField(name="InstanceStatuses")
         InstanceStatuses getInstanceStatuses();
 

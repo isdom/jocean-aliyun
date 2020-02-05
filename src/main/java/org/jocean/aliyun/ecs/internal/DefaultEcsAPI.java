@@ -157,8 +157,15 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public AttachInstanceRamRoleBuilder attachInstanceRamRole() {
-        // TODO Auto-generated method stub
-        return null;
+        return delegate(AttachInstanceRamRoleBuilder.class,
+                "aliyun.ecs.attachInstanceRamRole",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "AttachInstanceRamRole")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, AttachInstanceRamRoleResponse.class)
+            );
     }
 
     @Override

@@ -804,7 +804,7 @@ public interface EcsAPI {
 
     interface AttachInstanceRamRoleResult {
         @JSONField(name="Success")
-        String getSuccess();
+        boolean getSuccess();
 
         @JSONField(name="Success")
         void setSuccess(final boolean success);
@@ -855,12 +855,16 @@ public interface EcsAPI {
     }
 
     interface AttachInstanceRamRoleBuilder {
+        //  必选   [“i-bp14ss25xca5ex1u****”, “i-bp154z5o1qjalfse****”, “i-bp10ws62o04ubhvi****”…]
+        //  实例ID。取值可以由多个实例ID组成一个JSON数组，最多支持100个ID，ID之间用半角逗号（,）隔开。
         @QueryParam("InstanceIds")
         AttachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
 
+        //  必选   RamRoleTest    实例RAM角色名称。您可以使用 RAM API ListRoles查询您已创建的实例RAM角色。
         @QueryParam("RamRoleName")
         AttachInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
 
+        //  必选   cn-hangzhou    地域ID。
         @QueryParam("RegionId")
         AttachInstanceRamRoleBuilder regionId(final String regionId);
 

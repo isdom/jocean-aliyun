@@ -873,6 +873,86 @@ public interface EcsAPI {
 
     AttachInstanceRamRoleBuilder attachInstanceRamRole();
 
+    interface InstanceRamRoleSets {
+        @JSONField(name="InstanceId")
+        String getInstanceId();
+
+        @JSONField(name="InstanceId")
+        void setInstanceId(final String instanceId);
+
+        @JSONField(name="RamRoleName")
+        String getRamRoleName();
+
+        @JSONField(name="RamRoleName")
+        void setRamRoleName(final String ramRoleName);
+    }
+
+    interface DetachInstanceRamRoleResult {
+        @JSONField(name="InstanceId")
+        String getInstanceId();
+
+        @JSONField(name="InstanceId")
+        void setInstanceId(final String instanceId);
+
+        @JSONField(name="Success")
+        boolean getSuccess();
+
+        @JSONField(name="Success")
+        void setSuccess(final boolean success);
+
+        @JSONField(name="Code")
+        String getCode();
+
+        @JSONField(name="Code")
+        void setCode(final String code);
+
+        @JSONField(name="Message")
+        String getMessage();
+
+        @JSONField(name="Message")
+        void setMessage(final String message);
+
+        @JSONField(name="InstanceRamRoleSets")
+        InstanceRamRoleSets getInstanceRamRoleSets();
+
+        @JSONField(name="InstanceRamRoleSets")
+        void setInstanceRamRoleSets(final InstanceRamRoleSets instanceRamRoleSets);
+    }
+
+    interface DetachInstanceRamRoleResults {
+        @JSONField(name="DetachInstanceRamRoleResult")
+        DetachInstanceRamRoleResult[] getDetachInstanceRamRoleResult();
+
+        @JSONField(name="DetachInstanceRamRoleResult")
+        void setDetachInstanceRamRoleResult(final DetachInstanceRamRoleResult[] detachInstanceRamRoleResult);
+    }
+
+    interface DetachInstanceRamRoleResponse extends ECSAPIResponse {
+        @JSONField(name="DetachInstanceRamRoleResults")
+        DetachInstanceRamRoleResults getDetachInstanceRamRoleResults();
+
+        @JSONField(name="DetachInstanceRamRoleResults")
+        void setDetachInstanceRamRoleResults(final DetachInstanceRamRoleResults detachInstanceRamRoleResults);
+
+        @JSONField(name="RamRoleName")
+        String getRamRoleName();
+
+        @JSONField(name="RamRoleName")
+        void setRamRoleName(final String ramRoleName);
+
+        @JSONField(name="FailCount")
+        Integer getFailCount();
+
+        @JSONField(name="FailCount")
+        void setFailCount(final Integer failCount);
+
+        @JSONField(name="TotalCount")
+        Integer getTotalCount();
+
+        @JSONField(name="TotalCount")
+        void setTotalCount(final Integer totalCount);
+    }
+
     interface DetachInstanceRamRoleBuilder {
         @QueryParam("InstanceIds")
         DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
@@ -883,7 +963,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachInstanceRamRoleBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AttachInstanceRamRoleResponse> call();
+        Transformer<RpcRunner, DetachInstanceRamRoleResponse> call();
     }
 
     DetachInstanceRamRoleBuilder detachInstanceRamRole();

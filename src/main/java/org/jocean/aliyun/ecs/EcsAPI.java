@@ -828,12 +828,20 @@ public interface EcsAPI {
         void setMessage(final String message);
     }
 
+    interface AttachInstanceRamRoleResults {
+        @JSONField(name="AttachInstanceRamRoleResult")
+        AttachInstanceRamRoleResult[] getAttachInstanceRamRoleResultArray();
+
+        @JSONField(name="AttachInstanceRamRoleResult")
+        void setAttachInstanceRamRoleResultArray(final AttachInstanceRamRoleResult[] attachInstanceRamRoleResults);
+    }
+
     interface AttachInstanceRamRoleResponse extends ECSAPIResponse {
         @JSONField(name="AttachInstanceRamRoleResults")
-        AttachInstanceRamRoleResult[] getAttachInstanceRamRoleResults();
+        AttachInstanceRamRoleResults getAttachInstanceRamRoleResults();
 
         @JSONField(name="AttachInstanceRamRoleResults")
-        void setAttachInstanceRamRoleResults(final AttachInstanceRamRoleResult[] attachInstanceRamRoleResults);
+        void setAttachInstanceRamRoleResults(final AttachInstanceRamRoleResults attachInstanceRamRoleResults);
 
         @JSONField(name="RamRoleName")
         String getRamRoleName();

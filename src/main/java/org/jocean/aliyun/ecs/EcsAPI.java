@@ -1094,15 +1094,16 @@ public interface EcsAPI {
     RedeployInstanceBuilder redeployInstance();
 
     interface DescribeInstanceVncUrlResponse extends ECSAPIResponse {
+        @JSONField(name="VncUrl")
+        String getVncUrl();
 
+        @JSONField(name="VncUrl")
+        void setVncUrl(final String vncUrl);
     }
 
     interface DescribeInstanceVncUrlBuilder {
-        @QueryParam("InstanceIds")
-        DescribeInstanceVncUrlBuilder instanceIds(final String[] instanceIds);
-
-        @QueryParam("RamRoleName")
-        DescribeInstanceVncUrlBuilder ramRoleName(final String ramRoleName);
+        @QueryParam("InstanceId")
+        DescribeInstanceVncUrlBuilder instanceId(final String instanceId);
 
         @QueryParam("RegionId")
         DescribeInstanceVncUrlBuilder regionId(final String regionId);

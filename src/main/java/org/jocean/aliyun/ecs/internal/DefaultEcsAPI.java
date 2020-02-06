@@ -228,8 +228,15 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public DescribeInstanceVncUrlBuilder describeInstanceVncUrl() {
-        // TODO Auto-generated method stub
-        return null;
+        return delegate(DescribeInstanceVncUrlBuilder.class,
+                "aliyun.ecs.describeInstanceVncUrl",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DescribeInstanceVncUrl")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, DescribeInstanceVncUrlResponse.class)
+                );
     }
 
     @Override

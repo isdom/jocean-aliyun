@@ -1065,14 +1065,9 @@ public interface EcsAPI {
     }
 
     interface ReactivateInstancesBuilder {
-        @QueryParam("InstanceIds")
-        ReactivateInstancesBuilder instanceIds(final String[] instanceIds);
-
-        @QueryParam("RamRoleName")
-        ReactivateInstancesBuilder ramRoleName(final String ramRoleName);
-
-        @QueryParam("RegionId")
-        ReactivateInstancesBuilder regionId(final String regionId);
+        //  必选   需要重开机的实例 ID。
+        @QueryParam("InstanceId")
+        ReactivateInstancesBuilder instanceId(final String instanceId);
 
         Transformer<RpcRunner, ReactivateInstancesResponse> call();
     }

@@ -241,8 +241,15 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public DescribeUserDataBuilder describeUserData() {
-        // TODO Auto-generated method stub
-        return null;
+        return delegate(DescribeUserDataBuilder.class,
+                "aliyun.ecs.describeUserData",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DescribeUserData")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, DescribeUserDataResponse.class)
+                );
     }
 
     @Override

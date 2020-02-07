@@ -1114,15 +1114,31 @@ public interface EcsAPI {
     DescribeInstanceVncUrlBuilder describeInstanceVncUrl();
 
     interface DescribeUserDataResponse extends ECSAPIResponse {
+        @JSONField(name="RegionId")
+        String getRegionId();
+
+        @JSONField(name="RegionId")
+        void setRegionId(final String regionId);
+
+        @JSONField(name="InstanceId")
+        String getInstanceId();
+
+        @JSONField(name="InstanceId")
+        void setInstanceId(final String instanceId);
+
+        @JSONField(name="UserData")
+        String getUserData();
+
+        @JSONField(name="UserData")
+        void setUserData(final String userData);
     }
 
     interface DescribeUserDataBuilder {
-        @QueryParam("InstanceIds")
-        DescribeUserDataBuilder instanceIds(final String[] instanceIds);
+        //  必选   i-instanceid1           要查询的实例 ID。
+        @QueryParam("InstanceId")
+        DescribeUserDataBuilder instanceId(final String instanceId);
 
-        @QueryParam("RamRoleName")
-        DescribeUserDataBuilder ramRoleName(final String ramRoleName);
-
+        //  必选   cn-hangzhou         实例所属的地域ID。
         @QueryParam("RegionId")
         DescribeUserDataBuilder regionId(final String regionId);
 

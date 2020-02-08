@@ -254,8 +254,15 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public DescribeInstanceAutoRenewAttributeBuilder describeInstanceAutoRenewAttribute() {
-        // TODO Auto-generated method stub
-        return null;
+        return delegate(DescribeInstanceAutoRenewAttributeBuilder.class,
+                "aliyun.ecs.describeInstanceAutoRenewAttribute",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DescribeInstanceAutoRenewAttribute")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, DescribeInstanceAutoRenewAttributeResponse.class)
+                );
     }
 
     @Override

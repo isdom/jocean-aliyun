@@ -12,6 +12,14 @@ import rx.Observable.Transformer;
 
 public interface EcsAPI {
 
+    interface PageableBuilder<T> {
+        @QueryParam("PageNumber")
+        T pageNumber(final Integer pageNumber);
+
+        @QueryParam("PageSize")
+        T pageSize(final Integer pageSize);
+    }
+
     interface ECSAPIResponse {
         @JSONField(name="RequestId")
         String getRequestId();
@@ -1007,7 +1015,7 @@ public interface EcsAPI {
     }
 
     // https://help.aliyun.com/document_detail/25505.html?spm=a2c4g.11186623.6.1204.7c3f649fZpm8hA
-    interface DescribeInstanceStatusBuilder {
+    interface DescribeInstanceStatusBuilder extends PageableBuilder<DescribeInstanceStatusBuilder>  {
 
         @QueryParam("RegionId")
         DescribeInstanceStatusBuilder regionId(final String regionId);
@@ -1018,11 +1026,11 @@ public interface EcsAPI {
         @QueryParam("ZoneId")
         DescribeInstanceStatusBuilder zoneId(final String zoneId);
 
-        @QueryParam("PageNumber")
-        DescribeInstanceStatusBuilder pageNumber(final Integer pageNumber);
-
-        @QueryParam("PageSize")
-        DescribeInstanceStatusBuilder pageSize(final Integer pageSize);
+//        @QueryParam("PageNumber")
+//        DescribeInstanceStatusBuilder pageNumber(final Integer pageNumber);
+//
+//        @QueryParam("PageSize")
+//        DescribeInstanceStatusBuilder pageSize(final Integer pageSize);
 
         Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
     }
@@ -1147,18 +1155,69 @@ public interface EcsAPI {
 
     DescribeUserDataBuilder describeUserData();
 
-    interface DescribeInstanceAutoRenewAttributeResponse extends ECSAPIResponse {
+    interface InstanceRenewAttribute  {
+        @JSONField(name="InstanceId")
+        String getInstanceId();
+
+        @JSONField(name="InstanceId")
+        void setInstanceId(final String instanceId);
+
+        @JSONField(name="AutoRenewEnabled")
+        boolean getAutoRenewEnabled();
+
+        @JSONField(name="AutoRenewEnabled")
+        void setAutoRenewEnabled(final boolean autoRenewEnabled);
+
+        @JSONField(name="Duration")
+        int getDuration();
+
+        @JSONField(name="Duration")
+        void setDuration(final int duration);
+
+        @JSONField(name="PeriodUnit")
+        String getPeriodUnit();
+
+        @JSONField(name="PeriodUnit")
+        void setPeriodUnit(final String periodUnit);
+
+        @JSONField(name="RenewalStatus")
+        String getRenewalStatus();
+
+        @JSONField(name="RenewalStatus")
+        void setRenewalStatus(final String renewalStatus);
     }
 
-    interface DescribeInstanceAutoRenewAttributeBuilder {
-        @QueryParam("InstanceIds")
-        DescribeInstanceAutoRenewAttributeBuilder instanceIds(final String[] instanceIds);
+    interface InstanceRenewAttributes  {
+        @JSONField(name="InstanceRenewAttribute")
+        InstanceRenewAttribute[] getInstanceRenewAttributes();
 
-        @QueryParam("RamRoleName")
-        DescribeInstanceAutoRenewAttributeBuilder ramRoleName(final String ramRoleName);
+        @JSONField(name="InstanceRenewAttribute")
+        void setInstanceRenewAttributes(final InstanceRenewAttribute[] instanceRenewAttributes);
+    }
 
+    interface DescribeInstanceAutoRenewAttributeResponse extends ECSAPIResponse, Pageable {
+        @JSONField(name="InstanceRenewAttributes")
+        InstanceRenewAttributes getInstanceRenewAttributes();
+
+        @JSONField(name="InstanceRenewAttributes")
+        void setInstanceRenewAttributes(final InstanceRenewAttributes instanceRenewAttributes);
+    }
+
+    interface DescribeInstanceAutoRenewAttributeBuilder extends PageableBuilder<DescribeInstanceAutoRenewAttributeBuilder> {
+        //  必选   cn-hangzhou  实例所属的地域ID。
         @QueryParam("RegionId")
         DescribeInstanceAutoRenewAttributeBuilder regionId(final String regionId);
+
+        //  可选   i-bp18x3z4hc7bixhxh***,i-bp1g6zv0ce8oghu7k***    实例ID。支持最多100台包年包月实例批量查询，多个实例ID以半角逗号分隔。
+        @QueryParam("InstanceId")
+        DescribeInstanceAutoRenewAttributeBuilder instanceId(final String instanceId);
+
+        //  可选   AutoRenewal  实例的自动续费状态。取值范围：
+//        AutoRenewal：设置为自动续费。
+//        Normal：取消自动续费。
+//        NotRenewal：不再续费，系统不再发送到期提醒，只在到期前第三天发送不续费提醒。不再续费的ECS实例可以通过ModifyInstanceAutoRenewAttribute更改成待续费（Noramal）后，再自行续费或设置为自动续费。
+        @QueryParam("RenewalStatus")
+        DescribeInstanceAutoRenewAttributeBuilder renewalStatus(final String renewalStatus);
 
         Transformer<RpcRunner, DescribeInstanceAutoRenewAttributeResponse> call();
     }

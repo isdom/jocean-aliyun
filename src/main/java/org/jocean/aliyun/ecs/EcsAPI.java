@@ -889,7 +889,7 @@ public interface EcsAPI {
 
     AttachInstanceRamRoleBuilder attachInstanceRamRole();
 
-    interface InstanceRamRoleSets {
+    interface InstanceRamRoleSet {
         @JSONField(name="InstanceId")
         String getInstanceId();
 
@@ -928,11 +928,11 @@ public interface EcsAPI {
         @JSONField(name="Message")
         void setMessage(final String message);
 
-        @JSONField(name="InstanceRamRoleSets")
-        InstanceRamRoleSets getInstanceRamRoleSets();
+        @JSONField(name="InstanceRamRoleSet")
+        InstanceRamRoleSet getInstanceRamRoleSets();
 
-        @JSONField(name="InstanceRamRoleSets")
-        void setInstanceRamRoleSets(final InstanceRamRoleSets instanceRamRoleSets);
+        @JSONField(name="InstanceRamRoleSet")
+        void setInstanceRamRoleSets(final InstanceRamRoleSet instanceRamRoleSets);
     }
 
     interface DetachInstanceRamRoleResults {
@@ -1224,16 +1224,38 @@ public interface EcsAPI {
 
     DescribeInstanceAutoRenewAttributeBuilder describeInstanceAutoRenewAttribute();
 
-    interface DescribeInstanceRamRoleResponse extends ECSAPIResponse {
+    interface InstanceRamRoleSets {
+        @JSONField(name="InstanceRamRoleSet")
+        InstanceRamRoleSet[] getInstanceRamRoleSets();
+
+        @JSONField(name="InstanceRamRoleSet")
+        void setInstanceRamRoleSets(final InstanceRamRoleSet[] instanceRamRoleSets);
     }
 
-    interface DescribeInstanceRamRoleBuilder {
-        @QueryParam("InstanceIds")
-        DescribeInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
+    interface DescribeInstanceRamRoleResponse extends ECSAPIResponse, Pageable {
+        @JSONField(name="RegionId")
+        String getRegionId();
 
+        @JSONField(name="RegionId")
+        void setRegionId(final String regionId);
+
+        @JSONField(name="InstanceRamRoleSets")
+        InstanceRamRoleSets getInstanceRamRoleSets();
+
+        @JSONField(name="InstanceRamRoleSets")
+        void setInstanceRamRoleSets(final InstanceRamRoleSets instanceRamRoleSets);
+    }
+
+    interface DescribeInstanceRamRoleBuilder extends PageableBuilder<DescribeInstanceRamRoleBuilder> {
+        //  可选   ["i-bp67acfmxazb4ph***", "i-bp67acfmxazb4pi***", "bp67acfmxazb4pj***"…]  指定查询的实例ID的集合。最多支持一次查询100台实例。InstanceIds与RamRoleName参数必须至少填写一个。
+        @QueryParam("InstanceIds")
+        DescribeInstanceRamRoleBuilder instanceIds(final String instanceIds);
+
+        //  可选   EcsServiceRole-EcsDocGuideTest  查询赋予了某一实例RAM角色的所有ECS实例。
         @QueryParam("RamRoleName")
         DescribeInstanceRamRoleBuilder ramRoleName(final String ramRoleName);
 
+        //  必选   cn-hangzhou 实例RAM角色所在的地域。
         @QueryParam("RegionId")
         DescribeInstanceRamRoleBuilder regionId(final String regionId);
 

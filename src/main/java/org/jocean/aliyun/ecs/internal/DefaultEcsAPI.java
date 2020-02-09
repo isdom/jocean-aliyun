@@ -267,8 +267,15 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public DescribeInstanceRamRoleBuilder describeInstanceRamRole() {
-        // TODO Auto-generated method stub
-        return null;
+        return delegate(DescribeInstanceRamRoleBuilder.class,
+                "aliyun.ecs.describeInstanceRamRole",
+                interact -> interact.method(HttpMethod.GET)
+                    .uri("https://ecs.aliyuncs.com")
+                    .path("/")
+                    .paramAsQuery("Action", "DescribeInstanceRamRole")
+                    .paramAsQuery("Version", "2014-05-26")
+                    .responseAs(ContentUtil.ASJSON, DescribeInstanceRamRoleResponse.class)
+                );
     }
 
     @Override

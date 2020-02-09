@@ -42,22 +42,22 @@ public interface EcsAPI {
 
     interface Pageable {
         @JSONField(name="PageNumber")
-        int getPageNumber();
+        Integer getPageNumber();
 
         @JSONField(name="PageNumber")
-        void setPageNumber(final int pageNumber);
+        void setPageNumber(final Integer pageNumber);
 
         @JSONField(name="PageSize")
-        int getPageSize();
+        Integer getPageSize();
 
         @JSONField(name="PageSize")
-        void setPageSize(final int pageSize);
+        void setPageSize(final Integer pageSize);
 
         @JSONField(name="TotalCount")
-        int getTotalCount();
+        Integer getTotalCount();
 
         @JSONField(name="TotalCount")
-        void setTotalCount(final int totalCount);
+        void setTotalCount(final Integer totalCount);
     }
 
 //    "SecurityGroupIds":{

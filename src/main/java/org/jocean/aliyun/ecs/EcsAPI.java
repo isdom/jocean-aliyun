@@ -1,5 +1,6 @@
 package org.jocean.aliyun.ecs;
 
+import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.aliyun.annotation.ConstParams;
@@ -466,6 +467,7 @@ public interface EcsAPI {
     }
 
     @ConstParams({"Action", "DescribeInstances", "Version", "2014-05-26"})
+    @Path("https://ecs.aliyuncs.com/")
     interface DescribeInstancesBuilder {
         //  String   是   cn-hangzhou
         //  实例所属的地域ID。您可以调用DescribeRegions查看最新的阿里云地域列表。

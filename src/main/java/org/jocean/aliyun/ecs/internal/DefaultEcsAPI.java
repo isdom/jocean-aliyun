@@ -3,9 +3,11 @@ package org.jocean.aliyun.ecs.internal;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.aliyun.annotation.ConstParams;
@@ -56,6 +58,17 @@ public class DefaultEcsAPI implements EcsAPI {
             final Map<String, Object> params) {
         return (Transformer<RpcRunner, R>) runners -> runners.flatMap(runner -> runner.name(apiname).execute(
                 interact -> {
+                    final Path path = intf.getAnnotation(Path.class);
+                    if (null != path) {
+                        try {
+                            final URI uri = new URI(path.value());
+                            interact = interact.uri(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort())
+                                    .path(uri.getPath());
+                        } catch (final Exception e) {
+                            return Observable.error(e);
+                        }
+                    }
+
                     final ConstParams constParams = intf.getAnnotation(ConstParams.class);
                     // add const params mark by XXXBuilder interface
                     if (null != constParams) {
@@ -79,8 +92,8 @@ public class DefaultEcsAPI implements EcsAPI {
         return delegate(DescribeInstancesBuilder.class,
                 "aliyun.ecs.describeInstances",
                 interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
 //                    .paramAsQuery("Action", "DescribeInstances")
 //                    .paramAsQuery("Version", "2014-05-26")
                     .responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)

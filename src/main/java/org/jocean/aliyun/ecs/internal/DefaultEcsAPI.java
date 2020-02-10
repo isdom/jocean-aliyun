@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.ws.rs.QueryParam;
 
+import org.jocean.aliyun.annotation.ConstParams;
 import org.jocean.aliyun.ecs.EcsAPI;
 import org.jocean.http.ContentUtil;
 import org.jocean.http.Interact;
@@ -40,7 +41,7 @@ public class DefaultEcsAPI implements EcsAPI {
                             }
                             return proxy;
                         } else if (null == args || args.length == 0) {
-                            return callapi(apiname, api, params);
+                            return callapi(intf, apiname, api, params);
                         }
 
                         return null;
@@ -48,11 +49,21 @@ public class DefaultEcsAPI implements EcsAPI {
                 });
     }
 
-    private static <R> Transformer<RpcRunner, R> callapi(final String apiname,
+    private static <R> Transformer<RpcRunner, R> callapi(
+            final Class<?> intf,
+            final String apiname,
             final Func1<Interact, Observable<R>> api,
             final Map<String, Object> params) {
         return (Transformer<RpcRunner, R>) runners -> runners.flatMap(runner -> runner.name(apiname).execute(
                 interact -> {
+                    final ConstParams constParams = intf.getAnnotation(ConstParams.class);
+                    // add const params mark by XXXBuilder interface
+                    if (null != constParams) {
+                        final String keyValues[] = constParams.value();
+                        for (int i = 0; i < keyValues.length-1; i+=2) {
+                            interact = interact.paramAsQuery(keyValues[i], keyValues[i+1]);
+                        }
+                    }
                     for (final Map.Entry<String, Object> entry : params.entrySet()) {
                         if (entry.getKey() != null && entry.getValue() != null) {
                             interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
@@ -70,8 +81,8 @@ public class DefaultEcsAPI implements EcsAPI {
                 interact -> interact.method(HttpMethod.GET)
                     .uri("https://ecs.aliyuncs.com")
                     .path("/")
-                    .paramAsQuery("Action", "DescribeInstances")
-                    .paramAsQuery("Version", "2014-05-26")
+//                    .paramAsQuery("Action", "DescribeInstances")
+//                    .paramAsQuery("Version", "2014-05-26")
                     .responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
                 );
 

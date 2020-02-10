@@ -62,6 +62,7 @@ public class DefaultEcsAPI implements EcsAPI {
                     if (null != path) {
                         try {
                             final URI uri = new URI(path.value());
+                            LOG.info("uri-scheme:{}/host:{}/port:{}/path:{}", uri.getScheme(), uri.getHost(), uri.getPort(), uri.getPath());
                             interact = interact.uri(uri.getScheme() + "://" + uri.getHost() + ":" + uri.getPort())
                                     .path(uri.getPath());
                         } catch (final Exception e) {

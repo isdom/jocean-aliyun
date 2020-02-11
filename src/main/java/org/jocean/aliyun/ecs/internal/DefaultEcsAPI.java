@@ -62,9 +62,9 @@ public class DefaultEcsAPI implements EcsAPI {
                     if (null != path) {
                         try {
                             final URI uri = new URI(path.value());
-                            final int port = (uri.getPort() > 0 ? uri.getPort() : 80);
-                            LOG.info("uri-- {}://{}:{}{}", uri.getScheme(), uri.getHost(), port, uri.getPath());
-                            interact = interact.uri(uri.getScheme() + "://" + uri.getHost() + ":" + port).path(uri.getPath());
+                            final String colonWithPort = uri.getPort() > 0 ? ":" + uri.getPort() : "";
+                            LOG.info("uri-- {}://{}{}{}", uri.getScheme(), uri.getHost(), colonWithPort, uri.getPath());
+                            interact = interact.uri(uri.getScheme() + "://" + uri.getHost() + colonWithPort).path(uri.getPath());
                         } catch (final Exception e) {
                             return Observable.error(e);
                         }

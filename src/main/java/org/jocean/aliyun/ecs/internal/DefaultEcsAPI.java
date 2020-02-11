@@ -7,6 +7,13 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.HEAD;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.PATCH;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
@@ -45,7 +52,7 @@ public class DefaultEcsAPI implements EcsAPI {
                             return proxy;
                         } else if (null == args || args.length == 0) {
                             final ConstParams constParams = method.getAnnotation(ConstParams.class);
-                            // add const params mark by XXXBuilder interface
+                            // add const params mark by XXXBuilder.call method
                             if (null != constParams) {
                                 final String keyValues[] = constParams.value();
                                 for (int i = 0; i < keyValues.length-1; i+=2) {
@@ -68,6 +75,7 @@ public class DefaultEcsAPI implements EcsAPI {
             final Map<String, Object> params) {
         return (Transformer<RpcRunner, R>) runners -> runners.flatMap(runner -> runner.name(apiname).execute(
                 interact -> {
+                    interact = interact.method(getHttpMethod(method));
                     final Path path = method.getAnnotation(Path.class);
                     if (null != path) {
                         try {
@@ -89,13 +97,32 @@ public class DefaultEcsAPI implements EcsAPI {
                 }));
     }
 
+    private static HttpMethod getHttpMethod(final Method method) {
+        if (null != method.getAnnotation(GET.class)) {
+            return HttpMethod.GET;
+        } else if (null != method.getAnnotation(POST.class)) {
+            return HttpMethod.POST;
+        } else if (null != method.getAnnotation(PUT.class)) {
+            return HttpMethod.PUT;
+        } else if (null != method.getAnnotation(DELETE.class)) {
+            return HttpMethod.DELETE;
+        } else if (null != method.getAnnotation(HEAD.class)) {
+            return HttpMethod.HEAD;
+        } else if (null != method.getAnnotation(OPTIONS.class)) {
+            return HttpMethod.OPTIONS;
+        } else if (null != method.getAnnotation(PATCH.class)) {
+            return HttpMethod.PATCH;
+        } else {
+            return HttpMethod.GET;
+        }
+    }
+
     // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
     @Override
     public DescribeInstancesBuilder describeInstances() {
         return delegate(DescribeInstancesBuilder.class,
                 "aliyun.ecs.describeInstances",
-                interact -> interact.method(HttpMethod.GET)
-                    .responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
+                interact -> interact.responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
                 );
     }
 

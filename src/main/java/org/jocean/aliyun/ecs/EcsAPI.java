@@ -1040,6 +1040,11 @@ public interface EcsAPI {
 //        @QueryParam("PageSize")
 //        DescribeInstanceStatusBuilder pageSize(final Integer pageSize);
 
+        // TODO
+        @GET
+        @Path("https://ecs.aliyuncs.com/")
+        @ConstParams({"Action", "DescribeInstanceStatus", "Version", "2014-05-26"})
+//        @ResponseType(DescribeInstanceStatusResponse.class)
         Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
     }
 

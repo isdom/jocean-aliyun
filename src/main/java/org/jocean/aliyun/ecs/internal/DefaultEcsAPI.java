@@ -1,5 +1,6 @@
 package org.jocean.aliyun.ecs.internal;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -34,10 +35,19 @@ import rx.functions.Func1;
 public class DefaultEcsAPI implements EcsAPI {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEcsAPI.class);
 
-    @SuppressWarnings("unchecked")
-    public static <T, R> T delegate(final Class<T> intf,
+    public static <T, R> T delegate(
+            final Class<T> intf,
             final String apiname,
-            final Func1<Interact, Observable<R>> api) {
+            final Func1<Interact, Observable<R>> inter2resp) {
+        return delegate2(null, intf, apiname, inter2resp);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T, R> T delegate2(
+            final Class<?> api,
+            final Class<T> intf,
+            final String apiname,
+            final Func1<Interact, Observable<R>> inter2resp) {
         final Map<String, Object> params = new HashMap<>();
 
         return (T) Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class<?>[] { intf },
@@ -52,16 +62,10 @@ public class DefaultEcsAPI implements EcsAPI {
                             }
                             return proxy;
                         } else if (null == args || args.length == 0) {
-                            final ConstParams constParams = method.getAnnotation(ConstParams.class);
-                            // add const params mark by XXXBuilder.call method
-                            if (null != constParams) {
-                                final String keyValues[] = constParams.value();
-                                for (int i = 0; i < keyValues.length-1; i+=2) {
-                                    params.put(keyValues[i], keyValues[i+1]);
-                                }
-                            }
+                            addConstParams(api, params);
+                            addConstParams(method, params);
 
-                            return callapi(method, apiname, api, params);
+                            return callapi(api, method, apiname, inter2resp, params);
                         }
 
                         return null;
@@ -70,32 +74,32 @@ public class DefaultEcsAPI implements EcsAPI {
     }
 
     private static <R> Transformer<RpcRunner, R> callapi(
+            final Class<?> api,
             final Method method,
             final String apiname,
-            final Func1<Interact, Observable<R>> api,
+            final Func1<Interact, Observable<R>> inter2resp,
             final Map<String, Object> params) {
         return (Transformer<RpcRunner, R>) runners -> runners.flatMap(runner -> runner.name(apiname).execute(
                 interact -> {
-                    interact = interact.method(getHttpMethod(method));
-                    final Path path = method.getAnnotation(Path.class);
-                    if (null != path) {
-                        try {
-                            final URI uri = new URI(path.value());
-                            final String colonWithPort = uri.getPort() > 0 ? ":" + uri.getPort() : "";
-                            LOG.info("uri-- {}://{}{}{}", uri.getScheme(), uri.getHost(), colonWithPort, uri.getPath());
-                            interact = interact.uri(uri.getScheme() + "://" + uri.getHost() + colonWithPort).path(uri.getPath());
-                        } catch (final Exception e) {
-                            return Observable.error(e);
+                    Interact newInteract = assignUriAndPath(method, interact);
+                    if (null != newInteract) {
+                        interact = newInteract;
+                    } else {
+                        newInteract = assignUriAndPath(api, interact);
+                        if (null != newInteract) {
+                            interact = newInteract;
                         }
                     }
+
+                    interact = interact.method(getHttpMethod(method));
 
                     for (final Map.Entry<String, Object> entry : params.entrySet()) {
                         if (entry.getKey() != null && entry.getValue() != null) {
                             interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
                         }
                     }
-                    if (null != api) {
-                        return api.call(interact);
+                    if (null != inter2resp) {
+                        return inter2resp.call(interact);
                     } else {
                         final ResponseType responseType = method.getAnnotation(ResponseType.class);
                         if (null != responseType) {
@@ -127,13 +131,43 @@ public class DefaultEcsAPI implements EcsAPI {
         }
     }
 
+    private static void addConstParams(final AnnotatedElement annotatedElement, final Map<String, Object> params) {
+        if (null == annotatedElement) {
+            return;
+        }
+        final ConstParams constParams = annotatedElement.getAnnotation(ConstParams.class);
+        // add const params mark by XXXBuilder.call method
+        if (null != constParams) {
+            final String keyValues[] = constParams.value();
+            for (int i = 0; i < keyValues.length-1; i+=2) {
+                params.put(keyValues[i], keyValues[i+1]);
+            }
+        }
+    }
+
+    private static Interact assignUriAndPath(final AnnotatedElement annotatedElement, final Interact interact) {
+        if (null == annotatedElement) {
+            return null;
+        }
+        final Path path = annotatedElement.getAnnotation(Path.class);
+        if (null != path) {
+            try {
+                final URI uri = new URI(path.value());
+                final String colonWithPort = uri.getPort() > 0 ? ":" + uri.getPort() : "";
+                LOG.info("uri-- {}://{}{}{}", uri.getScheme(), uri.getHost(), colonWithPort, uri.getPath());
+                return interact.uri(uri.getScheme() + "://" + uri.getHost() + colonWithPort).path(uri.getPath());
+            } catch (final Exception e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            return null;
+        }
+    }
+
     // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
     @Override
     public DescribeInstancesBuilder describeInstances() {
-        return delegate(DescribeInstancesBuilder.class,
-                "aliyun.ecs.describeInstances", null
-//                interact -> interact.responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
-                );
+        return delegate2(EcsAPI.class, DescribeInstancesBuilder.class, "aliyun.ecs.describeInstances", null);
     }
 
     @Override
@@ -242,8 +276,7 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public DescribeInstanceStatusBuilder describeInstanceStatus() {
-        return delegate(DescribeInstanceStatusBuilder.class,
-                "aliyun.ecs.describeInstanceStatus", null);
+        return delegate2(EcsAPI.class, DescribeInstanceStatusBuilder.class, "aliyun.ecs.describeInstanceStatus", null);
     }
 
     @Override

@@ -14,6 +14,8 @@ import rx.Observable.Transformer;
 
 // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
 
+@Path("https://ecs.aliyuncs.com/")
+@ConstParams({"Version", "2014-05-26"})
 public interface EcsAPI {
 
     interface PageableBuilder<T> {
@@ -481,8 +483,8 @@ public interface EcsAPI {
         DescribeInstancesBuilder instanceName(final String instanceName);
 
         @GET
-        @Path("https://ecs.aliyuncs.com/")
-        @ConstParams({"Action", "DescribeInstances", "Version", "2014-05-26"})
+//        @Path("https://ecs.aliyuncs.com/")
+        @ConstParams({"Action", "DescribeInstances"/*, "Version", "2014-05-26"*/})
         @ResponseType(DescribeInstancesResponse.class)
         Transformer<RpcRunner, DescribeInstancesResponse> call();
     }
@@ -1034,17 +1036,10 @@ public interface EcsAPI {
         @QueryParam("ZoneId")
         DescribeInstanceStatusBuilder zoneId(final String zoneId);
 
-//        @QueryParam("PageNumber")
-//        DescribeInstanceStatusBuilder pageNumber(final Integer pageNumber);
-//
-//        @QueryParam("PageSize")
-//        DescribeInstanceStatusBuilder pageSize(final Integer pageSize);
-
-        // TODO
         @GET
-        @Path("https://ecs.aliyuncs.com/")
-        @ConstParams({"Action", "DescribeInstanceStatus", "Version", "2014-05-26"})
-//        @ResponseType(DescribeInstanceStatusResponse.class)
+//        @Path("https://ecs.aliyuncs.com/")
+        @ConstParams({"Action", "DescribeInstanceStatus" /*, "Version", "2014-05-26"*/})
+        @ResponseType(DescribeInstanceStatusResponse.class)
         Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
     }
 

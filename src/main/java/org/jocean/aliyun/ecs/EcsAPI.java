@@ -483,8 +483,7 @@ public interface EcsAPI {
         DescribeInstancesBuilder instanceName(final String instanceName);
 
         @GET
-//        @Path("https://ecs.aliyuncs.com/")
-        @ConstParams({"Action", "DescribeInstances"/*, "Version", "2014-05-26"*/})
+        @ConstParams({"Action", "DescribeInstances"})
         @ResponseType(DescribeInstancesResponse.class)
         Transformer<RpcRunner, DescribeInstancesResponse> call();
     }
@@ -1037,8 +1036,7 @@ public interface EcsAPI {
         DescribeInstanceStatusBuilder zoneId(final String zoneId);
 
         @GET
-//        @Path("https://ecs.aliyuncs.com/")
-        @ConstParams({"Action", "DescribeInstanceStatus" /*, "Version", "2014-05-26"*/})
+        @ConstParams({"Action", "DescribeInstanceStatus"})
         @ResponseType(DescribeInstanceStatusResponse.class)
         Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
     }

@@ -1,5 +1,6 @@
 package org.jocean.aliyun.ecs;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
@@ -466,8 +467,6 @@ public interface EcsAPI {
         void setInstances(final InstanceSet instanceSet);
     }
 
-    @ConstParams({"Action", "DescribeInstances", "Version", "2014-05-26"})
-    @Path("https://ecs.aliyuncs.com/")
     interface DescribeInstancesBuilder {
         //  String   是   cn-hangzhou
         //  实例所属的地域ID。您可以调用DescribeRegions查看最新的阿里云地域列表。
@@ -480,6 +479,9 @@ public interface EcsAPI {
         @QueryParam("InstanceName")
         DescribeInstancesBuilder instanceName(final String instanceName);
 
+        @GET
+        @Path("https://ecs.aliyuncs.com/")
+        @ConstParams({"Action", "DescribeInstances", "Version", "2014-05-26"})
         Transformer<RpcRunner, DescribeInstancesResponse> call();
     }
 

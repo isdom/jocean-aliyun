@@ -27,7 +27,8 @@ public class DefaultEcsAPI implements EcsAPI {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEcsAPI.class);
 
     @SuppressWarnings("unchecked")
-    public static <T, R> T delegate(final Class<T> intf, final String apiname,
+    public static <T, R> T delegate(final Class<T> intf,
+            final String apiname,
             final Func1<Interact, Observable<R>> api) {
         final Map<String, Object> params = new HashMap<>();
 
@@ -43,7 +44,16 @@ public class DefaultEcsAPI implements EcsAPI {
                             }
                             return proxy;
                         } else if (null == args || args.length == 0) {
-                            return callapi(intf, apiname, api, params);
+                            final ConstParams constParams = method.getAnnotation(ConstParams.class);
+                            // add const params mark by XXXBuilder interface
+                            if (null != constParams) {
+                                final String keyValues[] = constParams.value();
+                                for (int i = 0; i < keyValues.length-1; i+=2) {
+                                    params.put(keyValues[i], keyValues[i+1]);
+                                }
+                            }
+
+                            return callapi(method, apiname, api, params);
                         }
 
                         return null;
@@ -52,13 +62,13 @@ public class DefaultEcsAPI implements EcsAPI {
     }
 
     private static <R> Transformer<RpcRunner, R> callapi(
-            final Class<?> intf,
+            final Method method,
             final String apiname,
             final Func1<Interact, Observable<R>> api,
             final Map<String, Object> params) {
         return (Transformer<RpcRunner, R>) runners -> runners.flatMap(runner -> runner.name(apiname).execute(
                 interact -> {
-                    final Path path = intf.getAnnotation(Path.class);
+                    final Path path = method.getAnnotation(Path.class);
                     if (null != path) {
                         try {
                             final URI uri = new URI(path.value());
@@ -70,14 +80,6 @@ public class DefaultEcsAPI implements EcsAPI {
                         }
                     }
 
-                    final ConstParams constParams = intf.getAnnotation(ConstParams.class);
-                    // add const params mark by XXXBuilder interface
-                    if (null != constParams) {
-                        final String keyValues[] = constParams.value();
-                        for (int i = 0; i < keyValues.length-1; i+=2) {
-                            interact = interact.paramAsQuery(keyValues[i], keyValues[i+1]);
-                        }
-                    }
                     for (final Map.Entry<String, Object> entry : params.entrySet()) {
                         if (entry.getKey() != null && entry.getValue() != null) {
                             interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
@@ -93,13 +95,8 @@ public class DefaultEcsAPI implements EcsAPI {
         return delegate(DescribeInstancesBuilder.class,
                 "aliyun.ecs.describeInstances",
                 interact -> interact.method(HttpMethod.GET)
-//                    .uri("https://ecs.aliyuncs.com")
-//                    .path("/")
-//                    .paramAsQuery("Action", "DescribeInstances")
-//                    .paramAsQuery("Version", "2014-05-26")
                     .responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
                 );
-
     }
 
     @Override

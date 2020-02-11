@@ -18,6 +18,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.aliyun.annotation.ConstParams;
+import org.jocean.aliyun.annotation.ResponseType;
 import org.jocean.aliyun.ecs.EcsAPI;
 import org.jocean.http.ContentUtil;
 import org.jocean.http.Interact;
@@ -93,7 +94,16 @@ public class DefaultEcsAPI implements EcsAPI {
                             interact = interact.paramAsQuery(entry.getKey(), entry.getValue().toString());
                         }
                     }
-                    return api.call(interact);
+                    if (null != api) {
+                        return api.call(interact);
+                    } else {
+                        final ResponseType responseType = method.getAnnotation(ResponseType.class);
+                        if (null != responseType) {
+                            return interact.responseAs((Class<R>)responseType.value());
+                        } else {
+                            return Observable.error(new RuntimeException("Unknown Response Type"));
+                        }
+                    }
                 }));
     }
 
@@ -121,8 +131,8 @@ public class DefaultEcsAPI implements EcsAPI {
     @Override
     public DescribeInstancesBuilder describeInstances() {
         return delegate(DescribeInstancesBuilder.class,
-                "aliyun.ecs.describeInstances",
-                interact -> interact.responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
+                "aliyun.ecs.describeInstances", null
+//                interact -> interact.responseAs(ContentUtil.ASJSON, DescribeInstancesResponse.class)
                 );
     }
 

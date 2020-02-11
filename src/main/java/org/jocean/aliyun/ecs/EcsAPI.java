@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.aliyun.annotation.ConstParams;
+import org.jocean.aliyun.annotation.ResponseType;
 import org.jocean.http.RpcRunner;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -482,6 +483,7 @@ public interface EcsAPI {
         @GET
         @Path("https://ecs.aliyuncs.com/")
         @ConstParams({"Action", "DescribeInstances", "Version", "2014-05-26"})
+        @ResponseType(DescribeInstancesResponse.class)
         Transformer<RpcRunner, DescribeInstancesResponse> call();
     }
 

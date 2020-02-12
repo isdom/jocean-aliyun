@@ -1,38 +1,10 @@
 package org.jocean.aliyun.ecs.internal;
 
-import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.HEAD;
-import javax.ws.rs.OPTIONS;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-
 import org.jocean.aliyun.ecs.EcsAPI;
-import org.jocean.http.ContentUtil;
-import org.jocean.http.Interact;
-import org.jocean.http.RpcRunner;
-import org.jocean.rpc.annotation.ConstParams;
-import org.jocean.rpc.annotation.ResponseType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import io.netty.handler.codec.http.HttpMethod;
-import rx.Observable;
-import rx.Observable.Transformer;
-import rx.functions.Func1;
 
 public class DefaultEcsAPI implements EcsAPI {
+
+    /*
     private static final Logger LOG = LoggerFactory.getLogger(DefaultEcsAPI.class);
 
     public static <T, R> T delegate(
@@ -163,146 +135,159 @@ public class DefaultEcsAPI implements EcsAPI {
             return null;
         }
     }
+    */
 
     // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
     @Override
     public DescribeInstancesBuilder describeInstances() {
-        return delegate2(EcsAPI.class, DescribeInstancesBuilder.class, "aliyun.ecs.describeInstances", null);
+//        return delegate2(EcsAPI.class, DescribeInstancesBuilder.class, "aliyun.ecs.describeInstances", null);
+        return null;
     }
 
     @Override
     public DescribeSpotPriceHistoryBuilder describeSpotPriceHistory() {
-        return delegate(DescribeSpotPriceHistoryBuilder.class,
-                "aliyun.ecs.describeSpotPriceHistory",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "DescribeSpotPriceHistory")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class)
-                );
+//        return delegate(DescribeSpotPriceHistoryBuilder.class,
+//                "aliyun.ecs.describeSpotPriceHistory",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "DescribeSpotPriceHistory")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, DescribeSpotPriceHistoryResponse.class)
+//                );
+        return null;
     }
 
     @Override
     public CreateInstanceBuilder createInstance() {
-        return delegate(CreateInstanceBuilder.class,
-                "aliyun.ecs.createInstance",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "CreateInstance")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, CreateInstanceResponse.class)
-            );
+//        return delegate(CreateInstanceBuilder.class,
+//                "aliyun.ecs.createInstance",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "CreateInstance")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, CreateInstanceResponse.class)
+//            );
+        return null;
     }
 
     @Override
     public StartInstanceBuilder startInstance() {
-        return delegate(StartInstanceBuilder.class,
-                "aliyun.ecs.startInstance",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "StartInstance")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, StartInstanceResponse.class)
-            );
+//        return delegate(StartInstanceBuilder.class,
+//                "aliyun.ecs.startInstance",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "StartInstance")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, StartInstanceResponse.class)
+//            );
+        return null;
     }
 
     @Override
     public RebootInstanceBuilder rebootInstance() {
-        return delegate(RebootInstanceBuilder.class,
-                "aliyun.ecs.rebootInstance",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "RebootInstance")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, RebootInstanceResponse.class)
-            );
+//        return delegate(RebootInstanceBuilder.class,
+//                "aliyun.ecs.rebootInstance",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "RebootInstance")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, RebootInstanceResponse.class)
+//            );
+        return null;
     }
 
     @Override
     public StopInstanceBuilder stopInstance() {
-        return delegate(StopInstanceBuilder.class,
-                "aliyun.ecs.stopInstance",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "StopInstance")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, StopInstanceResponse.class)
-            );
+//        return delegate(StopInstanceBuilder.class,
+//                "aliyun.ecs.stopInstance",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "StopInstance")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, StopInstanceResponse.class)
+//            );
+        return null;
     }
 
     @Override
     public DeleteInstanceBuilder deleteInstance() {
-        return delegate(DeleteInstanceBuilder.class,
-                "aliyun.ecs.deleteInstance",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "DeleteInstance")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, DeleteInstanceResponse.class)
-            );
+//        return delegate(DeleteInstanceBuilder.class,
+//                "aliyun.ecs.deleteInstance",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "DeleteInstance")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, DeleteInstanceResponse.class)
+//            );
+        return null;
     }
 
     @Override
     public AttachInstanceRamRoleBuilder attachInstanceRamRole() {
-        return delegate(AttachInstanceRamRoleBuilder.class,
-                "aliyun.ecs.attachInstanceRamRole",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "AttachInstanceRamRole")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, AttachInstanceRamRoleResponse.class)
-            );
+//        return delegate(AttachInstanceRamRoleBuilder.class,
+//                "aliyun.ecs.attachInstanceRamRole",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "AttachInstanceRamRole")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, AttachInstanceRamRoleResponse.class)
+//            );
+        return null;
     }
 
     @Override
     public DetachInstanceRamRoleBuilder detachInstanceRamRole() {
-        return delegate(DetachInstanceRamRoleBuilder.class,
-                "aliyun.ecs.detachInstanceRamRole",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "DetachInstanceRamRole")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, DetachInstanceRamRoleResponse.class)
-            );
+//        return delegate(DetachInstanceRamRoleBuilder.class,
+//                "aliyun.ecs.detachInstanceRamRole",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "DetachInstanceRamRole")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, DetachInstanceRamRoleResponse.class)
+//            );
+        return null;
     }
 
     @Override
     public DescribeInstanceStatusBuilder describeInstanceStatus() {
-        return delegate2(EcsAPI.class, DescribeInstanceStatusBuilder.class, "aliyun.ecs.describeInstanceStatus", null);
+//        return delegate2(EcsAPI.class, DescribeInstanceStatusBuilder.class, "aliyun.ecs.describeInstanceStatus", null);
+        return null;
     }
 
     @Override
     public RenewInstanceBuilder renewInstance() {
-        return delegate(RenewInstanceBuilder.class,
-                "aliyun.ecs.renewInstance",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "RenewInstance")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, RenewInstanceResponse.class)
-                );
+//        return delegate(RenewInstanceBuilder.class,
+//                "aliyun.ecs.renewInstance",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "RenewInstance")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, RenewInstanceResponse.class)
+//                );
+        return null;
     }
 
     @Override
     public ReactivateInstancesBuilder reactivateInstances() {
-        return delegate(ReactivateInstancesBuilder.class,
-                "aliyun.ecs.reactivateInstances",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "ReactivateInstances")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, ReactivateInstancesResponse.class)
-                );
+//        return delegate(ReactivateInstancesBuilder.class,
+//                "aliyun.ecs.reactivateInstances",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "ReactivateInstances")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, ReactivateInstancesResponse.class)
+//                );
+        return null;
     }
 
     @Override
@@ -313,54 +298,58 @@ public class DefaultEcsAPI implements EcsAPI {
 
     @Override
     public DescribeInstanceVncUrlBuilder describeInstanceVncUrl() {
-        return delegate(DescribeInstanceVncUrlBuilder.class,
-                "aliyun.ecs.describeInstanceVncUrl",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "DescribeInstanceVncUrl")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, DescribeInstanceVncUrlResponse.class)
-                );
+//        return delegate(DescribeInstanceVncUrlBuilder.class,
+//                "aliyun.ecs.describeInstanceVncUrl",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "DescribeInstanceVncUrl")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, DescribeInstanceVncUrlResponse.class)
+//                );
+        return null;
     }
 
     @Override
     public DescribeUserDataBuilder describeUserData() {
-        return delegate(DescribeUserDataBuilder.class,
-                "aliyun.ecs.describeUserData",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "DescribeUserData")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, DescribeUserDataResponse.class)
-                );
+//        return delegate(DescribeUserDataBuilder.class,
+//                "aliyun.ecs.describeUserData",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "DescribeUserData")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, DescribeUserDataResponse.class)
+//                );
+        return null;
     }
 
     @Override
     public DescribeInstanceAutoRenewAttributeBuilder describeInstanceAutoRenewAttribute() {
-        return delegate(DescribeInstanceAutoRenewAttributeBuilder.class,
-                "aliyun.ecs.describeInstanceAutoRenewAttribute",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "DescribeInstanceAutoRenewAttribute")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, DescribeInstanceAutoRenewAttributeResponse.class)
-                );
+//        return delegate(DescribeInstanceAutoRenewAttributeBuilder.class,
+//                "aliyun.ecs.describeInstanceAutoRenewAttribute",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "DescribeInstanceAutoRenewAttribute")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, DescribeInstanceAutoRenewAttributeResponse.class)
+//                );
+        return null;
     }
 
     @Override
     public DescribeInstanceRamRoleBuilder describeInstanceRamRole() {
-        return delegate(DescribeInstanceRamRoleBuilder.class,
-                "aliyun.ecs.describeInstanceRamRole",
-                interact -> interact.method(HttpMethod.GET)
-                    .uri("https://ecs.aliyuncs.com")
-                    .path("/")
-                    .paramAsQuery("Action", "DescribeInstanceRamRole")
-                    .paramAsQuery("Version", "2014-05-26")
-                    .responseAs(ContentUtil.ASJSON, DescribeInstanceRamRoleResponse.class)
-                );
+//        return delegate(DescribeInstanceRamRoleBuilder.class,
+//                "aliyun.ecs.describeInstanceRamRole",
+//                interact -> interact.method(HttpMethod.GET)
+//                    .uri("https://ecs.aliyuncs.com")
+//                    .path("/")
+//                    .paramAsQuery("Action", "DescribeInstanceRamRole")
+//                    .paramAsQuery("Version", "2014-05-26")
+//                    .responseAs(ContentUtil.ASJSON, DescribeInstanceRamRoleResponse.class)
+//                );
+        return null;
     }
 
     @Override

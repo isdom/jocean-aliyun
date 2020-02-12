@@ -1,13 +1,9 @@
 package org.jocean.aliyun.ivision.internal;
 
-import org.jocean.aliyun.ecs.internal.DefaultEcsAPI;
 import org.jocean.aliyun.ivision.IvisionAPI;
-import org.jocean.http.ContentUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-
-import io.netty.handler.codec.http.HttpMethod;
 
 public class DefaultIvisionAPI implements IvisionAPI {
 
@@ -15,6 +11,7 @@ public class DefaultIvisionAPI implements IvisionAPI {
 
     @Override
     public CreateProjectBuilder createProject() {
+        /*
         return DefaultEcsAPI.delegate(CreateProjectBuilder.class,
                 "aliyun.ivision.createProject",
                 interact -> interact.method(HttpMethod.GET)
@@ -25,10 +22,13 @@ public class DefaultIvisionAPI implements IvisionAPI {
                     .paramAsQuery("Version", "2019-03-08")
                     .responseAs(ContentUtil.ASJSON, CreateProjectResponse.class)
             );
+            */
+        return null;
     }
 
     @Override
     public DescribeIterationsBuilder describeIterations() {
+        /*
         return DefaultEcsAPI.delegate(DescribeIterationsBuilder.class,
                 "aliyun.ivision.describeIterations",
                 interact -> interact.method(HttpMethod.GET)
@@ -39,10 +39,13 @@ public class DefaultIvisionAPI implements IvisionAPI {
                     .paramAsQuery("Version", "2019-03-08")
                     .responseAs(ContentUtil.ASJSON, DescribeIterationsResponse.class)
             );
+        */
+        return null;
     }
 
     @Override
     public DeleteIterationBuilder deleteIteration() {
+        /*
         return DefaultEcsAPI.delegate(DeleteIterationBuilder.class,
                 "aliyun.ivision.deleteIteration",
                 interact -> interact.method(HttpMethod.GET)
@@ -53,10 +56,13 @@ public class DefaultIvisionAPI implements IvisionAPI {
                     .paramAsQuery("Version", "2019-03-08")
                     .responseAs(ContentUtil.ASJSON, DeleteIterationResponse.class)
             );
+        */
+        return null;
     }
 
     @Override
     public PredictImageBuilder predictImage() {
+        /*
         return DefaultEcsAPI.delegate(PredictImageBuilder.class,
                 "aliyun.ivision.predictImage",
                 interact -> interact.method(HttpMethod.GET)
@@ -67,10 +73,13 @@ public class DefaultIvisionAPI implements IvisionAPI {
                     .paramAsQuery("Version", "2019-03-08")
                     .responseAs(ContentUtil.ASJSON, PredictImageResponse.class)
             );
+        */
+        return null;
     }
 
     @Override
     public DescribePredictDatasBuilder describePredictDatas() {
+        /*
         return DefaultEcsAPI.delegate(DescribePredictDatasBuilder.class,
                 "aliyun.ivision.describePredictDatas",
                 interact -> interact.method(HttpMethod.GET)
@@ -81,10 +90,13 @@ public class DefaultIvisionAPI implements IvisionAPI {
                     .paramAsQuery("Version", "2019-03-08")
                     .responseAs(ContentUtil.ASJSON, DescribePredictDatasResponse.class)
             );
+        */
+        return null;
     }
 
     @Override
     public DeletePredictDatasBuilder deletePredictDatas() {
+        /*
         return DefaultEcsAPI.delegate(DeletePredictDatasBuilder.class,
                 "aliyun.ivision.deletePredictDatas",
                 interact -> interact.method(HttpMethod.GET)
@@ -95,6 +107,8 @@ public class DefaultIvisionAPI implements IvisionAPI {
                     .paramAsQuery("Version", "2019-03-08")
                     .responseAs(ContentUtil.ASJSON, DeletePredictDatasResponse.class)
             );
+        */
+        return null;
     }
 
     @Value("${regionid}")

@@ -582,6 +582,9 @@ public interface EcsAPI {
         @QueryParam("NetworkType")
         DescribeSpotPriceHistoryBuilder networkType(final String networkType);
 
+        @GET
+        @ConstParams({"Action", "DescribeSpotPriceHistory"})
+        @ResponseType(DescribeSpotPriceHistoryResponse.class)
         Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> call();
     }
 
@@ -738,6 +741,9 @@ public interface EcsAPI {
         @QueryParam("Tenancy")
         CreateInstanceBuilder tenancy(final String tenancy);
 
+        @GET
+        @ConstParams({"Action", "CreateInstance"})
+        @ResponseType(CreateInstanceResponse.class)
         Transformer<RpcRunner, CreateInstanceResponse> call();
     }
 
@@ -756,6 +762,9 @@ public interface EcsAPI {
         @QueryParam("OwnerAccount")
         StartInstanceBuilder ownerAccount(final String ownerAccount);
 
+        @GET
+        @ConstParams({"Action", "StartInstance"})
+        @ResponseType(StartInstanceResponse.class)
         Transformer<RpcRunner, StartInstanceResponse> call();
     }
 
@@ -774,6 +783,9 @@ public interface EcsAPI {
         @QueryParam("ForceStop")
         RebootInstanceBuilder forceStop(final boolean forceStop);
 
+        @GET
+        @ConstParams({"Action", "RebootInstance"})
+        @ResponseType(RebootInstanceResponse.class)
         Transformer<RpcRunner, RebootInstanceResponse> call();
     }
 
@@ -795,6 +807,9 @@ public interface EcsAPI {
         @QueryParam("ConfirmStop")
         StopInstanceBuilder confirmStop(final boolean confirmStop);
 
+        @GET
+        @ConstParams({"Action", "StopInstance"})
+        @ResponseType(StopInstanceResponse.class)
         Transformer<RpcRunner, StopInstanceResponse> call();
     }
 
@@ -813,11 +828,13 @@ public interface EcsAPI {
         @QueryParam("TerminateSubscription")
         DeleteInstanceBuilder terminateSubscription(final boolean terminateSubscription);
 
+        @GET
+        @ConstParams({"Action", "DeleteInstance"})
+        @ResponseType(DeleteInstanceResponse.class)
         Transformer<RpcRunner, DeleteInstanceResponse> call();
     }
 
     DeleteInstanceBuilder deleteInstance();
-
 
     interface AttachInstanceRamRoleResult {
         @JSONField(name="Success")
@@ -893,6 +910,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachInstanceRamRoleBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "AttachInstanceRamRole"})
+        @ResponseType(AttachInstanceRamRoleResponse.class)
         Transformer<RpcRunner, AttachInstanceRamRoleResponse> call();
     }
 
@@ -988,6 +1008,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachInstanceRamRoleBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DetachInstanceRamRole"})
+        @ResponseType(DetachInstanceRamRoleResponse.class)
         Transformer<RpcRunner, DetachInstanceRamRoleResponse> call();
     }
 
@@ -1069,6 +1092,9 @@ public interface EcsAPI {
         @QueryParam("ClientToken")
         RenewInstanceBuilder clientToken(final String clientToken);
 
+        @GET
+        @ConstParams({"Action", "RenewInstance"})
+        @ResponseType(RenewInstanceResponse.class)
         Transformer<RpcRunner, RenewInstanceResponse> call();
     }
 
@@ -1083,6 +1109,9 @@ public interface EcsAPI {
         @QueryParam("InstanceId")
         ReactivateInstancesBuilder instanceId(final String instanceId);
 
+        @GET
+        @ConstParams({"Action", "ReactivateInstances"})
+        @ResponseType(ReactivateInstancesResponse.class)
         Transformer<RpcRunner, ReactivateInstancesResponse> call();
     }
 
@@ -1122,6 +1151,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceVncUrlBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstanceVncUrl"})
+        @ResponseType(DescribeInstanceVncUrlResponse.class)
         Transformer<RpcRunner, DescribeInstanceVncUrlResponse> call();
     }
 
@@ -1156,6 +1188,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeUserDataBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeUserData"})
+        @ResponseType(DescribeUserDataResponse.class)
         Transformer<RpcRunner, DescribeUserDataResponse> call();
     }
 
@@ -1225,6 +1260,9 @@ public interface EcsAPI {
         @QueryParam("RenewalStatus")
         DescribeInstanceAutoRenewAttributeBuilder renewalStatus(final String renewalStatus);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstanceAutoRenewAttribute"})
+        @ResponseType(DescribeInstanceAutoRenewAttributeResponse.class)
         Transformer<RpcRunner, DescribeInstanceAutoRenewAttributeResponse> call();
     }
 
@@ -1265,6 +1303,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceRamRoleBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstanceRamRole"})
+        @ResponseType(DescribeInstanceRamRoleResponse.class)
         Transformer<RpcRunner, DescribeInstanceRamRoleResponse> call();
     }
 

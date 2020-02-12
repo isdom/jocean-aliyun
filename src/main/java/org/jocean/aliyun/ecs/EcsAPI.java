@@ -4,9 +4,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import org.jocean.aliyun.annotation.ConstParams;
-import org.jocean.aliyun.annotation.ResponseType;
 import org.jocean.http.RpcRunner;
+import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 

@@ -119,4 +119,10 @@ public class DefaultIvisionAPI implements IvisionAPI {
 
     @Value("${ak_secret}")
     String _ak_secret;
+
+    @Override
+    public ImagePredictBuilder imagePredict() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

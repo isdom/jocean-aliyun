@@ -1,8 +1,11 @@
 package org.jocean.aliyun.ivision;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.http.RpcRunner;
+import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -359,4 +362,28 @@ public interface IvisionAPI {
     }
 
     public DeletePredictDatasBuilder deletePredictDatas();
+
+    //  https://help.aliyun.com/document_detail/95921.html?spm=a2c4g.11186623.6.564.71014dc0SBzhhV
+    public interface ImagePredictResponse extends IvisionResponse {
+        @JSONField(name="PredictDatas")
+        public PredictDatas getPredictDatas();
+
+        @JSONField(name="PredictDatas")
+        public void setPredictDatas(final PredictDatas datas);
+    }
+
+    interface ImagePredictBuilder {
+        @QueryParam("ModelId")
+        ImagePredictBuilder modelId(final String modelId);
+
+        @QueryParam("DataUrl")
+        ImagePredictBuilder imgurls(final String imgurl);
+
+        @GET
+        @ConstParams({"Action", "ImagePredict", "Version", "2019-03-08"})
+        @ResponseType(ImagePredictResponse.class)
+        Transformer<RpcRunner, ImagePredictResponse> call();
+    }
+
+    public ImagePredictBuilder imagePredict();
 }

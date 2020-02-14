@@ -1,6 +1,7 @@
 package org.jocean.aliyun.ivision;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.http.RpcRunner;
@@ -11,6 +12,8 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import rx.Observable.Transformer;
 
+@Path("http://ivision.cn-beijing.aliyuncs.com/")
+@ConstParams({"Version", "2019-03-08"})
 public interface IvisionAPI {
     public interface IvisionResponse {
         @JSONField(name="Code")
@@ -363,13 +366,63 @@ public interface IvisionAPI {
 
     public DeletePredictDatasBuilder deletePredictDatas();
 
+    interface ImagePredict {
+        @JSONField(name="Code")
+        public String getCode();
+
+        @JSONField(name="Code")
+        public void setCode(final String code);
+
+        @JSONField(name="Message")
+        public String getMessage();
+
+        @JSONField(name="Message")
+        public void setMessage(final String message);
+
+        @JSONField(name="ModelId")
+        public String getModelId();
+
+        @JSONField(name="ModelId")
+        public void setModelId(final String modelId);
+
+        @JSONField(name="DataUrl")
+        public String getDataUrl();
+
+        @JSONField(name="DataUrl")
+        public void setDataUrl(final String dataUrl);
+
+        @JSONField(name="PredictId")
+        public String getPredictId();
+
+        @JSONField(name="PredictId")
+        public void setPredictId(final String predictId);
+
+        @JSONField(name="PredictResult")
+        public String getPredictResult();
+
+        @JSONField(name="PredictResult")
+        public void setPredictResult(final String predictResult);
+
+        @JSONField(name="PredictTime")
+        public String getPredictTime();
+
+        @JSONField(name="PredictTime")
+        public void setPredictTime(final String predictTime);
+
+        @JSONField(name="Status")
+        public String getStatus();
+
+        @JSONField(name="Status")
+        public void setStatus(final String status);
+    }
+
     //  https://help.aliyun.com/document_detail/95921.html?spm=a2c4g.11186623.6.564.71014dc0SBzhhV
     public interface ImagePredictResponse extends IvisionResponse {
-        @JSONField(name="PredictDatas")
-        public PredictDatas getPredictDatas();
+        @JSONField(name="ImagePredict")
+        public ImagePredict getImagePredict();
 
-        @JSONField(name="PredictDatas")
-        public void setPredictDatas(final PredictDatas datas);
+        @JSONField(name="ImagePredict")
+        public void setImagePredict(final ImagePredict imagePredict);
     }
 
     interface ImagePredictBuilder {
@@ -377,10 +430,10 @@ public interface IvisionAPI {
         ImagePredictBuilder modelId(final String modelId);
 
         @QueryParam("DataUrl")
-        ImagePredictBuilder imgurls(final String imgurl);
+        ImagePredictBuilder dataUrl(final String dataUrl);
 
         @GET
-        @ConstParams({"Action", "ImagePredict", "Version", "2019-03-08"})
+        @ConstParams({"Action", "ImagePredict"})
         @ResponseType(ImagePredictResponse.class)
         Transformer<RpcRunner, ImagePredictResponse> call();
     }

@@ -439,4 +439,64 @@ public interface IvisionAPI {
     }
 
     public ImagePredictBuilder imagePredict();
+
+    public interface Rect {
+        @JSONField(name="left")
+        public int getLeft();
+
+        @JSONField(name="left")
+        public void setLeft(final int left);
+
+        @JSONField(name="top")
+        public int getTop();
+
+        @JSONField(name="top")
+        public void setTop(final int top);
+
+        @JSONField(name="width")
+        public int getWidth();
+
+        @JSONField(name="width")
+        public void setWidth(final int width);
+
+        @JSONField(name="height")
+        public int getHeight();
+
+        @JSONField(name="height")
+        public void setHeight(final int height);
+    }
+
+    public interface PredictResult {
+        @JSONField(name="rect")
+        public Rect getRect();
+
+        @JSONField(name="rect")
+        public void setRect(final Rect rect);
+
+        @JSONField(name="tagId")
+        public String getTagId();
+
+        @JSONField(name="tagId")
+        public void setTagId(final String tagId);
+
+        @JSONField(name="probability")
+        public float getProbability();
+
+        @JSONField(name="probability")
+        public void setProbability(final float probability);
+
+        @JSONField(name="tagName")
+        public String getTagName();
+
+        @JSONField(name="tagName")
+        public void setTagName(final String tagName);
+    }
+
+    public interface PredictResults {
+        @JSONField(name="objects")
+        public PredictResult[] getObjects();
+
+        @JSONField(name="objects")
+        public void setObjects(final PredictResult[] predictResults);
+    }
 }

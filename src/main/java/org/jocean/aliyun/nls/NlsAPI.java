@@ -1,6 +1,5 @@
 package org.jocean.aliyun.nls;
 
-import org.jocean.aliyun.nls.NlsmetaAPI.CreateTokenBuilder;
 import org.jocean.http.MessageBody;
 import org.jocean.http.RpcRunner;
 
@@ -38,7 +37,7 @@ public interface NlsAPI {
 
 
     public Transformer<RpcRunner, AsrResponse> streamAsrV1(
-            CreateTokenBuilder builder,
+            final String token,
             final MessageBody content,
             final String format,
             final int sample_rate);

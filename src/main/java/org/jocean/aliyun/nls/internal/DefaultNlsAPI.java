@@ -1,7 +1,6 @@
 package org.jocean.aliyun.nls.internal;
 
 import org.jocean.aliyun.nls.NlsAPI;
-import org.jocean.aliyun.nls.NlsmetaAPI.CreateTokenBuilder;
 import org.jocean.http.ContentUtil;
 import org.jocean.http.MessageBody;
 import org.jocean.http.RpcRunner;
@@ -23,12 +22,11 @@ public class DefaultNlsAPI implements NlsAPI {
 
     @Override
     public Transformer<RpcRunner, AsrResponse> streamAsrV1(
-            final CreateTokenBuilder builder,
+            final String token,
             final MessageBody content,
             final String format,
             final int sample_rate) {
-        return runners -> runners.compose(builder.call()).flatMap(resp ->
-            runners.flatMap(runner -> runner.name("nls.streamAsrV1").execute(
+        return runners -> runners.flatMap(runner -> runner.name("nls.streamAsrV1").execute(
                 interact -> {
                     interact = interact.method(HttpMethod.POST)
                         .uri("http://nls-gateway.cn-shanghai.aliyuncs.com")
@@ -46,7 +44,7 @@ public class DefaultNlsAPI implements NlsAPI {
                     return interact.onrequest( obj -> {
                         if (obj instanceof HttpRequest) {
                             final HttpRequest req = (HttpRequest)obj;
-                            req.headers().set("X-NLS-Token", resp.getNlsToken().getId());
+                            req.headers().set("X-NLS-Token", token);
                             req.headers().set(HttpHeaderNames.CONTENT_TYPE, HttpHeaderValues.APPLICATION_OCTET_STREAM);
                             HttpUtil.setContentLength(req, content.contentLength());
                         }
@@ -54,7 +52,7 @@ public class DefaultNlsAPI implements NlsAPI {
                     .body(Observable.just(content))
                     .responseAs(ContentUtil.ASJSON, AsrResponse.class);
                 }
-            )));
+            ));
     }
 
     @Value("${appkey}")

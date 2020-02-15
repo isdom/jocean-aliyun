@@ -4,13 +4,16 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import org.jocean.http.Interact;
 import org.jocean.http.RpcRunner;
 import org.jocean.rpc.annotation.ConstParams;
 import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import rx.Observable;
 import rx.Observable.Transformer;
+import rx.functions.Func1;
 
 @Path("http://ivision.cn-beijing.aliyuncs.com/")
 @ConstParams({"Version", "2019-03-08"})
@@ -435,7 +438,7 @@ public interface IvisionAPI {
         @GET
         @ConstParams({"Action", "ImagePredict"})
         @ResponseType(ImagePredictResponse.class)
-        Transformer<RpcRunner, ImagePredictResponse> call();
+        Func1<Interact, Observable<ImagePredictResponse>> call();
     }
 
     public ImagePredictBuilder imagePredict();

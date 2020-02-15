@@ -21,20 +21,6 @@ public class DefaultNlsAPI implements NlsAPI {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultNlsAPI.class);
 
-//    @Override
-//    public CreateTokenBuilder createToken() {
-//        return DefaultEcsAPI.delegate(CreateTokenBuilder.class,
-//                "aliyun.nls.createToken",
-//                interact -> interact.method(HttpMethod.GET)
-//                    .uri("http://nls-meta.cn-shanghai.aliyuncs.com")
-//                    .path("/")
-//                    .paramAsQuery("RegionId", _region)
-//                    .paramAsQuery("Action", "CreateToken")
-//                    .paramAsQuery("Version", "2019-02-28")
-//                    .responseAs(ContentUtil.ASJSON, CreateTokenResponse.class)
-//            );
-//    }
-
     @Override
     public Transformer<RpcRunner, AsrResponse> streamAsrV1(
             final CreateTokenBuilder builder,
@@ -70,9 +56,6 @@ public class DefaultNlsAPI implements NlsAPI {
                 }
             )));
     }
-
-    @Value("${regionid}")
-    String _region;
 
     @Value("${appkey}")
     String _appkey;

@@ -11,9 +11,7 @@ import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-import rx.Observable;
 import rx.Observable.Transformer;
-import rx.functions.Func1;
 
 @Path("http://ivision.cn-beijing.aliyuncs.com/")
 @ConstParams({"Version", "2019-03-08"})
@@ -438,7 +436,7 @@ public interface IvisionAPI {
         @GET
         @ConstParams({"Action", "ImagePredict"})
         @ResponseType(ImagePredictResponse.class)
-        Func1<Interact, Observable<ImagePredictResponse>> call();
+        Transformer<Interact, ImagePredictResponse> call();
     }
 
     public ImagePredictBuilder imagePredict();

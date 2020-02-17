@@ -1,7 +1,12 @@
 package org.jocean.aliyun.nls;
 
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
+
+import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
-import org.jocean.http.RpcRunner;
+import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -35,8 +40,24 @@ public interface NlsAPI {
         public void setResult(final String result);
     }
 
+    interface StreamAsrV1Builder {
+        @QueryParam("format")
+        StreamAsrV1Builder format(final String format);
 
-    public Transformer<RpcRunner, AsrResponse> streamAsrV1(
+        @QueryParam("sample_rate")
+        StreamAsrV1Builder sampleRate(final Integer sample_rate);
+
+        StreamAsrV1Builder body(final MessageBody body);
+
+        @POST
+        @Path("http://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/asr")
+        @ResponseType(AsrResponse.class)
+        Transformer<Interact, AsrResponse> call();
+    }
+
+    public StreamAsrV1Builder streamAsrV1();
+
+    public Transformer<Interact, AsrResponse> streamAsrV1(
             final String token,
             final MessageBody content,
             final String format,

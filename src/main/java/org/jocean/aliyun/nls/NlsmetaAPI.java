@@ -3,7 +3,7 @@ package org.jocean.aliyun.nls;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
-import org.jocean.http.RpcRunner;
+import org.jocean.http.Interact;
 import org.jocean.rpc.annotation.ConstParams;
 import org.jocean.rpc.annotation.ResponseType;
 
@@ -65,7 +65,7 @@ public interface NlsmetaAPI {
         @Path("http://nls-meta.cn-shanghai.aliyuncs.com/")
         @ConstParams({"Action", "CreateToken", "Version", "2019-02-28", "RegionId", "cn-shanghai"})
         @ResponseType(CreateTokenResponse.class)
-        Transformer<RpcRunner, CreateTokenResponse> call();
+        Transformer<Interact, CreateTokenResponse> call();
     }
 
     // https://help.aliyun.com/document_detail/113251.html?spm=a2c4g.11186623.2.16.5bca7229C5kw00

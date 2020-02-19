@@ -10,6 +10,7 @@ import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import rx.Observable;
 import rx.Observable.Transformer;
 
 public interface NlsAPI {
@@ -47,7 +48,7 @@ public interface NlsAPI {
         @QueryParam("sample_rate")
         StreamAsrV1Builder sampleRate(final Integer sample_rate);
 
-        StreamAsrV1Builder body(final MessageBody body);
+        StreamAsrV1Builder body(final Observable<MessageBody> body);
 
         @POST
         @Path("http://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/asr")
@@ -55,6 +56,7 @@ public interface NlsAPI {
         Transformer<Interact, AsrResponse> call();
     }
 
+    // https://help.aliyun.com/document_detail/92131.html?spm=a2c4g.11186623.6.573.68fc7142HRaq2y
     public StreamAsrV1Builder streamAsrV1();
 
     public Transformer<Interact, AsrResponse> streamAsrV1(

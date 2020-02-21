@@ -93,4 +93,16 @@ public class DefaultMetadataAPI implements MetadataAPI {
             }
         }));
     }
+
+    @Override
+    public HostnameBuilder hostname() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public STSTokenBuilder getSTSToken() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

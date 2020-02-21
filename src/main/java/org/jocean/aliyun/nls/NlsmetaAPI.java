@@ -1,7 +1,9 @@
 package org.jocean.aliyun.nls;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.Interact;
 import org.jocean.rpc.annotation.ConstParams;
@@ -64,6 +66,7 @@ public interface NlsmetaAPI {
         @GET
         @Path("http://nls-meta.cn-shanghai.aliyuncs.com/")
         @ConstParams({"Action", "CreateToken", "Version", "2019-02-28", "RegionId", "cn-shanghai"})
+        @Consumes(MediaType.APPLICATION_JSON)
         @ResponseType(CreateTokenResponse.class)
         Transformer<Interact, CreateTokenResponse> call();
     }

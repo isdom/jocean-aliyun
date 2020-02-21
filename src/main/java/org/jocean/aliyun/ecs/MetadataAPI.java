@@ -2,7 +2,15 @@ package org.jocean.aliyun.ecs;
 
 import java.util.Date;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
+
+import org.jocean.http.Interact;
 import org.jocean.http.RpcRunner;
+import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -13,7 +21,20 @@ import rx.Observable.Transformer;
 
 public interface MetadataAPI {
 
+    // TODO, change to auto generate
+
+    // change to
+    interface HostnameBuilder {
+        @GET
+        @Path("http://100.100.100.200/latest/meta-data/hostname")
+        @Consumes(MediaType.TEXT_PLAIN)
+        @ResponseType(String.class)
+        Transformer<Interact, String> call();
+    }
+
     //  获取实例的主机名
+    HostnameBuilder hostname();
+
     public Transformer<RpcRunner, String> getHostname();
 
     //  获取实例所属地域
@@ -64,6 +85,19 @@ public interface MetadataAPI {
         @JSONField(name = "LastUpdated")
         public Date getLastUpdated();
     }
+
+    interface STSTokenBuilder {
+        @PathParam("roleName")
+        STSTokenBuilder roleName(final String roleName);
+
+        @GET
+        @Path("http://100.100.100.200/latest/meta-data/ram/security-credentials/{roleName}")
+        @Consumes(MediaType.APPLICATION_JSON)
+        @ResponseType(STSTokenResponse.class)
+        Transformer<Interact, STSTokenResponse> call();
+    }
+
+    STSTokenBuilder getSTSToken();
 
     //  获取实例RAM角色策略所生成的STS临时凭证
     public Transformer<RpcRunner, STSTokenResponse> getSTSToken(final String roleName);

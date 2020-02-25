@@ -51,6 +51,12 @@ public class Signer4OSS {
 
         req.headers().set(HttpHeaderNames.DATE, buildGMT4Now(new Date()));
 
+        // 如果以STS获得的AccessKeyId和AccessKeySecret发送请求时，
+        //  还需要将获得的security-token值以x-oss-security-token:security-token的形式加入到签名字符串中。
+        if (null != ststoken) {
+            req.headers().set("x-oss-security-token", ststoken);
+        }
+
         final String host = req.headers().get(HttpHeaderNames.HOST);
         final String bucketName = host.split(".")[0];
 

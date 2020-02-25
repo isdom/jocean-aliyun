@@ -60,7 +60,7 @@ public class Signer4OSS {
         final String host = req.headers().get(HttpHeaderNames.HOST);
         LOG.debug("sign4oss: host:{}", host);
 
-        final String bucketName = host.split(".")[0];
+        final String bucketName = host.split("\\.")[0];
 
         final QueryStringDecoder decoder = new QueryStringDecoder(req.uri());
         final String objectName = decoder.path();

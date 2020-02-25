@@ -34,8 +34,7 @@ import rx.functions.Action1;
 
 public class BlobRepoOverOSS implements BlobRepo {
 
-    private static final Logger LOG =
-        LoggerFactory.getLogger(BlobRepoOverOSS.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BlobRepoOverOSS.class);
 
     @Override
     public PutObjectBuilder putObject() {

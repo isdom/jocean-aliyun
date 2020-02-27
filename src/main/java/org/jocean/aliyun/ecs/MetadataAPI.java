@@ -9,7 +9,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.Interact;
-import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -38,7 +37,6 @@ public interface MetadataAPI {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/hostname")
         @Consumes(MediaType.TEXT_PLAIN)
-        @ResponseType(String.class)
         Transformer<Interact, String> call();
     }
 
@@ -50,7 +48,6 @@ public interface MetadataAPI {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/region-id")
         @Consumes(MediaType.TEXT_PLAIN)
-        @ResponseType(String.class)
         Transformer<Interact, String> call();
     }
 
@@ -61,7 +58,6 @@ public interface MetadataAPI {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/instance-id")
         @Consumes(MediaType.TEXT_PLAIN)
-        @ResponseType(String.class)
         Transformer<Interact, String> call();
     }
 
@@ -72,7 +68,6 @@ public interface MetadataAPI {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/private-ipv4")
         @Consumes(MediaType.TEXT_PLAIN)
-        @ResponseType(String.class)
         Transformer<Interact, String> call();
     }
 
@@ -126,7 +121,6 @@ public interface MetadataAPI {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/ram/security-credentials/{roleName}")
         @Consumes(MediaType.APPLICATION_JSON)
-        @ResponseType(STSTokenResponse.class)
         Transformer<Interact, STSTokenResponse> call();
     }
 

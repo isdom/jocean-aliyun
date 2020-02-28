@@ -6,7 +6,6 @@ import javax.ws.rs.QueryParam;
 
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
-import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -52,7 +51,6 @@ public interface NlsAPI {
 
         @POST
         @Path("http://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/asr")
-        @ResponseType(AsrResponse.class)
         Transformer<Interact, AsrResponse> call();
     }
 

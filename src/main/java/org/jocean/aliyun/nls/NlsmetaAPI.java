@@ -7,7 +7,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.Interact;
 import org.jocean.rpc.annotation.ConstParams;
-import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -67,7 +66,6 @@ public interface NlsmetaAPI {
         @Path("http://nls-meta.cn-shanghai.aliyuncs.com/")
         @ConstParams({"Action", "CreateToken", "Version", "2019-02-28", "RegionId", "cn-shanghai"})
         @Consumes(MediaType.APPLICATION_JSON)
-        @ResponseType(CreateTokenResponse.class)
         Transformer<Interact, CreateTokenResponse> call();
     }
 

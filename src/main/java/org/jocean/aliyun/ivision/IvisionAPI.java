@@ -7,7 +7,6 @@ import javax.ws.rs.QueryParam;
 import org.jocean.http.Interact;
 import org.jocean.http.RpcRunner;
 import org.jocean.rpc.annotation.ConstParams;
-import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -435,7 +434,6 @@ public interface IvisionAPI {
 
         @GET
         @ConstParams({"Action", "ImagePredict"})
-        @ResponseType(ImagePredictResponse.class)
         Transformer<Interact, ImagePredictResponse> call();
     }
 

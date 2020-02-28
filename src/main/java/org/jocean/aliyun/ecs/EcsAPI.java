@@ -6,7 +6,6 @@ import javax.ws.rs.QueryParam;
 
 import org.jocean.http.RpcRunner;
 import org.jocean.rpc.annotation.ConstParams;
-import org.jocean.rpc.annotation.ResponseType;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -484,7 +483,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstances"})
-        @ResponseType(DescribeInstancesResponse.class)
         Transformer<RpcRunner, DescribeInstancesResponse> call();
     }
 
@@ -584,7 +582,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeSpotPriceHistory"})
-        @ResponseType(DescribeSpotPriceHistoryResponse.class)
         Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> call();
     }
 
@@ -743,7 +740,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "CreateInstance"})
-        @ResponseType(CreateInstanceResponse.class)
         Transformer<RpcRunner, CreateInstanceResponse> call();
     }
 
@@ -764,7 +760,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StartInstance"})
-        @ResponseType(StartInstanceResponse.class)
         Transformer<RpcRunner, StartInstanceResponse> call();
     }
 
@@ -785,7 +780,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RebootInstance"})
-        @ResponseType(RebootInstanceResponse.class)
         Transformer<RpcRunner, RebootInstanceResponse> call();
     }
 
@@ -809,7 +803,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StopInstance"})
-        @ResponseType(StopInstanceResponse.class)
         Transformer<RpcRunner, StopInstanceResponse> call();
     }
 
@@ -830,7 +823,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DeleteInstance"})
-        @ResponseType(DeleteInstanceResponse.class)
         Transformer<RpcRunner, DeleteInstanceResponse> call();
     }
 
@@ -912,7 +904,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "AttachInstanceRamRole"})
-        @ResponseType(AttachInstanceRamRoleResponse.class)
         Transformer<RpcRunner, AttachInstanceRamRoleResponse> call();
     }
 
@@ -1010,7 +1001,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DetachInstanceRamRole"})
-        @ResponseType(DetachInstanceRamRoleResponse.class)
         Transformer<RpcRunner, DetachInstanceRamRoleResponse> call();
     }
 
@@ -1060,7 +1050,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceStatus"})
-        @ResponseType(DescribeInstanceStatusResponse.class)
         Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
     }
 
@@ -1094,7 +1083,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RenewInstance"})
-        @ResponseType(RenewInstanceResponse.class)
         Transformer<RpcRunner, RenewInstanceResponse> call();
     }
 
@@ -1111,7 +1099,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "ReactivateInstances"})
-        @ResponseType(ReactivateInstancesResponse.class)
         Transformer<RpcRunner, ReactivateInstancesResponse> call();
     }
 
@@ -1153,7 +1140,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceVncUrl"})
-        @ResponseType(DescribeInstanceVncUrlResponse.class)
         Transformer<RpcRunner, DescribeInstanceVncUrlResponse> call();
     }
 
@@ -1190,7 +1176,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeUserData"})
-        @ResponseType(DescribeUserDataResponse.class)
         Transformer<RpcRunner, DescribeUserDataResponse> call();
     }
 
@@ -1262,7 +1247,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceAutoRenewAttribute"})
-        @ResponseType(DescribeInstanceAutoRenewAttributeResponse.class)
         Transformer<RpcRunner, DescribeInstanceAutoRenewAttributeResponse> call();
     }
 
@@ -1305,7 +1289,6 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceRamRole"})
-        @ResponseType(DescribeInstanceRamRoleResponse.class)
         Transformer<RpcRunner, DescribeInstanceRamRoleResponse> call();
     }
 

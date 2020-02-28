@@ -133,7 +133,7 @@ public class BlobRepoOverOSS implements BlobRepo {
     @Override
     public Transformer<RpcRunner, SimplifiedObjectMeta> getSimplifiedObjectMeta(final String objectName) {
         return runners -> runners.flatMap( run -> run.name("oss.getSimplifiedObjectMeta").execute(
-                interact->interact.name("oss.getSimplifiedObjectMeta").method(HttpMethod.GET).uri(uri4bucket())
+                interact->interact.name("oss.getSimplifiedObjectMeta").method(HttpMethod.HEAD).uri(uri4bucket())
                 .path("/" + objectName + "?objectMeta")
                 .onrequest(signRequest(objectName))
                 .response()

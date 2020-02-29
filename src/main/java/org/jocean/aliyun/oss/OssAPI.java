@@ -242,23 +242,23 @@ public interface OssAPI {
 
     public ListObjectsBuilder listObjects();
 
-    interface GetSimplifiedObjectMetaBuilder {
+    interface GetObjectMetaBuilder {
 
         @PathParam("object")
-        GetSimplifiedObjectMetaBuilder object(final String object);
+        GetObjectMetaBuilder object(final String object);
 
         @PathParam("bucket")
-        GetSimplifiedObjectMetaBuilder bucket(final String bucket);
+        GetObjectMetaBuilder bucket(final String bucket);
 
         @PathParam("endpoint")
-        GetSimplifiedObjectMetaBuilder endpoint(final String endpoint);
+        GetObjectMetaBuilder endpoint(final String endpoint);
 
         @HEAD
         @Path("http://{bucket}.{endpoint}/{object}?objectMeta")
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public GetSimplifiedObjectMetaBuilder getSimplifiedObjectMeta();
+    public GetObjectMetaBuilder getObjectMeta();
 
     /* REF: https://help.aliyun.com/document_detail/31979.html?spm=a2c4g.11186623.6.926.p75n2Q
      * API:

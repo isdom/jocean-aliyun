@@ -223,10 +223,23 @@ public interface OssAPI {
         }
     }
 
+    //  https://help.aliyun.com/document_detail/31965.html?spm=a2c4g.11186623.6.1570.68afb81eXwEqgq
     interface ListObjectsBuilder {
 
-        @QueryParam("prefix")
+        @QueryParam("Prefix")
         ListObjectsBuilder prefix(final String prefix);
+
+        @QueryParam("Marker")
+        ListObjectsBuilder marker(final String marker);
+
+        @QueryParam("Max-keys")
+        ListObjectsBuilder maxKeys(final String maxKeys);
+
+        @QueryParam("Delimiter")
+        ListObjectsBuilder delimiter(final String delimiter);
+
+        @QueryParam("Encoding-type")
+        ListObjectsBuilder encodingType(final String encodingType);
 
         @PathParam("bucket")
         ListObjectsBuilder bucket(final String bucket);
@@ -242,6 +255,7 @@ public interface OssAPI {
 
     public ListObjectsBuilder listObjects();
 
+    // https://help.aliyun.com/document_detail/31985.html?spm=a2c4g.11186623.6.1603.15ec810cYy37lP
     interface GetObjectMetaBuilder {
 
         @PathParam("object")

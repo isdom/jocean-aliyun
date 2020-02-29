@@ -226,19 +226,19 @@ public interface OssAPI {
     //  https://help.aliyun.com/document_detail/31965.html?spm=a2c4g.11186623.6.1570.68afb81eXwEqgq
     interface ListObjectsBuilder {
 
-        @QueryParam("Prefix")
+        @QueryParam("prefix")
         ListObjectsBuilder prefix(final String prefix);
 
-        @QueryParam("Marker")
+        @QueryParam("marker")
         ListObjectsBuilder marker(final String marker);
 
-        @QueryParam("Max-keys")
+        @QueryParam("max-keys")
         ListObjectsBuilder maxKeys(final String maxKeys);
 
-        @QueryParam("Delimiter")
+        @QueryParam("delimiter")
         ListObjectsBuilder delimiter(final String delimiter);
 
-        @QueryParam("Encoding-type")
+        @QueryParam("encoding-type")
         ListObjectsBuilder encodingType(final String encodingType);
 
         @PathParam("bucket")

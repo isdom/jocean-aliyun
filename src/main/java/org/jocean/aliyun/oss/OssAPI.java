@@ -1,6 +1,7 @@
 package org.jocean.aliyun.oss;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -14,11 +15,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.jocean.aliyun.BlobRepo.OSSObjectSummary;
 import org.jocean.http.FullMessage;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 
+import com.aliyun.oss.model.Bucket;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -65,6 +66,317 @@ public interface OssAPI {
     }
 
     public GetObjectBuilder getObject();
+
+    public static class Owner {
+
+        /**
+         * Constructor.
+         */
+        public Owner() {
+        }
+
+        /**
+         * Constructor.
+         *
+         * @param id
+         *            Owner Id.
+         * @param displayName
+         *            Owner display name.
+         */
+        public Owner(final String id, final String displayName) {
+            this.id = id;
+            this.displayName = displayName;
+        }
+
+        /**
+         * Serialization the owner information into string, including name and id.
+         */
+        @Override
+        public String toString() {
+            return "Owner [name=" + getDisplayName() + ",id=" + getId() + "]";
+        }
+
+        /**
+         * Gets the owner Id.
+         *
+         * @return Owner Id.
+         */
+        public String getId() {
+            return id;
+        }
+
+        /**
+         * Sets the owner Id.
+         *
+         * @param id
+         *            Owner Id.
+         */
+        @JacksonXmlProperty(localName="ID")
+        public void setId(final String id) {
+            this.id = id;
+        }
+
+        /**
+         * Gets the owner's display name
+         *
+         * @return Owner's display name.
+         */
+        public String getDisplayName() {
+            return displayName;
+        }
+
+        /**
+         * Sets the owner's display name.
+         *
+         * @param name
+         *            Owner's display name.
+         */
+        @JacksonXmlProperty(localName="DisplayName")
+        public void setDisplayName(final String name) {
+            this.displayName = name;
+        }
+
+        /**
+         * Checks if the current object equals the specified one. Override the
+         * object.Equals() method. Both Id and name must be same to return true for
+         * this method.
+         */
+        @Override
+        public boolean equals(final Object obj) {
+            if (!(obj instanceof Owner)) {
+                return false;
+            }
+
+            final Owner otherOwner = (Owner) obj;
+
+            String otherOwnerId = otherOwner.getId();
+            String otherOwnerName = otherOwner.getDisplayName();
+            String thisOwnerId = this.getId();
+            String thisOwnerName = this.getDisplayName();
+
+            if (otherOwnerId == null)
+                otherOwnerId = "";
+            if (otherOwnerName == null)
+                otherOwnerName = "";
+            if (thisOwnerId == null)
+                thisOwnerId = "";
+            if (thisOwnerName == null)
+                thisOwnerName = "";
+
+            return (otherOwnerId.equals(thisOwnerId) && otherOwnerName.equals(thisOwnerName));
+        }
+
+        /**
+         * Gets the hash code. It uses the owner's Id's hashCode.
+         */
+        @Override
+        public int hashCode() {
+            if (id != null) {
+                return id.hashCode();
+            } else {
+                return 0;
+            }
+        }
+
+        private String displayName;
+        private String id;
+    }
+
+    public static class OSSObjectSummary {
+        @Override
+        public String toString() {
+            final StringBuilder builder = new StringBuilder();
+            builder.append("OSSObjectSummary [bucketName=").append(bucketName).append(", key=").append(key)
+                    .append(", eTag=").append(eTag).append(", type=").append(type).append(", size=").append(size)
+                    .append(", lastModified=").append(lastModified).append(", storageClass=").append(storageClass)
+                    .append(", owner=").append(owner).append("]");
+            return builder.toString();
+        }
+
+        /**
+         * Constructor.
+         */
+        public OSSObjectSummary() {
+        }
+
+        /**
+         * Gets the {@link Bucket} name.
+         *
+         * @return The bucket name.
+         */
+        public String getBucketName() {
+            return bucketName;
+        }
+
+        /**
+         * Sets the {@link Bucket} name.
+         *
+         * @param bucketName
+         *            The {@link Bucket} name.
+         */
+        public void setBucketName(final String bucketName) {
+            this.bucketName = bucketName;
+        }
+
+        /**
+         * Gets the object key.
+         *
+         * @return Object key.
+         */
+        public String getKey() {
+            return key;
+        }
+
+        /**
+         * Sets the object key.
+         *
+         * @param key
+         *            Object key.
+         */
+        @JacksonXmlProperty(localName="Key")
+        public void setKey(final String key) {
+            this.key = key;
+        }
+
+        /**
+         * Gets the object ETag. ETag is a 128bit MD5 signature about the object in
+         * hex.
+         *
+         * @return ETag value.
+         */
+        public String getETag() {
+            return eTag;
+        }
+
+        /**
+         * Sets the object ETag.
+         *
+         * @param eTag
+         *            ETag value.
+         */
+        @JacksonXmlProperty(localName="ETag")
+        public void setETag(final String eTag) {
+            this.eTag = eTag;
+        }
+
+        /**
+         * Gets the object Type
+         *
+         * @return Object type.
+         */
+        public String getType() {
+            return type;
+        }
+
+        /**
+         * Sets the object Type.
+         *
+         * @param type
+         *            Object type.
+         */
+        @JacksonXmlProperty(localName="Type")
+        public void setType(final String type) {
+            this.type = type;
+        }
+
+        /**
+         * Gets the object Size
+         *
+         * @return Object size.
+         */
+        public long getSize() {
+            return size;
+        }
+
+        /**
+         * Sets the object size.
+         *
+         * @param size
+         *            Object size.
+         */
+        @JacksonXmlProperty(localName="Size")
+        public void setSize(final long size) {
+            this.size = size;
+        }
+
+        /**
+         * Gets the last modified time of the object.
+         *
+         * @return The last modified time.
+         */
+        public Date getLastModified() {
+            return lastModified;
+        }
+
+        /**
+         * Sets the last modified time.
+         *
+         * @param lastModified
+         *            Last modified time.
+         */
+        @JacksonXmlProperty(localName="LastModified")
+        public void setLastModified(final Date lastModified) {
+            this.lastModified = lastModified;
+        }
+
+        /**
+         * Gets the owner of the object.
+         *
+         * @return Object owner.
+         */
+        public Owner getOwner() {
+            return owner;
+        }
+
+        /**
+         * Sets the owner of the object.
+         *
+         * @param owner
+         *            Object owner.
+         */
+        @JacksonXmlProperty(localName="Owner")
+        public void setOwner(final Owner owner) {
+            this.owner = owner;
+        }
+
+        /**
+         * Gets the storage class of the object.
+         *
+         * @return Object storage class.
+         */
+        public String getStorageClass() {
+            return storageClass;
+        }
+
+        /**
+         * Sets the storage class of the object.
+         *
+         * @param storageClass
+         *            Object storage class.
+         */
+        @JacksonXmlProperty(localName="StorageClass")
+        public void setStorageClass(final String storageClass) {
+            this.storageClass = storageClass;
+        }
+
+        /** The name of the bucket in which this object is stored */
+        private String bucketName;
+
+        /** The key under which this object is stored */
+        private String key;
+
+        private String eTag;
+
+        private String type;
+
+        private long size;
+
+        private Date lastModified;
+
+        private String storageClass;
+
+        private Owner owner;
+    }
 
     @Consumes({"application/xml","text/xml"})
     @JacksonXmlRootElement(localName="ListBucketResult")

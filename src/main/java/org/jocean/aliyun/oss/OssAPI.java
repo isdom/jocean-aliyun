@@ -9,6 +9,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
 import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,16 +30,20 @@ import rx.Observable;
 import rx.Observable.Transformer;
 
 public interface OssAPI {
-    interface PutObjectBuilder {
+    interface Endpointable<BUILDER> {
+        @PathParam("endpoint")
+        BUILDER endpoint(final String endpoint);
+    }
+
+    interface Bucketable<BUILDER> extends Endpointable<BUILDER> {
+        @PathParam("bucket")
+        BUILDER bucket(final String bucket);
+    }
+
+    interface PutObjectBuilder extends Bucketable<PutObjectBuilder> {
 
         @PathParam("object")
         PutObjectBuilder object(final String object);
-
-        @PathParam("bucket")
-        PutObjectBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        PutObjectBuilder endpoint(final String endpoint);
 
         PutObjectBuilder body(final Observable<MessageBody> body);
 
@@ -49,16 +54,10 @@ public interface OssAPI {
 
     public PutObjectBuilder putObject();
 
-    interface GetObjectBuilder {
+    interface GetObjectBuilder extends Bucketable<GetObjectBuilder> {
 
         @PathParam("object")
         GetObjectBuilder object(final String object);
-
-        @PathParam("bucket")
-        GetObjectBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        GetObjectBuilder endpoint(final String endpoint);
 
         @GET
         @Path("http://{bucket}.{endpoint}/{object}")
@@ -536,7 +535,7 @@ public interface OssAPI {
     }
 
     //  https://help.aliyun.com/document_detail/31965.html?spm=a2c4g.11186623.6.1570.68afb81eXwEqgq
-    interface ListObjectsBuilder {
+    interface ListObjectsBuilder extends Bucketable<ListObjectsBuilder> {
 
         @QueryParam("prefix")
         ListObjectsBuilder prefix(final String prefix);
@@ -553,12 +552,6 @@ public interface OssAPI {
         @QueryParam("encoding-type")
         ListObjectsBuilder encodingType(final String encodingType);
 
-        @PathParam("bucket")
-        ListObjectsBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        ListObjectsBuilder endpoint(final String endpoint);
-
         @GET
         @Path("http://{bucket}.{endpoint}/")
         @Consumes(MediaType.APPLICATION_XML)
@@ -568,16 +561,10 @@ public interface OssAPI {
     public ListObjectsBuilder listObjects();
 
     // https://help.aliyun.com/document_detail/31985.html?spm=a2c4g.11186623.6.1603.15ec810cYy37lP
-    interface GetObjectMetaBuilder {
+    interface GetObjectMetaBuilder extends Bucketable<GetObjectMetaBuilder> {
 
         @PathParam("object")
         GetObjectMetaBuilder object(final String object);
-
-        @PathParam("bucket")
-        GetObjectMetaBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        GetObjectMetaBuilder endpoint(final String endpoint);
 
         @HEAD
         @Path("http://{bucket}.{endpoint}/{object}?objectMeta")
@@ -594,16 +581,10 @@ public interface OssAPI {
     Authorization: SignatureValue
     x-oss-copy-source: /SourceBucketName/SourceObjectName
     */
-    interface CopyObjectBuilder {
+    interface CopyObjectBuilder extends Bucketable<CopyObjectBuilder> {
 
         @PathParam("destObject")
         CopyObjectBuilder destObject(final String destObject);
-
-        @PathParam("bucket")
-        CopyObjectBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        CopyObjectBuilder endpoint(final String endpoint);
 
         // /<bucket>/<sourceObject>
         @HeaderParam("x-oss-copy-source")
@@ -616,16 +597,10 @@ public interface OssAPI {
 
     public CopyObjectBuilder copyObject();
 
-    interface DeleteObjectBuilder {
+    interface DeleteObjectBuilder extends Bucketable<DeleteObjectBuilder> {
 
         @PathParam("object")
         DeleteObjectBuilder object(final String object);
-
-        @PathParam("bucket")
-        DeleteObjectBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        DeleteObjectBuilder endpoint(final String endpoint);
 
         @DELETE
         @Path("http://{bucket}.{endpoint}/{object}")
@@ -634,16 +609,10 @@ public interface OssAPI {
 
     public DeleteObjectBuilder deleteObject();
 
-    interface PutSymlinkBuilder {
+    interface PutSymlinkBuilder extends Bucketable<PutSymlinkBuilder> {
 
         @PathParam("symlinkObject")
         PutSymlinkBuilder symlinkObject(final String symlinkObject);
-
-        @PathParam("bucket")
-        PutSymlinkBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        PutSymlinkBuilder endpoint(final String endpoint);
 
         @HeaderParam("x-oss-symlink-target")
         PutSymlinkBuilder targetObject(final String targetObject);
@@ -656,16 +625,10 @@ public interface OssAPI {
     public PutSymlinkBuilder putSymlink();
 
     // https://help.aliyun.com/document_detail/45146.html?spm=a2c4g.11186623.6.1609.a8eeb81ed5SIWi
-    interface GetSymlinkBuilder {
+    interface GetSymlinkBuilder extends Bucketable<GetSymlinkBuilder> {
 
         @PathParam("symlinkObject")
         GetSymlinkBuilder symlinkObject(final String symlinkObject);
-
-        @PathParam("bucket")
-        GetSymlinkBuilder bucket(final String bucket);
-
-        @PathParam("endpoint")
-        GetSymlinkBuilder endpoint(final String endpoint);
 
         @GET
         @Path("http://{bucket}.{endpoint}/{symlinkObject}?symlink")
@@ -673,4 +636,16 @@ public interface OssAPI {
     }
 
     public GetSymlinkBuilder getSymlink();
+
+    // https://help.aliyun.com/document_detail/31991.html?spm=a2c4g.11186623.3.3.552a79det2Ev6r
+    // 关于MultipartUpload的操作
+    interface InitiateMultipartUploadBuilder {
+        @PathParam("object")
+        InitiateMultipartUploadBuilder object(final String object);
+
+        @POST
+        @Path("http://{bucket}.{endpoint}/{object}?uploads")
+        Transformer<Interact, FullMessage<HttpResponse>> call();
+    }
+
 }

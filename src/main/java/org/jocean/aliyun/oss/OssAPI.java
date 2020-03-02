@@ -40,10 +40,12 @@ public interface OssAPI {
         BUILDER bucket(final String bucket);
     }
 
-    interface PutObjectBuilder extends Bucketable<PutObjectBuilder> {
-
+    interface Objectable<BUILDER> extends Bucketable<BUILDER> {
         @PathParam("object")
-        PutObjectBuilder object(final String object);
+        BUILDER object(final String object);
+    }
+
+    interface PutObjectBuilder extends Objectable<PutObjectBuilder> {
 
         PutObjectBuilder body(final Observable<MessageBody> body);
 
@@ -54,10 +56,7 @@ public interface OssAPI {
 
     public PutObjectBuilder putObject();
 
-    interface GetObjectBuilder extends Bucketable<GetObjectBuilder> {
-
-        @PathParam("object")
-        GetObjectBuilder object(final String object);
+    interface GetObjectBuilder extends Objectable<GetObjectBuilder> {
 
         @GET
         @Path("http://{bucket}.{endpoint}/{object}")
@@ -561,10 +560,7 @@ public interface OssAPI {
     public ListObjectsBuilder listObjects();
 
     // https://help.aliyun.com/document_detail/31985.html?spm=a2c4g.11186623.6.1603.15ec810cYy37lP
-    interface GetObjectMetaBuilder extends Bucketable<GetObjectMetaBuilder> {
-
-        @PathParam("object")
-        GetObjectMetaBuilder object(final String object);
+    interface GetObjectMetaBuilder extends Objectable<GetObjectMetaBuilder> {
 
         @HEAD
         @Path("http://{bucket}.{endpoint}/{object}?objectMeta")
@@ -597,10 +593,7 @@ public interface OssAPI {
 
     public CopyObjectBuilder copyObject();
 
-    interface DeleteObjectBuilder extends Bucketable<DeleteObjectBuilder> {
-
-        @PathParam("object")
-        DeleteObjectBuilder object(final String object);
+    interface DeleteObjectBuilder extends Objectable<DeleteObjectBuilder> {
 
         @DELETE
         @Path("http://{bucket}.{endpoint}/{object}")

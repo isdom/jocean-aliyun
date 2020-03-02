@@ -654,4 +654,23 @@ public interface OssAPI {
     }
 
     public PutSymlinkBuilder putSymlink();
+
+    // https://help.aliyun.com/document_detail/45146.html?spm=a2c4g.11186623.6.1609.a8eeb81ed5SIWi
+    interface GetSymlinkBuilder {
+
+        @PathParam("symlinkObject")
+        GetSymlinkBuilder symlinkObject(final String symlinkObject);
+
+        @PathParam("bucket")
+        GetSymlinkBuilder bucket(final String bucket);
+
+        @PathParam("endpoint")
+        GetSymlinkBuilder endpoint(final String endpoint);
+
+        @GET
+        @Path("http://{bucket}.{endpoint}/{symlinkObject}?symlink")
+        Transformer<Interact, FullMessage<HttpResponse>> call();
+    }
+
+    public GetSymlinkBuilder getSymlink();
 }

@@ -45,7 +45,79 @@ public interface OssAPI {
         BUILDER object(final String object);
     }
 
+    // https://help.aliyun.com/document_detail/31978.html?spm=a2c4g.11186623.6.1596.4fb211a06jVZO2
     interface PutObjectBuilder extends Objectable<PutObjectBuilder> {
+
+        // 指定该Object被下载时网页的缓存行为，详细描述参考RFC2616。
+        // 默认值：无
+        @HeaderParam("Cache-Control")
+        PutObjectBuilder cacheControl(final String cacheControl);
+
+        // 指定该Object被下载时的名称，详细描述参考RFC2616。
+        // 默认值：无
+        @HeaderParam("Content-Disposition")
+        PutObjectBuilder contentDisposition(final String contentDisposition);
+
+        // 指定该Object被下载时的内容编码格式，详细描述参考RFC2616。
+        // 默认值：无
+        @HeaderParam("Content-Encoding")
+        PutObjectBuilder contentEncoding(final String contentEncoding);
+
+        // 用于检查消息内容是否与发送时一致。Content-MD5是一串由MD5算法生成的值。上传了Content-MD5请求头后，OSS会计算消息体的Content-MD5并检查一致性。
+        //  有关Content-MD5的计算方法，详情请参见Content-MD5的计算方法。
+        // 默认值：无
+        @HeaderParam("Content-MD5")
+        PutObjectBuilder contentMD5(final String contentMD5);
+
+        // 过期时间，详细描述参考照RFC2616。
+        // 默认值：无
+        @HeaderParam("Expires")
+        PutObjectBuilder expires(final String expires);
+
+        // 指定PutObject操作时是否覆盖同名Object。
+        // 不指定x-oss-forbid-overwrite时，默认覆盖同名Object。
+        // 指定x-oss-forbid-overwrite为true时，表示禁止覆盖同名Object；
+        // 指定x-oss-forbid-overwrite为false时，表示允许覆盖同名Object。
+        @HeaderParam("x-oss-forbid-overwrite")
+        PutObjectBuilder forbidOverwrite(final Boolean isOverwrite);
+
+        // 指定OSS创建Object时的服务器端加密编码算法。
+        // 取值：AES256 或 KMS（您需要购买KMS套件，才可以使用 KMS 加密算法，否则会报 KmsServiceNotEnabled 错误码）
+        //
+        // 指定此参数后，在响应头中会返回此参数，OSS会对上传的Object进行加密编码存储。
+        //  当下载该Object时，响应头中会包含x-oss-server-side-encryption，且该值会被设置成该Object的加密算法。
+        @HeaderParam("x-oss-server-side-encryption")
+        PutObjectBuilder serverSideEncryption(final String encryption);
+
+        // KMS托管的用户主密钥。
+        // 该参数在x-oss-server-side-encryption为KMS时有效。
+        @HeaderParam("x-oss-server-side-encryption-key-id")
+        PutObjectBuilder serverSideEncryptionKeyid(final String encryptionKeyid);
+
+        // 指定OSS创建Object时的访问权限。
+        // 合法值：public-read，private，public-read-write
+        @HeaderParam("x-oss-object-acl")
+        PutObjectBuilder objectAcl(final String objectAcl);
+
+        // 指定Object的存储类型。
+        // 对于任意存储类型的Bucket，若上传Object时指定此参数，则此次上传的Object将存储为指定的类型。
+        // 例如，在IA类型的Bucket中上传Object时，若指定x-oss-storage-class为Standard，则该Object直接存储为Standard。
+        // 取值：Standard、IA、Archive
+        // 支持的接口：PutObject、InitMultipartUpload、AppendObject、 PutObjectSymlink、CopyObject。
+        @HeaderParam("x-oss-storage-class")
+        PutObjectBuilder storageClass(final String storageClass);
+
+        // 指定Object的标签，可同时设置多个标签，例如： TagA=A&TagB=B。
+        // 说明 Key和Value需要先进行URL编码，如果某项没有"="，则看作Value为空字符串。
+        @HeaderParam("x-oss-tagging")
+        PutObjectBuilder tagging(final String tagging);
+
+        // 使用PutObject接口时，如果配置以x-oss-meta-*为前缀的参数，则该参数视为元数据，例如x-oss-meta-location。
+        // 一个Object可以有多个类似的参数，但所有的元数据总大小不能超过8KB。
+        // 元数据支持短横线（-）、数字、英文字母（a-z），英文字符的大写字母会被转成小写字母，不支持下划线（_）在内的其他字符
+        // TODO
+        @HeaderParam("x-oss-meta-*")
+        PutObjectBuilder meta(final String meta);
 
         PutObjectBuilder body(final Observable<MessageBody> body);
 

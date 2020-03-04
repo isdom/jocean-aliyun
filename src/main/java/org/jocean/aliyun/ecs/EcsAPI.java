@@ -4,6 +4,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import org.jocean.http.Interact;
 import org.jocean.http.RpcRunner;
 import org.jocean.rpc.annotation.ConstParams;
 
@@ -740,7 +741,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "CreateInstance"})
-        Transformer<RpcRunner, CreateInstanceResponse> call();
+        Transformer<Interact, CreateInstanceResponse> call();
     }
 
     CreateInstanceBuilder createInstance();

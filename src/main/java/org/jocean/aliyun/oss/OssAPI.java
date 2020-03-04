@@ -116,8 +116,8 @@ public interface OssAPI {
         // 一个Object可以有多个类似的参数，但所有的元数据总大小不能超过8KB。
         // 元数据支持短横线（-）、数字、英文字母（a-z），英文字符的大写字母会被转成小写字母，不支持下划线（_）在内的其他字符
         // TODO
-        @HeaderParam("x-oss-meta-*")
-        PutObjectBuilder meta(final String meta);
+//        @HeaderParam("x-oss-meta-*")
+//        PutObjectBuilder meta(final String meta);
 
         PutObjectBuilder body(final Observable<MessageBody> body);
 
@@ -129,6 +129,22 @@ public interface OssAPI {
     public PutObjectBuilder putObject();
 
     interface GetObjectBuilder extends Objectable<GetObjectBuilder> {
+
+        //说明 OSS不支持多Range参数，即不支持指定多个范围。ByteRange指请求资源的范围，单位为Byte（字节），ByteRange有效区间在0至object size - 1的范围内。
+        // 具体示例如下：
+        // Range: bytes=0-499表示第0-499字节范围的内容。
+        //        Range: bytes=500-999表示第500-999字节范围的内容。
+        //        Range: bytes=-500表示最后500字节的内容。
+        //        Range: bytes=500-表示从第500字节开始到文件结束部分的内容。
+        //        Range: bytes=0-表示从第一个字节到最后一个字节，即完整的文件内容。
+
+        // 指定文件传输的范围。
+        // 默认值：无
+        // 如果指定的范围符合规范，返回消息中会包含整个Object的大小和此次返回的范围。
+        // 例如：Content-Range: bytes 0-9/44，表示整个Object大小为44，此次返回的范围为0-9。
+        // 如果指定的范围不符合范围规范，则传送整个Object，并且不在结果中提及Content-Range。
+        @HeaderParam("Range")
+        GetObjectBuilder range(final String range);
 
         @GET
         @Path("http://{bucket}.{endpoint}/{object}")

@@ -779,4 +779,32 @@ public interface OssAPI {
         Transformer<Interact, InitiateMultipartUploadResult> call();
     }
 
+    public InitiateMultipartUploadBuilder initiateMultipartUpload();
+
+    // https://help.aliyun.com/document_detail/31993.html?spm=a2c4g.11186623.6.1625.405a79deMFs3vX
+    interface UploadPartBuilder extends Objectable<UploadPartBuilder> {
+
+        //调用该接口上传Part数据前，必须先调用InitiateMultipartUpload接口来获取一个OSS服务器颁发的Upload ID。Upload ID用于唯一标识上传的part属于哪个Object。
+        // 每一个上传的Part都有一个标识它的号码（part number，范围是1-10000），单个Part大小范围100KB-5GB。
+        // MultipartUpload要求除最后一个Part以外，其他的Part大小都要大于100KB。
+        // 因不确定是否为最后一个Part，UploadPart接口并不会立即校验上传Part的大小，只有当CompleteMultipartUpload的时候才会校验。
+        // 如果你用同一个part number上传了新的数据，那么OSS上已有的这个号码的Part数据将被覆盖。
+        // OSS会将服务器端收到Part数据的MD5值放在ETag头内返回给用户。
+        // 若调用InitiateMultipartUpload接口时，指定了x-oss-server-side-encryption请求头，则会对上传的Part进行加密编码，
+        // 并在UploadPart响应头中返回x-oss-server-side-encryption头，其值表明该Part的服务器端加密算法，详情请参考InitiateMultipartUpload。
+
+        @QueryParam("partNumber")
+        UploadPartBuilder partNumber(final int partNumber);
+
+        @QueryParam("uploadId")
+        UploadPartBuilder uploadId(final String uploadId);
+
+        UploadPartBuilder body(final Observable<MessageBody> body);
+
+        @PUT
+        @Path("http://{bucket}.{endpoint}/{object}")
+        Transformer<Interact, FullMessage<HttpResponse>> call();
+    }
+
+    public UploadPartBuilder uploadPart();
 }

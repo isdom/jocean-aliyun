@@ -45,41 +45,33 @@ public interface OssAPI {
         BUILDER object(final String object);
     }
 
-    // https://help.aliyun.com/document_detail/31978.html?spm=a2c4g.11186623.6.1596.4fb211a06jVZO2
-    interface PutObjectBuilder extends Objectable<PutObjectBuilder> {
-
+    interface StoreOperation<BUILDER> {
         // 指定该Object被下载时网页的缓存行为，详细描述参考RFC2616。
         // 默认值：无
         @HeaderParam("Cache-Control")
-        PutObjectBuilder cacheControl(final String cacheControl);
+        BUILDER cacheControl(final String cacheControl);
 
         // 指定该Object被下载时的名称，详细描述参考RFC2616。
         // 默认值：无
         @HeaderParam("Content-Disposition")
-        PutObjectBuilder contentDisposition(final String contentDisposition);
+        BUILDER contentDisposition(final String contentDisposition);
 
         // 指定该Object被下载时的内容编码格式，详细描述参考RFC2616。
         // 默认值：无
         @HeaderParam("Content-Encoding")
-        PutObjectBuilder contentEncoding(final String contentEncoding);
-
-        // 用于检查消息内容是否与发送时一致。Content-MD5是一串由MD5算法生成的值。上传了Content-MD5请求头后，OSS会计算消息体的Content-MD5并检查一致性。
-        //  有关Content-MD5的计算方法，详情请参见Content-MD5的计算方法。
-        // 默认值：无
-        @HeaderParam("Content-MD5")
-        PutObjectBuilder contentMD5(final String contentMD5);
+        BUILDER contentEncoding(final String contentEncoding);
 
         // 过期时间，详细描述参考照RFC2616。
         // 默认值：无
         @HeaderParam("Expires")
-        PutObjectBuilder expires(final String expires);
+        BUILDER expires(final String expires);
 
         // 指定PutObject操作时是否覆盖同名Object。
         // 不指定x-oss-forbid-overwrite时，默认覆盖同名Object。
         // 指定x-oss-forbid-overwrite为true时，表示禁止覆盖同名Object；
         // 指定x-oss-forbid-overwrite为false时，表示允许覆盖同名Object。
         @HeaderParam("x-oss-forbid-overwrite")
-        PutObjectBuilder forbidOverwrite(final Boolean isOverwrite);
+        BUILDER forbidOverwrite(final Boolean isOverwrite);
 
         // 指定OSS创建Object时的服务器端加密编码算法。
         // 取值：AES256 或 KMS（您需要购买KMS套件，才可以使用 KMS 加密算法，否则会报 KmsServiceNotEnabled 错误码）
@@ -87,17 +79,12 @@ public interface OssAPI {
         // 指定此参数后，在响应头中会返回此参数，OSS会对上传的Object进行加密编码存储。
         //  当下载该Object时，响应头中会包含x-oss-server-side-encryption，且该值会被设置成该Object的加密算法。
         @HeaderParam("x-oss-server-side-encryption")
-        PutObjectBuilder serverSideEncryption(final String encryption);
+        BUILDER serverSideEncryption(final String encryption);
 
         // KMS托管的用户主密钥。
         // 该参数在x-oss-server-side-encryption为KMS时有效。
         @HeaderParam("x-oss-server-side-encryption-key-id")
-        PutObjectBuilder serverSideEncryptionKeyid(final String encryptionKeyid);
-
-        // 指定OSS创建Object时的访问权限。
-        // 合法值：public-read，private，public-read-write
-        @HeaderParam("x-oss-object-acl")
-        PutObjectBuilder objectAcl(final String objectAcl);
+        BUILDER serverSideEncryptionKeyid(final String encryptionKeyid);
 
         // 指定Object的存储类型。
         // 对于任意存储类型的Bucket，若上传Object时指定此参数，则此次上传的Object将存储为指定的类型。
@@ -105,12 +92,27 @@ public interface OssAPI {
         // 取值：Standard、IA、Archive
         // 支持的接口：PutObject、InitMultipartUpload、AppendObject、 PutObjectSymlink、CopyObject。
         @HeaderParam("x-oss-storage-class")
-        PutObjectBuilder storageClass(final String storageClass);
+        BUILDER storageClass(final String storageClass);
 
         // 指定Object的标签，可同时设置多个标签，例如： TagA=A&TagB=B。
         // 说明 Key和Value需要先进行URL编码，如果某项没有"="，则看作Value为空字符串。
         @HeaderParam("x-oss-tagging")
-        PutObjectBuilder tagging(final String tagging);
+        BUILDER tagging(final String tagging);
+    }
+
+    // https://help.aliyun.com/document_detail/31978.html?spm=a2c4g.11186623.6.1596.4fb211a06jVZO2
+    interface PutObjectBuilder extends Objectable<PutObjectBuilder>, StoreOperation<PutObjectBuilder> {
+
+        // 用于检查消息内容是否与发送时一致。Content-MD5是一串由MD5算法生成的值。上传了Content-MD5请求头后，OSS会计算消息体的Content-MD5并检查一致性。
+        //  有关Content-MD5的计算方法，详情请参见Content-MD5的计算方法。
+        // 默认值：无
+        @HeaderParam("Content-MD5")
+        PutObjectBuilder contentMD5(final String contentMD5);
+
+        // 指定OSS创建Object时的访问权限。
+        // 合法值：public-read，private，public-read-write
+        @HeaderParam("x-oss-object-acl")
+        PutObjectBuilder objectAcl(final String objectAcl);
 
         // 使用PutObject接口时，如果配置以x-oss-meta-*为前缀的参数，则该参数视为元数据，例如x-oss-meta-location。
         // 一个Object可以有多个类似的参数，但所有的元数据总大小不能超过8KB。
@@ -718,15 +720,63 @@ public interface OssAPI {
 
     public GetSymlinkBuilder getSymlink();
 
+    @Consumes({"application/xml","text/xml"})
+    @JacksonXmlRootElement(localName="InitiateMultipartUploadResult")
+    public static class InitiateMultipartUploadResult {
+
+        private String bucket;
+
+        private String key;
+
+        private String uploadId;
+
+//        private String encodingType;
+
+        public String getKey() {
+            return key;
+        }
+
+        @JacksonXmlProperty(localName="Key")
+        public void setKey(final String key) {
+            this.key = key;
+        }
+
+        public String getBucket() {
+            return this.bucket;
+        }
+
+        @JacksonXmlProperty(localName="Bucket")
+        public void setBucket(final String bucket) {
+            this.bucket = bucket;
+        }
+
+        public String getUploadId() {
+            return uploadId;
+        }
+
+        @JacksonXmlProperty(localName="UploadId")
+        public void setUploadId(final String uploadId) {
+            this.uploadId = uploadId;
+        }
+//        public String getEncodingType() {
+//            return encodingType;
+//        }
+//
+//        @JacksonXmlProperty(localName="EncodingType")
+//        public void setEncodingType(final String encodingType) {
+//            this.encodingType = encodingType;
+//        }
+    }
+
     // https://help.aliyun.com/document_detail/31991.html?spm=a2c4g.11186623.3.3.552a79det2Ev6r
     // 关于MultipartUpload的操作
-    interface InitiateMultipartUploadBuilder {
-        @PathParam("object")
-        InitiateMultipartUploadBuilder object(final String object);
+    interface InitiateMultipartUploadBuilder extends
+        Objectable<InitiateMultipartUploadBuilder>, StoreOperation<InitiateMultipartUploadBuilder> {
 
         @POST
         @Path("http://{bucket}.{endpoint}/{object}?uploads")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        @Consumes(MediaType.APPLICATION_XML)
+        Transformer<Interact, InitiateMultipartUploadResult> call();
     }
 
 }

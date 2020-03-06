@@ -13,6 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
@@ -21,6 +22,7 @@ import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 
 import com.aliyun.oss.model.Bucket;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -128,7 +130,7 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public PutObjectBuilder putObject();
+    PutObjectBuilder putObject();
 
     interface GetObjectBuilder extends Objectable<GetObjectBuilder> {
 
@@ -153,7 +155,7 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public GetObjectBuilder getObject();
+    GetObjectBuilder getObject();
 
     public static class Owner {
 
@@ -466,7 +468,6 @@ public interface OssAPI {
         private Owner owner;
     }
 
-    @Consumes({"application/xml","text/xml"})
     @JacksonXmlRootElement(localName="ListBucketResult")
     public static class ObjectListing {
 
@@ -647,7 +648,7 @@ public interface OssAPI {
         Transformer<Interact, ObjectListing> call();
     }
 
-    public ListObjectsBuilder listObjects();
+    ListObjectsBuilder listObjects();
 
     // https://help.aliyun.com/document_detail/31985.html?spm=a2c4g.11186623.6.1603.15ec810cYy37lP
     interface GetObjectMetaBuilder extends Objectable<GetObjectMetaBuilder> {
@@ -657,7 +658,7 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public GetObjectMetaBuilder getObjectMeta();
+    GetObjectMetaBuilder getObjectMeta();
 
     /* REF: https://help.aliyun.com/document_detail/31979.html?spm=a2c4g.11186623.6.926.p75n2Q
      * API:
@@ -681,7 +682,7 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public CopyObjectBuilder copyObject();
+    CopyObjectBuilder copyObject();
 
     interface DeleteObjectBuilder extends Objectable<DeleteObjectBuilder> {
 
@@ -690,7 +691,7 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public DeleteObjectBuilder deleteObject();
+    DeleteObjectBuilder deleteObject();
 
     interface PutSymlinkBuilder extends Bucketable<PutSymlinkBuilder> {
 
@@ -705,7 +706,7 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public PutSymlinkBuilder putSymlink();
+    PutSymlinkBuilder putSymlink();
 
     // https://help.aliyun.com/document_detail/45146.html?spm=a2c4g.11186623.6.1609.a8eeb81ed5SIWi
     interface GetSymlinkBuilder extends Bucketable<GetSymlinkBuilder> {
@@ -718,9 +719,8 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public GetSymlinkBuilder getSymlink();
+    GetSymlinkBuilder getSymlink();
 
-    @Consumes({"application/xml","text/xml"})
     @JacksonXmlRootElement(localName="InitiateMultipartUploadResult")
     public static class InitiateMultipartUploadResult {
 
@@ -779,7 +779,7 @@ public interface OssAPI {
         Transformer<Interact, InitiateMultipartUploadResult> call();
     }
 
-    public InitiateMultipartUploadBuilder initiateMultipartUpload();
+    InitiateMultipartUploadBuilder initiateMultipartUpload();
 
     // https://help.aliyun.com/document_detail/31993.html?spm=a2c4g.11186623.6.1625.405a79deMFs3vX
     interface UploadPartBuilder extends Objectable<UploadPartBuilder> {
@@ -806,5 +806,162 @@ public interface OssAPI {
         Transformer<Interact, FullMessage<HttpResponse>> call();
     }
 
-    public UploadPartBuilder uploadPart();
+    UploadPartBuilder uploadPart();
+
+    @JacksonXmlRootElement(localName="CompleteMultipartUpload")
+    public static class CompleteMultipartUpload {
+        public static class Part {
+            private final int partNumber;
+            private final String etag;
+
+            public Part(final int partNumber, final String etag) {
+                this.partNumber = partNumber;
+                this.etag = etag;
+            }
+
+            @JacksonXmlProperty(localName="PartNumber")
+            public int getPartNumber() {
+                return partNumber;
+            }
+
+            @JacksonXmlProperty(localName="ETag")
+            public String getETag() {
+                return etag;
+            }
+
+            @Override
+            public String toString() {
+                final StringBuilder builder = new StringBuilder();
+                builder.append("Part [PartNumber=").append(partNumber).append(", ETag=").append(etag).append("]");
+                return builder.toString();
+            }
+        }
+
+        @Override
+        public String toString() {
+            final int maxLen = 10;
+            final StringBuilder builder = new StringBuilder();
+            builder.append("CompleteMultipartUpload [parts=")
+                    .append(parts != null ? parts.subList(0, Math.min(parts.size(), maxLen)) : null).append("]");
+            return builder.toString();
+        }
+
+        private final List<Part> parts = new ArrayList<Part>();
+
+        @JacksonXmlProperty(localName="Part")
+        @JacksonXmlElementWrapper(useWrapping = false)
+        public List<Part> getParts() {
+            return this.parts;
+        }
+
+        public void addPart(final Part part) {
+            this.parts.add(part);
+        }
+
+        public void setParts(final List<Part> parts) {
+            this.parts.clear();
+            if (parts != null && !parts.isEmpty()) {
+                this.parts.addAll(parts);
+            }
+        }
+    }
+
+
+    // <CompleteMultipartUploadResult xmlns=”http://doc.oss-cn-hangzhou.aliyuncs.com”>
+    //     <Location>http://oss-example.oss-cn-hangzhou.aliyuncs.com /multipart.data</Location>
+    //     <Bucket>oss-example</Bucket>
+    //     <Key>multipart.data</Key>
+    //     <ETag>B864DB6A936D376F9F8D3ED3BBE540****</ETag>
+    // </CompleteMultipartUploadResult>
+    @JacksonXmlRootElement(localName="CompleteMultipartUploadResult")
+    public static class CompleteMultipartUploadResult {
+
+        @Override
+        public String toString() {
+            final StringBuilder builder = new StringBuilder();
+            builder.append("CompleteMultipartUploadResult [Location=").append(location).append(", Bucket=")
+                    .append(bucket).append(", Key=").append(key).append(", ETag=").append(etag).append("]");
+            return builder.toString();
+        }
+
+        private String location;
+
+        private String bucket;
+
+        private String key;
+
+        private String etag;
+
+        public String getLocation() {
+            return this.location;
+        }
+
+        @JacksonXmlProperty(localName="Location")
+        public void setLocation(final String location) {
+            this.location = location;
+        }
+
+        public String getBucket() {
+            return this.bucket;
+        }
+
+        @JacksonXmlProperty(localName="Bucket")
+        public void setBucket(final String bucket) {
+            this.bucket = bucket;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        @JacksonXmlProperty(localName="Key")
+        public void setKey(final String key) {
+            this.key = key;
+        }
+
+        public String getETag() {
+            return etag;
+        }
+
+        @JacksonXmlProperty(localName="ETag")
+        public void setETag(final String etag) {
+            this.etag = etag;
+        }
+    }
+
+
+    // https://help.aliyun.com/document_detail/31995.html?spm=a2c4g.11186623.6.1627.83272d74mdlAp3
+    interface CompleteMultipartUploadBuilder extends Objectable<UploadPartBuilder> {
+
+        // CompleteMultipartUpload时会确认除最后一块以外所有块的大小是否都大于100KB，并检查用户提交的Part列表中的每一个Part号码和Etag。
+        // 所以在上传Part时，客户端除了需要记录Part号码外，还需要记录每次上传Part成功后服务器返回的ETag值。
+        // 由于OSS处理CompleteMultipartUpload请求时会持续一定的时间。在这段时间内，如果客户端与OSS之间连接中断，OSS仍会继续该请求。
+        // 用户提交的Part列表中，Part号码可以不连续。例如第一块的Part号码是1，第二块的Part号码是5。
+        // OSS处理CompleteMultipartUpload请求成功后，该Upload ID就会变成无效。
+        // 同一个Object可以同时拥有不同的Upload ID，当Complete一个Upload ID后，该Object的其他Upload ID不受影响。
+        // 若调用InitiateMultipartUpload接口时，指定了x-oss-server-side-encryption请求头，
+        // 则在CompleteMultipartUpload的响应头中返回x-oss-server-side-encryption，其值表明该Object的服务器端加密算法。
+        @QueryParam("uploadId")
+        CompleteMultipartUploadBuilder uploadId(final String uploadId);
+
+        // 参见：https://github.com/isdom/jocean-http/commit/ffa8805ea9a63ae784a8bb98b0b0f43d07bc2fea
+        @Produces(MediaType.APPLICATION_XML)
+        CompleteMultipartUploadBuilder body(final CompleteMultipartUpload body);
+
+        @POST
+        @Path("http://{bucket}.{endpoint}/{object}")
+        @Consumes(MediaType.APPLICATION_XML)
+        Transformer<Interact, CompleteMultipartUploadResult> call();
+    }
+
+    CompleteMultipartUploadBuilder completeMultipartUpload();
+
+    public static void main(final String[] args) throws Exception {
+        final CompleteMultipartUpload body = new CompleteMultipartUpload();
+        body.addPart(new CompleteMultipartUpload.Part(1, "\"123\""));
+        body.addPart(new CompleteMultipartUpload.Part(2, "\"456\""));
+
+        final XmlMapper mapper = new XmlMapper();
+        System.out.print(mapper.writeValueAsString(body));
+    }
 }

@@ -22,7 +22,6 @@ import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 
 import com.aliyun.oss.model.Bucket;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
@@ -931,7 +930,7 @@ public interface OssAPI {
 
 
     // https://help.aliyun.com/document_detail/31995.html?spm=a2c4g.11186623.6.1627.83272d74mdlAp3
-    interface CompleteMultipartUploadBuilder extends Objectable<UploadPartBuilder> {
+    interface CompleteMultipartUploadBuilder extends Objectable<CompleteMultipartUploadBuilder> {
 
         // CompleteMultipartUpload时会确认除最后一块以外所有块的大小是否都大于100KB，并检查用户提交的Part列表中的每一个Part号码和Etag。
         // 所以在上传Part时，客户端除了需要记录Part号码外，还需要记录每次上传Part成功后服务器返回的ETag值。
@@ -956,6 +955,7 @@ public interface OssAPI {
 
     CompleteMultipartUploadBuilder completeMultipartUpload();
 
+    /*
     public static void main(final String[] args) throws Exception {
         final CompleteMultipartUpload body = new CompleteMultipartUpload();
         body.addPart(new CompleteMultipartUpload.Part(1, "\"123\""));
@@ -964,4 +964,22 @@ public interface OssAPI {
         final XmlMapper mapper = new XmlMapper();
         System.out.print(mapper.writeValueAsString(body));
     }
+    */
+
+    // https://help.aliyun.com/document_detail/31996.html?spm=a2c4g.11186623.6.1628.60233dc1EYbByM
+    interface AbortMultipartUploadBuilder extends Objectable<AbortMultipartUploadBuilder> {
+
+        // 当一个MultipartUpload事件被中止后，您无法再使用这个Upload ID做任何操作，已经上传的Part数据也会被删除。
+        // 中止一个MultipartUpload事件时，如果其所属的某些Part仍然在上传，那么这次中止操作将无法删除这些Part。
+        // 所以如果存在并发访问的情况，需要调用几次AbortMultipartUpload接口以彻底释放OSS上的空间。
+
+        @QueryParam("uploadId")
+        AbortMultipartUploadBuilder uploadId(final String uploadId);
+
+        @DELETE
+        @Path("http://{bucket}.{endpoint}/{object}")
+        Transformer<Interact, FullMessage<HttpResponse>> call();
+    }
+
+    AbortMultipartUploadBuilder abortMultipartUpload();
 }

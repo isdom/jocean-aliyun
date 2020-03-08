@@ -1,13 +1,13 @@
 package org.jocean.aliyun.sign;
 
-import org.jocean.http.RpcRunner;
+import org.jocean.http.Interact;
 import org.springframework.beans.factory.annotation.Value;
 
 public class AKSigner implements AliyunSigner {
 
     @Override
-    public void call(final RpcRunner runner) {
-        runner.oninteract(interact -> interact.onsending(SignerV1.signRequest(_ak_id, _ak_secret)));
+    public void call(final Interact interact) {
+        interact.onsending(SignerV1.signRequest(_ak_id, _ak_secret));
     }
 
     @Value("${ak_id}")

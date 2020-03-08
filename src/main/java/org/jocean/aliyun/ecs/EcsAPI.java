@@ -5,7 +5,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.http.Interact;
-import org.jocean.http.RpcRunner;
 import org.jocean.rpc.annotation.ConstParams;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -484,7 +483,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstances"})
-        Transformer<RpcRunner, DescribeInstancesResponse> call();
+        Transformer<Interact, DescribeInstancesResponse> call();
     }
 
     DescribeInstancesBuilder describeInstances();
@@ -583,7 +582,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeSpotPriceHistory"})
-        Transformer<RpcRunner, DescribeSpotPriceHistoryResponse> call();
+        Transformer<Interact, DescribeSpotPriceHistoryResponse> call();
     }
 
     DescribeSpotPriceHistoryBuilder describeSpotPriceHistory();
@@ -761,7 +760,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StartInstance"})
-        Transformer<RpcRunner, StartInstanceResponse> call();
+        Transformer<Interact, StartInstanceResponse> call();
     }
 
     StartInstanceBuilder startInstance();
@@ -781,7 +780,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RebootInstance"})
-        Transformer<RpcRunner, RebootInstanceResponse> call();
+        Transformer<Interact, RebootInstanceResponse> call();
     }
 
     RebootInstanceBuilder rebootInstance();
@@ -804,7 +803,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StopInstance"})
-        Transformer<RpcRunner, StopInstanceResponse> call();
+        Transformer<Interact, StopInstanceResponse> call();
     }
 
     StopInstanceBuilder stopInstance();
@@ -824,7 +823,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DeleteInstance"})
-        Transformer<RpcRunner, DeleteInstanceResponse> call();
+        Transformer<Interact, DeleteInstanceResponse> call();
     }
 
     DeleteInstanceBuilder deleteInstance();
@@ -905,7 +904,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "AttachInstanceRamRole"})
-        Transformer<RpcRunner, AttachInstanceRamRoleResponse> call();
+        Transformer<Interact, AttachInstanceRamRoleResponse> call();
     }
 
     AttachInstanceRamRoleBuilder attachInstanceRamRole();
@@ -1002,7 +1001,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DetachInstanceRamRole"})
-        Transformer<RpcRunner, DetachInstanceRamRoleResponse> call();
+        Transformer<Interact, DetachInstanceRamRoleResponse> call();
     }
 
     DetachInstanceRamRoleBuilder detachInstanceRamRole();
@@ -1051,7 +1050,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceStatus"})
-        Transformer<RpcRunner, DescribeInstanceStatusResponse> call();
+        Transformer<Interact, DescribeInstanceStatusResponse> call();
     }
 
     DescribeInstanceStatusBuilder describeInstanceStatus();
@@ -1084,7 +1083,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RenewInstance"})
-        Transformer<RpcRunner, RenewInstanceResponse> call();
+        Transformer<Interact, RenewInstanceResponse> call();
     }
 
     RenewInstanceBuilder renewInstance();
@@ -1100,7 +1099,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "ReactivateInstances"})
-        Transformer<RpcRunner, ReactivateInstancesResponse> call();
+        Transformer<Interact, ReactivateInstancesResponse> call();
     }
 
     ReactivateInstancesBuilder reactivateInstances();
@@ -1119,7 +1118,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RedeployInstanceBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, RedeployInstanceResponse> call();
+        Transformer<Interact, RedeployInstanceResponse> call();
     }
 
     RedeployInstanceBuilder redeployInstance();
@@ -1141,7 +1140,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceVncUrl"})
-        Transformer<RpcRunner, DescribeInstanceVncUrlResponse> call();
+        Transformer<Interact, DescribeInstanceVncUrlResponse> call();
     }
 
     DescribeInstanceVncUrlBuilder describeInstanceVncUrl();
@@ -1177,7 +1176,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeUserData"})
-        Transformer<RpcRunner, DescribeUserDataResponse> call();
+        Transformer<Interact, DescribeUserDataResponse> call();
     }
 
     DescribeUserDataBuilder describeUserData();
@@ -1248,7 +1247,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceAutoRenewAttribute"})
-        Transformer<RpcRunner, DescribeInstanceAutoRenewAttributeResponse> call();
+        Transformer<Interact, DescribeInstanceAutoRenewAttributeResponse> call();
     }
 
     DescribeInstanceAutoRenewAttributeBuilder describeInstanceAutoRenewAttribute();
@@ -1290,7 +1289,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceRamRole"})
-        Transformer<RpcRunner, DescribeInstanceRamRoleResponse> call();
+        Transformer<Interact, DescribeInstanceRamRoleResponse> call();
     }
 
     DescribeInstanceRamRoleBuilder describeInstanceRamRole();
@@ -1308,7 +1307,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceTypeFamiliesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInstanceTypeFamiliesResponse> call();
+        Transformer<Interact, DescribeInstanceTypeFamiliesResponse> call();
     }
 
     DescribeInstanceTypeFamiliesBuilder describeInstanceTypeFamilies();
@@ -1326,7 +1325,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceTypesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInstanceTypesResponse> call();
+        Transformer<Interact, DescribeInstanceTypesResponse> call();
     }
 
     DescribeInstanceTypesBuilder describeInstanceTypes();
@@ -1344,7 +1343,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceVpcAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceVpcAttributeResponse> call();
+        Transformer<Interact, ModifyInstanceVpcAttributeResponse> call();
     }
 
     ModifyInstanceVpcAttributeBuilder modifyInstanceVpcAttribute();
@@ -1362,7 +1361,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceAttributeResponse> call();
+        Transformer<Interact, ModifyInstanceAttributeResponse> call();
     }
 
     ModifyInstanceAttributeBuilder modifyInstanceAttribute();
@@ -1380,7 +1379,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceVncPasswdBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceVncPasswdResponse> call();
+        Transformer<Interact, ModifyInstanceVncPasswdResponse> call();
     }
 
     ModifyInstanceVncPasswdBuilder modifyInstanceVncPasswd();
@@ -1398,7 +1397,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAutoReleaseTimeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceAutoReleaseTimeResponse> call();
+        Transformer<Interact, ModifyInstanceAutoReleaseTimeResponse> call();
     }
 
     ModifyInstanceAutoReleaseTimeBuilder modifyInstanceAutoReleaseTime();
@@ -1416,7 +1415,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAutoRenewAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceAutoRenewAttributeResponse> call();
+        Transformer<Interact, ModifyInstanceAutoRenewAttributeResponse> call();
     }
 
     ModifyInstanceAutoRenewAttributeBuilder modifyInstanceAutoRenewAttribute();
@@ -1434,7 +1433,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceChargeTypeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceChargeTypeResponse> call();
+        Transformer<Interact, ModifyInstanceChargeTypeResponse> call();
     }
 
     ModifyInstanceChargeTypeBuilder modifyInstanceChargeType();
@@ -1452,7 +1451,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceSpecBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceSpecResponse> call();
+        Transformer<Interact, ModifyInstanceSpecResponse> call();
     }
 
     ModifyInstanceSpecBuilder modifyInstanceSpec();
@@ -1470,7 +1469,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyPrepayInstanceSpecBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyPrepayInstanceSpecResponse> call();
+        Transformer<Interact, ModifyPrepayInstanceSpecResponse> call();
     }
 
     ModifyPrepayInstanceSpecBuilder modifyPrepayInstanceSpec();
@@ -1488,7 +1487,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstancesFullStatusBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInstancesFullStatusResponse> call();
+        Transformer<Interact, DescribeInstancesFullStatusResponse> call();
     }
 
     DescribeInstancesFullStatusBuilder describeInstancesFullStatus();
@@ -1507,7 +1506,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceHistoryEventsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInstanceHistoryEventsResponse> call();
+        Transformer<Interact, DescribeInstanceHistoryEventsResponse> call();
     }
 
     DescribeInstanceHistoryEventsBuilder describeInstanceHistoryEvents();
@@ -1526,7 +1525,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeDisksFullStatusBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeDisksFullStatusResponse> call();
+        Transformer<Interact, DescribeDisksFullStatusResponse> call();
     }
 
     DescribeDisksFullStatusBuilder describeDisksFullStatus();
@@ -1545,7 +1544,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelSimulatedSystemEventsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CancelSimulatedSystemEventsResponse> call();
+        Transformer<Interact, CancelSimulatedSystemEventsResponse> call();
     }
 
     CancelSimulatedSystemEventsBuilder cancelSimulatedSystemEvents();
@@ -1564,7 +1563,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateSimulatedSystemEventsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateSimulatedSystemEventsResponse> call();
+        Transformer<Interact, CreateSimulatedSystemEventsResponse> call();
     }
 
     CreateSimulatedSystemEventsBuilder createSimulatedSystemEvents();
@@ -1584,7 +1583,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeEniMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeEniMonitorDataResponse> call();
+        Transformer<Interact, DescribeEniMonitorDataResponse> call();
     }
 
     DescribeEniMonitorDataBuilder describeEniMonitorData();
@@ -1603,7 +1602,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeDiskMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeDiskMonitorDataResponse> call();
+        Transformer<Interact, DescribeDiskMonitorDataResponse> call();
     }
 
     DescribeDiskMonitorDataBuilder describeDiskMonitorData();
@@ -1622,7 +1621,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInstanceMonitorDataResponse> call();
+        Transformer<Interact, DescribeInstanceMonitorDataResponse> call();
     }
 
     DescribeInstanceMonitorDataBuilder describeInstanceMonitorData();
@@ -1641,7 +1640,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         GetInstanceScreenshotBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, GetInstanceScreenshotResponse> call();
+        Transformer<Interact, GetInstanceScreenshotResponse> call();
     }
 
     GetInstanceScreenshotBuilder getInstanceScreenshot();
@@ -1660,7 +1659,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         GetInstanceConsoleOutputBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, GetInstanceConsoleOutputResponse> call();
+        Transformer<Interact, GetInstanceConsoleOutputResponse> call();
     }
 
     GetInstanceConsoleOutputBuilder getInstanceConsoleOutput();
@@ -1679,7 +1678,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSnapshotMonitorDataResponse> call();
+        Transformer<Interact, DescribeSnapshotMonitorDataResponse> call();
     }
 
     DescribeSnapshotMonitorDataBuilder describeSnapshotMonitorData();
@@ -1698,7 +1697,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeRegionsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeRegionsResponse> call();
+        Transformer<Interact, DescribeRegionsResponse> call();
     }
 
     DescribeRegionsBuilder describeRegions();
@@ -1717,7 +1716,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeZonesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeZonesResponse> call();
+        Transformer<Interact, DescribeZonesResponse> call();
     }
 
     DescribeZonesBuilder describeZones();
@@ -1736,7 +1735,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeResourcesModificationBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeResourcesModificationResponse> call();
+        Transformer<Interact, DescribeResourcesModificationResponse> call();
     }
 
     DescribeResourcesModificationBuilder describeResourcesModification();
@@ -1755,7 +1754,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeAvailableResourceBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeAvailableResourceResponse> call();
+        Transformer<Interact, DescribeAvailableResourceResponse> call();
     }
 
     DescribeAvailableResourceBuilder describeAvailableResource();
@@ -1775,7 +1774,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateKeyPairBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateKeyPairResponse> call();
+        Transformer<Interact, CreateKeyPairResponse> call();
     }
 
     CreateKeyPairBuilder createKeyPair();
@@ -1794,7 +1793,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ImportKeyPairBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ImportKeyPairResponse> call();
+        Transformer<Interact, ImportKeyPairResponse> call();
     }
 
     ImportKeyPairBuilder importKeyPair();
@@ -1813,7 +1812,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachKeyPairBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AttachKeyPairResponse> call();
+        Transformer<Interact, AttachKeyPairResponse> call();
     }
 
     AttachKeyPairBuilder attachKeyPair();
@@ -1832,7 +1831,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachKeyPairBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DetachKeyPairResponse> call();
+        Transformer<Interact, DetachKeyPairResponse> call();
     }
 
     DetachKeyPairBuilder detachKeyPair();
@@ -1851,7 +1850,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteKeyPairsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DeleteKeyPairsResponse> call();
+        Transformer<Interact, DeleteKeyPairsResponse> call();
     }
 
     DeleteKeyPairsBuilder deleteKeyPairs();
@@ -1870,7 +1869,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeKeyPairsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeKeyPairsResponse> call();
+        Transformer<Interact, DescribeKeyPairsResponse> call();
     }
 
     DescribeKeyPairsBuilder describeKeyPairs();
@@ -1890,7 +1889,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AllocatePublicIpAddressBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AllocatePublicIpAddressResponse> call();
+        Transformer<Interact, AllocatePublicIpAddressResponse> call();
     }
 
     AllocatePublicIpAddressBuilder allocatePublicIpAddress();
@@ -1909,7 +1908,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ConvertNatPublicIpToEipBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ConvertNatPublicIpToEipResponse> call();
+        Transformer<Interact, ConvertNatPublicIpToEipResponse> call();
     }
 
     ConvertNatPublicIpToEipBuilder convertNatPublicIpToEip();
@@ -1928,7 +1927,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachClassicLinkVpcBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AttachClassicLinkVpcResponse> call();
+        Transformer<Interact, AttachClassicLinkVpcResponse> call();
     }
 
     AttachClassicLinkVpcBuilder attachClassicLinkVpc();
@@ -1947,7 +1946,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachClassicLinkVpcBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DetachClassicLinkVpcResponse> call();
+        Transformer<Interact, DetachClassicLinkVpcResponse> call();
     }
 
     DetachClassicLinkVpcBuilder detachClassicLinkVpc();
@@ -1966,7 +1965,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeBandwidthLimitationBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeBandwidthLimitationResponse> call();
+        Transformer<Interact, DescribeBandwidthLimitationResponse> call();
     }
 
     DescribeBandwidthLimitationBuilder describeBandwidthLimitation();
@@ -1985,7 +1984,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeClassicLinkInstancesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeClassicLinkInstancesResponse> call();
+        Transformer<Interact, DescribeClassicLinkInstancesResponse> call();
     }
 
     DescribeClassicLinkInstancesBuilder describeClassicLinkInstances();
@@ -2004,7 +2003,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceNetworkSpecBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyInstanceNetworkSpecResponse> call();
+        Transformer<Interact, ModifyInstanceNetworkSpecResponse> call();
     }
 
     ModifyInstanceNetworkSpecBuilder modifyInstanceNetworkSpec();
@@ -2024,7 +2023,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateSecurityGroupResponse> call();
+        Transformer<Interact, CreateSecurityGroupResponse> call();
     }
 
     CreateSecurityGroupBuilder createSecurityGroup();
@@ -2043,7 +2042,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AuthorizeSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AuthorizeSecurityGroupResponse> call();
+        Transformer<Interact, AuthorizeSecurityGroupResponse> call();
     }
 
     AuthorizeSecurityGroupBuilder authorizeSecurityGroup();
@@ -2062,7 +2061,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AuthorizeSecurityGroupEgressBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AuthorizeSecurityGroupEgressResponse> call();
+        Transformer<Interact, AuthorizeSecurityGroupEgressResponse> call();
     }
 
     AuthorizeSecurityGroupEgressBuilder authorizeSecurityGroupEgress();
@@ -2081,7 +2080,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RevokeSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, RevokeSecurityGroupResponse> call();
+        Transformer<Interact, RevokeSecurityGroupResponse> call();
     }
 
     RevokeSecurityGroupBuilder revokeSecurityGroup();
@@ -2100,7 +2099,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RevokeSecurityGroupEgressBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, RevokeSecurityGroupEgressResponse> call();
+        Transformer<Interact, RevokeSecurityGroupEgressResponse> call();
     }
 
     RevokeSecurityGroupEgressBuilder revokeSecurityGroupEgress();
@@ -2119,7 +2118,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         JoinSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, JoinSecurityGroupResponse> call();
+        Transformer<Interact, JoinSecurityGroupResponse> call();
     }
 
     JoinSecurityGroupBuilder joinSecurityGroup();
@@ -2138,7 +2137,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         LeaveSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, LeaveSecurityGroupResponse> call();
+        Transformer<Interact, LeaveSecurityGroupResponse> call();
     }
 
     LeaveSecurityGroupBuilder leaveSecurityGroup();
@@ -2157,7 +2156,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DeleteSecurityGroupResponse> call();
+        Transformer<Interact, DeleteSecurityGroupResponse> call();
     }
 
     DeleteSecurityGroupBuilder deleteSecurityGroup();
@@ -2176,7 +2175,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSecurityGroupAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSecurityGroupAttributeResponse> call();
+        Transformer<Interact, DescribeSecurityGroupAttributeResponse> call();
     }
 
     DescribeSecurityGroupAttributeBuilder describeSecurityGroupAttribute();
@@ -2195,7 +2194,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSecurityGroupsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSecurityGroupsResponse> call();
+        Transformer<Interact, DescribeSecurityGroupsResponse> call();
     }
 
     DescribeSecurityGroupsBuilder describeSecurityGroups();
@@ -2214,7 +2213,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSecurityGroupReferencesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSecurityGroupReferencesResponse> call();
+        Transformer<Interact, DescribeSecurityGroupReferencesResponse> call();
     }
 
     DescribeSecurityGroupReferencesBuilder describeSecurityGroupReferences();
@@ -2233,7 +2232,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifySecurityGroupAttributeResponse> call();
+        Transformer<Interact, ModifySecurityGroupAttributeResponse> call();
     }
 
     ModifySecurityGroupAttributeBuilder modifySecurityGroupAttribute();
@@ -2252,7 +2251,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupEgressRuleBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifySecurityGroupEgressRuleResponse> call();
+        Transformer<Interact, ModifySecurityGroupEgressRuleResponse> call();
     }
 
     ModifySecurityGroupEgressRuleBuilder modifySecurityGroupEgressRule();
@@ -2271,7 +2270,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupPolicyBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifySecurityGroupPolicyResponse> call();
+        Transformer<Interact, ModifySecurityGroupPolicyResponse> call();
     }
 
     ModifySecurityGroupPolicyBuilder modifySecurityGroupPolicy();
@@ -2290,7 +2289,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupRuleBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifySecurityGroupRuleResponse> call();
+        Transformer<Interact, ModifySecurityGroupRuleResponse> call();
     }
 
     ModifySecurityGroupRuleBuilder modifySecurityGroupRule();
@@ -2310,7 +2309,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateImageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateImageResponse> call();
+        Transformer<Interact, CreateImageResponse> call();
     }
 
     CreateImageBuilder createImage();
@@ -2329,7 +2328,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ImportImageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ImportImageResponse> call();
+        Transformer<Interact, ImportImageResponse> call();
     }
 
     ImportImageBuilder importImage();
@@ -2348,7 +2347,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CopyImageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CopyImageResponse> call();
+        Transformer<Interact, CopyImageResponse> call();
     }
 
     CopyImageBuilder copyImage();
@@ -2367,7 +2366,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelCopyImageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CancelCopyImageResponse> call();
+        Transformer<Interact, CancelCopyImageResponse> call();
     }
 
     CancelCopyImageBuilder cancelCopyImage();
@@ -2386,7 +2385,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ExportImageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ExportImageResponse> call();
+        Transformer<Interact, ExportImageResponse> call();
     }
 
     ExportImageBuilder exportImage();
@@ -2405,7 +2404,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeImagesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeImagesResponse> call();
+        Transformer<Interact, DescribeImagesResponse> call();
     }
 
     DescribeImagesBuilder describeImages();
@@ -2424,7 +2423,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteImageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DeleteImageResponse> call();
+        Transformer<Interact, DeleteImageResponse> call();
     }
 
     DeleteImageBuilder deleteImage();
@@ -2443,7 +2442,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeImageSharePermissionBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeImageSharePermissionResponse> call();
+        Transformer<Interact, DescribeImageSharePermissionResponse> call();
     }
 
     DescribeImageSharePermissionBuilder describeImageSharePermission();
@@ -2462,7 +2461,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyImageAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyImageAttributeResponse> call();
+        Transformer<Interact, ModifyImageAttributeResponse> call();
     }
 
     ModifyImageAttributeBuilder modifyImageAttribute();
@@ -2481,7 +2480,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyImageSharePermissionBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyImageSharePermissionResponse> call();
+        Transformer<Interact, ModifyImageSharePermissionResponse> call();
     }
 
     ModifyImageSharePermissionBuilder modifyImageSharePermission();
@@ -2500,7 +2499,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeImageSupportInstanceTypesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeImageSupportInstanceTypesResponse> call();
+        Transformer<Interact, DescribeImageSupportInstanceTypesResponse> call();
     }
 
     DescribeImageSupportInstanceTypesBuilder describeImageSupportInstanceTypes();
@@ -2520,7 +2519,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateSnapshotBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateSnapshotResponse> call();
+        Transformer<Interact, CreateSnapshotResponse> call();
     }
 
     CreateSnapshotBuilder createSnapshot();
@@ -2539,7 +2538,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteSnapshotBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DeleteSnapshotResponse> call();
+        Transformer<Interact, DeleteSnapshotResponse> call();
     }
 
     DeleteSnapshotBuilder deleteSnapshot();
@@ -2558,7 +2557,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSnapshotsResponse> call();
+        Transformer<Interact, DescribeSnapshotsResponse> call();
     }
 
     DescribeSnapshotsBuilder describeSnapshots();
@@ -2577,7 +2576,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotsUsageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSnapshotsUsageResponse> call();
+        Transformer<Interact, DescribeSnapshotsUsageResponse> call();
     }
 
     DescribeSnapshotsUsageBuilder describeSnapshotsUsage();
@@ -2596,7 +2595,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotPackageBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSnapshotPackageResponse> call();
+        Transformer<Interact, DescribeSnapshotPackageResponse> call();
     }
 
     DescribeSnapshotPackageBuilder describeSnapshotPackage();
@@ -2615,7 +2614,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotLinksBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeSnapshotLinksResponse> call();
+        Transformer<Interact, DescribeSnapshotLinksResponse> call();
     }
 
     DescribeSnapshotLinksBuilder describeSnapshotLinks();
@@ -2634,7 +2633,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySnapshotAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifySnapshotAttributeResponse> call();
+        Transformer<Interact, ModifySnapshotAttributeResponse> call();
     }
 
     ModifySnapshotAttributeBuilder modifySnapshotAttribute();
@@ -2653,7 +2652,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateAutoSnapshotPolicyResponse> call();
+        Transformer<Interact, CreateAutoSnapshotPolicyResponse> call();
     }
 
     CreateAutoSnapshotPolicyBuilder createAutoSnapshotPolicy();
@@ -2672,7 +2671,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ApplyAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ApplyAutoSnapshotPolicyResponse> call();
+        Transformer<Interact, ApplyAutoSnapshotPolicyResponse> call();
     }
 
     ApplyAutoSnapshotPolicyBuilder applyAutoSnapshotPolicy();
@@ -2691,7 +2690,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CancelAutoSnapshotPolicyResponse> call();
+        Transformer<Interact, CancelAutoSnapshotPolicyResponse> call();
     }
 
     CancelAutoSnapshotPolicyBuilder cancelAutoSnapshotPolicy();
@@ -2710,7 +2709,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DeleteAutoSnapshotPolicyResponse> call();
+        Transformer<Interact, DeleteAutoSnapshotPolicyResponse> call();
     }
 
     DeleteAutoSnapshotPolicyBuilder deleteAutoSnapshotPolicy();
@@ -2729,7 +2728,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeAutoSnapshotPolicyEXBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeAutoSnapshotPolicyEXResponse> call();
+        Transformer<Interact, DescribeAutoSnapshotPolicyEXResponse> call();
     }
 
     DescribeAutoSnapshotPolicyEXBuilder describeAutoSnapshotPolicyEX();
@@ -2748,7 +2747,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyAutoSnapshotPolicyExBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyAutoSnapshotPolicyExResponse> call();
+        Transformer<Interact, ModifyAutoSnapshotPolicyExResponse> call();
     }
 
     ModifyAutoSnapshotPolicyExBuilder modifyAutoSnapshotPolicyEx();
@@ -2768,7 +2767,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ListTagResourcesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ListTagResourcesResponse> call();
+        Transformer<Interact, ListTagResourcesResponse> call();
     }
 
     ListTagResourcesBuilder listTagResources();
@@ -2787,7 +2786,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         TagResourcesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, TagResourcesResponse> call();
+        Transformer<Interact, TagResourcesResponse> call();
     }
 
     TagResourcesBuilder tagResources();
@@ -2806,7 +2805,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         UntagResourcesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, UntagResourcesResponse> call();
+        Transformer<Interact, UntagResourcesResponse> call();
     }
 
     UntagResourcesBuilder untagResources();
@@ -2826,7 +2825,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelTaskBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CancelTaskResponse> call();
+        Transformer<Interact, CancelTaskResponse> call();
     }
 
     CancelTaskBuilder cancelTask();
@@ -2845,7 +2844,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeTasksBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeTasksResponse> call();
+        Transformer<Interact, DescribeTasksResponse> call();
     }
 
     DescribeTasksBuilder describeTasks();
@@ -2864,7 +2863,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeTaskAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeTaskAttributeResponse> call();
+        Transformer<Interact, DescribeTaskAttributeResponse> call();
     }
 
     DescribeTaskAttributeBuilder describeTaskAttribute();
@@ -2883,7 +2882,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeAccountAttributesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeAccountAttributesResponse> call();
+        Transformer<Interact, DescribeAccountAttributesResponse> call();
     }
 
     DescribeAccountAttributesBuilder describeAccountAttributes();
@@ -2902,7 +2901,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribePriceBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribePriceResponse> call();
+        Transformer<Interact, DescribePriceResponse> call();
     }
 
     DescribePriceBuilder describePrice();
@@ -2921,7 +2920,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         JoinResourceGroupBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, JoinResourceGroupResponse> call();
+        Transformer<Interact, JoinResourceGroupResponse> call();
     }
 
     JoinResourceGroupBuilder joinResourceGroup();
@@ -2941,7 +2940,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateCommandBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateCommandResponse> call();
+        Transformer<Interact, CreateCommandResponse> call();
     }
 
     CreateCommandBuilder createCommand();
@@ -2960,7 +2959,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         InstallCloudAssistantBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, InstallCloudAssistantResponse> call();
+        Transformer<Interact, InstallCloudAssistantResponse> call();
     }
 
     InstallCloudAssistantBuilder installCloudAssistant();
@@ -2979,7 +2978,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         InvokeCommandBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, InvokeCommandResponse> call();
+        Transformer<Interact, InvokeCommandResponse> call();
     }
 
     InvokeCommandBuilder invokeCommand();
@@ -2998,7 +2997,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         StopInvocationBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, StopInvocationResponse> call();
+        Transformer<Interact, StopInvocationResponse> call();
     }
 
     StopInvocationBuilder stopInvocation();
@@ -3017,7 +3016,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteCommandBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DeleteCommandResponse> call();
+        Transformer<Interact, DeleteCommandResponse> call();
     }
 
     DeleteCommandBuilder deleteCommand();
@@ -3036,7 +3035,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeCloudAssistantStatusBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeCloudAssistantStatusResponse> call();
+        Transformer<Interact, DescribeCloudAssistantStatusResponse> call();
     }
 
     DescribeCloudAssistantStatusBuilder describeCloudAssistantStatus();
@@ -3055,7 +3054,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeCommandsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeCommandsResponse> call();
+        Transformer<Interact, DescribeCommandsResponse> call();
     }
 
     DescribeCommandsBuilder describeCommands();
@@ -3074,7 +3073,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInvocationsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInvocationsResponse> call();
+        Transformer<Interact, DescribeInvocationsResponse> call();
     }
 
     DescribeInvocationsBuilder describeInvocations();
@@ -3093,7 +3092,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInvocationResultsBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeInvocationResultsResponse> call();
+        Transformer<Interact, DescribeInvocationResultsResponse> call();
     }
 
     DescribeInvocationResultsBuilder describeInvocationResults();
@@ -3112,7 +3111,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RunCommandBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, RunCommandResponse> call();
+        Transformer<Interact, RunCommandResponse> call();
     }
 
     RunCommandBuilder runCommand();
@@ -3132,7 +3131,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, CreateNetworkInterfaceResponse> call();
+        Transformer<Interact, CreateNetworkInterfaceResponse> call();
     }
 
     CreateNetworkInterfaceBuilder createNetworkInterface();
@@ -3151,7 +3150,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AttachNetworkInterfaceResponse> call();
+        Transformer<Interact, AttachNetworkInterfaceResponse> call();
     }
 
     AttachNetworkInterfaceBuilder attachNetworkInterface();
@@ -3170,7 +3169,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AssignPrivateIpAddressesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AssignPrivateIpAddressesResponse> call();
+        Transformer<Interact, AssignPrivateIpAddressesResponse> call();
     }
 
     AssignPrivateIpAddressesBuilder assignPrivateIpAddresses();
@@ -3189,7 +3188,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         UnassignPrivateIpAddressesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, UnassignPrivateIpAddressesResponse> call();
+        Transformer<Interact, UnassignPrivateIpAddressesResponse> call();
     }
 
     UnassignPrivateIpAddressesBuilder unassignPrivateIpAddresses();
@@ -3208,7 +3207,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DetachNetworkInterfaceResponse> call();
+        Transformer<Interact, DetachNetworkInterfaceResponse> call();
     }
 
     DetachNetworkInterfaceBuilder detachNetworkInterface();
@@ -3227,7 +3226,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DeleteNetworkInterfaceResponse> call();
+        Transformer<Interact, DeleteNetworkInterfaceResponse> call();
     }
 
     DeleteNetworkInterfaceBuilder deleteNetworkInterface();
@@ -3246,7 +3245,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeNetworkInterfacesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, DescribeNetworkInterfacesResponse> call();
+        Transformer<Interact, DescribeNetworkInterfacesResponse> call();
     }
 
     DescribeNetworkInterfacesBuilder describeNetworkInterfaces();
@@ -3265,7 +3264,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyNetworkInterfaceAttributeBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, ModifyNetworkInterfaceAttributeResponse> call();
+        Transformer<Interact, ModifyNetworkInterfaceAttributeResponse> call();
     }
 
     ModifyNetworkInterfaceAttributeBuilder modifyNetworkInterfaceAttribute();
@@ -3284,7 +3283,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AssignIpv6AddressesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, AssignIpv6AddressesResponse> call();
+        Transformer<Interact, AssignIpv6AddressesResponse> call();
     }
 
     AssignIpv6AddressesBuilder assignIpv6Addresses();
@@ -3303,7 +3302,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         UnassignIpv6AddressesBuilder regionId(final String regionId);
 
-        Transformer<RpcRunner, UnassignIpv6AddressesResponse> call();
+        Transformer<Interact, UnassignIpv6AddressesResponse> call();
     }
 
     UnassignIpv6AddressesBuilder unassignIpv6Addresses();

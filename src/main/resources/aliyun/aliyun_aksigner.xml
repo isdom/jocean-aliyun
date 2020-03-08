@@ -5,8 +5,6 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
     
     <bean id="aksigner" class="org.jocean.aliyun.sign.AKSigner"/>
-    <bean id="aksigner2" class="org.jocean.aliyun.sign.AKSigner2"/>
     
     <alias name="aksigner" alias="${signer.name:aksigner.default}"/>
-    <alias name="aksigner2" alias="${signer2.name:aksigner2.default}"/>
 </beans>

@@ -1,9 +1,9 @@
 package org.jocean.aliyun.sign;
 
-import org.jocean.http.RpcRunner;
+import org.jocean.http.Interact;
 
 import rx.functions.Action1;
 
-public interface AliyunSigner extends Action1<RpcRunner>{
+public interface AliyunSigner extends Action1<Interact>{
 
 }

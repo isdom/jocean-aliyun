@@ -3,11 +3,13 @@ package org.jocean.aliyun.sign;
 import org.jocean.http.Interact;
 import org.springframework.beans.factory.annotation.Value;
 
+import rx.Observable;
+
 public class AKSigner implements AliyunSigner {
 
     @Override
-    public void call(final Interact interact) {
-        interact.onsending(SignerV1.signRequest(_ak_id, _ak_secret));
+    public Observable<Interact> call(final Observable<Interact> interacts) {
+        return interacts.doOnNext(interact -> interact.onsending(SignerV1.signRequest(_ak_id, _ak_secret)));
     }
 
     @Value("${ak_id}")

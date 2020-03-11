@@ -9,6 +9,7 @@ import org.jocean.rpc.annotation.ConstParams;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import rx.Observable;
 import rx.Observable.Transformer;
 
 // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
@@ -740,7 +741,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "CreateInstance"})
-        Transformer<Interact, CreateInstanceResponse> call();
+        Observable<CreateInstanceResponse> call();
     }
 
     CreateInstanceBuilder createInstance();

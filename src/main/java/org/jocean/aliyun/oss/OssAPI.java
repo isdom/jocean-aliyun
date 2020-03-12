@@ -18,7 +18,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.FullMessage;
-import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 
 import com.aliyun.oss.model.Bucket;
@@ -28,7 +27,6 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable;
-import rx.Observable.Transformer;
 
 public interface OssAPI {
     interface Endpointable<BUILDER> {
@@ -126,7 +124,7 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{object}")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     PutObjectBuilder putObject();
@@ -151,7 +149,7 @@ public interface OssAPI {
 
         @GET
         @Path("http://{bucket}.{endpoint}/{object}")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     GetObjectBuilder getObject();
@@ -644,7 +642,7 @@ public interface OssAPI {
         @GET
         @Path("http://{bucket}.{endpoint}/")
         @Consumes(MediaType.APPLICATION_XML)
-        Transformer<Interact, ObjectListing> call();
+        Observable<ObjectListing> call();
     }
 
     ListObjectsBuilder listObjects();
@@ -654,7 +652,7 @@ public interface OssAPI {
 
         @HEAD
         @Path("http://{bucket}.{endpoint}/{object}?objectMeta")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     GetObjectMetaBuilder getObjectMeta();
@@ -678,7 +676,7 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{destObject}")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     CopyObjectBuilder copyObject();
@@ -687,7 +685,7 @@ public interface OssAPI {
 
         @DELETE
         @Path("http://{bucket}.{endpoint}/{object}")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     DeleteObjectBuilder deleteObject();
@@ -702,7 +700,7 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{symlinkObject}?symlink")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     PutSymlinkBuilder putSymlink();
@@ -715,7 +713,7 @@ public interface OssAPI {
 
         @GET
         @Path("http://{bucket}.{endpoint}/{symlinkObject}?symlink")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     GetSymlinkBuilder getSymlink();
@@ -775,7 +773,7 @@ public interface OssAPI {
         @POST
         @Path("http://{bucket}.{endpoint}/{object}?uploads")
         @Consumes(MediaType.APPLICATION_XML)
-        Transformer<Interact, InitiateMultipartUploadResult> call();
+        Observable<InitiateMultipartUploadResult> call();
     }
 
     InitiateMultipartUploadBuilder initiateMultipartUpload();
@@ -802,7 +800,7 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{object}")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     UploadPartBuilder uploadPart();
@@ -950,7 +948,7 @@ public interface OssAPI {
         @POST
         @Path("http://{bucket}.{endpoint}/{object}")
         @Consumes(MediaType.APPLICATION_XML)
-        Transformer<Interact, CompleteMultipartUploadResult> call();
+        Observable<CompleteMultipartUploadResult> call();
     }
 
     CompleteMultipartUploadBuilder completeMultipartUpload();
@@ -978,7 +976,7 @@ public interface OssAPI {
 
         @DELETE
         @Path("http://{bucket}.{endpoint}/{object}")
-        Transformer<Interact, FullMessage<HttpResponse>> call();
+        Observable<FullMessage<HttpResponse>> call();
     }
 
     AbortMultipartUploadBuilder abortMultipartUpload();

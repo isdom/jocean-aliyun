@@ -24,22 +24,22 @@ dependencies {
     compile 'javax.inject:javax.inject:1'
     compile 'com.google.guava:guava:28.1-jre'
     
-    compile 'com.aliyun:aliyun-java-sdk-core:4.4.5'
+    compile 'com.aliyun:aliyun-java-sdk-core:4.5.0'
     
     /*aliyun ecs*/
-    compile 'com.aliyun:aliyun-java-sdk-ecs:4.17.5'
+    compile 'com.aliyun:aliyun-java-sdk-ecs:4.19.2'
     
     /*aliyun ivision*/
-    compile 'com.aliyun:aliyun-java-sdk-ivision:1.0.1'
+    compile 'com.aliyun:aliyun-java-sdk-ivision:1.2.0'
     
     /*aliyun ons*/
     compile 'com.aliyun.openservices:ons-client:1.7.8.Final'
     
     /* for aliyun-sdk-oss */
-    compile 'com.aliyun.oss:aliyun-sdk-oss:3.3.0'
+    compile 'com.aliyun.oss:aliyun-sdk-oss:3.8.1'
     
     /*aliyun mns*/
-    compile 'com.aliyun.mns:aliyun-sdk-mns:1.1.8.6'
+    compile 'com.aliyun.mns:aliyun-sdk-mns:1.1.8.8'
     
     compile "org.springframework:spring-context-support:${springVersion}"
     

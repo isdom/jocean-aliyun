@@ -21,8 +21,6 @@ package org.jocean.aliyun.oss.internal;
 
 import static com.aliyun.oss.internal.OSSConstants.DEFAULT_CHARSET_NAME;
 import static com.aliyun.oss.internal.OSSConstants.OBJECT_NAME_MAX_LENGTH;
-import static com.aliyun.oss.internal.OSSConstants.OSS_AUTHORIZATION_PREFIX;
-import static com.aliyun.oss.internal.OSSConstants.OSS_AUTHORIZATION_SEPERATOR;
 import static com.aliyun.oss.internal.OSSConstants.RESOURCE_NAME_COMMON;
 import static com.aliyun.oss.internal.OSSConstants.RESOURCE_NAME_OSS;
 
@@ -45,32 +43,32 @@ import com.aliyun.oss.common.utils.DateUtil;
 import com.aliyun.oss.common.utils.HttpUtil;
 import com.aliyun.oss.common.utils.ResourceManager;
 import com.aliyun.oss.model.Callback;
+import com.aliyun.oss.model.Callback.CalbackBodyType;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.ResponseHeaderOverrides;
-import com.aliyun.oss.model.Callback.CalbackBodyType;
 
 public class OSSUtils {
-    
-    public static final ResourceManager OSS_RESOURCE_MANAGER = 
+
+    public static final ResourceManager OSS_RESOURCE_MANAGER =
             ResourceManager.getInstance(RESOURCE_NAME_OSS);
-    public static final ResourceManager COMMON_RESOURCE_MANAGER = 
-            ResourceManager.getInstance(RESOURCE_NAME_COMMON);    
-    
+    public static final ResourceManager COMMON_RESOURCE_MANAGER =
+            ResourceManager.getInstance(RESOURCE_NAME_COMMON);
+
     private static final String BUCKET_NAMING_REGEX = "^[a-z0-9][a-z0-9_\\-]{1,61}[a-z0-9]$";
 
     /**
      * Validate bucket name.
      */
-    public static boolean validateBucketName(String bucketName) {
-        
+    public static boolean validateBucketName(final String bucketName) {
+
         if (bucketName == null) {
             return false;
         }
-        
+
         return bucketName.matches(BUCKET_NAMING_REGEX);
     }
 
-    public static void ensureBucketNameValid(String bucketName) {
+    public static void ensureBucketNameValid(final String bucketName) {
         if (!validateBucketName(bucketName)) {
             throw new IllegalArgumentException(OSS_RESOURCE_MANAGER.getFormattedString(
                     "BucketNameInvalid", bucketName));
@@ -80,82 +78,82 @@ public class OSSUtils {
     /**
      * Validate object name.
      */
-    public static boolean validateObjectKey(String key) {
-        
+    public static boolean validateObjectKey(final String key) {
+
         if (key == null || key.length() == 0) {
             return false;
         }
-        
+
         byte[] bytes = null;
         try {
             bytes = key.getBytes(DEFAULT_CHARSET_NAME);
-        } catch (UnsupportedEncodingException e) {
+        } catch (final UnsupportedEncodingException e) {
             return false;
         }
-        
+
         // Validate exculde xml unsupported chars
-        char keyChars[] = key.toCharArray();
-        char firstChar = keyChars[0];
+        final char keyChars[] = key.toCharArray();
+        final char firstChar = keyChars[0];
         if (firstChar == '/' || firstChar == '\\') {
             return false;
         }
-        
+
         return (bytes.length > 0 && bytes.length < OBJECT_NAME_MAX_LENGTH);
     }
 
-    public static void ensureObjectKeyValid(String key) {
+    public static void ensureObjectKeyValid(final String key) {
         if (!validateObjectKey(key)) {
             throw new IllegalArgumentException(OSS_RESOURCE_MANAGER.getFormattedString(
                     "ObjectKeyInvalid", key));
         }
     }
-    
-    public static void ensureLiveChannelNameValid(String liveChannelName) {
+
+    public static void ensureLiveChannelNameValid(final String liveChannelName) {
         if (!validateObjectKey(liveChannelName)) {
             throw new IllegalArgumentException(OSS_RESOURCE_MANAGER.getFormattedString(
                     "LiveChannelNameInvalid", liveChannelName));
         }
     }
-    
+
     /**
-     * Make a third-level domain by appending bucket name to front of original endpoint 
+     * Make a third-level domain by appending bucket name to front of original endpoint
      * if no binding to CNAME, otherwise use original endpoint as second-level domain directly.
      */
-    public static URI determineFinalEndpoint(URI endpoint, String bucket, ClientConfiguration clientConfig) {
+    public static URI determineFinalEndpoint(final URI endpoint, final String bucket, final ClientConfiguration clientConfig) {
         try {
-            StringBuilder conbinedEndpoint = new StringBuilder();
+            final StringBuilder conbinedEndpoint = new StringBuilder();
             conbinedEndpoint.append(String.format("%s://", endpoint.getScheme()));
             conbinedEndpoint.append(buildCanonicalHost(endpoint, bucket, clientConfig));
             conbinedEndpoint.append(endpoint.getPort() != -1 ? String.format(":%s", endpoint.getPort()) : "");
             conbinedEndpoint.append(endpoint.getPath());
             return new URI(conbinedEndpoint.toString());
-        } catch (URISyntaxException ex) {
-            throw new IllegalArgumentException(ex.getMessage(), ex);            
+        } catch (final URISyntaxException ex) {
+            throw new IllegalArgumentException(ex.getMessage(), ex);
         }
     }
-    
-    private static String buildCanonicalHost(URI endpoint, String bucket, ClientConfiguration clientConfig) {
-        String host = endpoint.getHost();
-        
+
+    private static String buildCanonicalHost(final URI endpoint, final String bucket, final ClientConfiguration clientConfig) {
+        final String host = endpoint.getHost();
+
         boolean isCname = false;
         if (clientConfig.isSupportCname()) {
-            isCname = cnameExcludeFilter(host, clientConfig.getCnameExcludeList());            
+            isCname = cnameExcludeFilter(host, clientConfig.getCnameExcludeList());
         }
-        
-        StringBuffer cannonicalHost = new StringBuffer();
-        if (bucket != null && !isCname && !clientConfig.isSLDEnabled()) {        
+
+        final StringBuffer cannonicalHost = new StringBuffer();
+        if (bucket != null && !isCname && !clientConfig.isSLDEnabled()) {
                 cannonicalHost.append(bucket).append(".").append(host);
         } else {
             cannonicalHost.append(host);
         }
-        
+
         return cannonicalHost.toString();
     }
 
-    private static boolean cnameExcludeFilter(String hostToFilter, List<String> excludeList) {         
+    private static boolean cnameExcludeFilter(final String hostToFilter, final List<String> excludeList) {
         if (hostToFilter != null && !hostToFilter.trim().isEmpty()) {
-            String canonicalHost = hostToFilter.toLowerCase();
-            for (String excl : excludeList) {
+            final String canonicalHost = hostToFilter.toLowerCase();
+            for (final String excl : excludeList) {
                 if (canonicalHost.endsWith(excl)) {
                     return false;
                 }
@@ -164,22 +162,22 @@ public class OSSUtils {
         }
         throw new  IllegalArgumentException("Host name can not be null.");
     }
-    
-    public static String determineResourcePath(String bucket, String key, boolean sldEnabled) {
+
+    public static String determineResourcePath(final String bucket, final String key, final boolean sldEnabled) {
         return sldEnabled ? makeResourcePath(bucket, key) : makeResourcePath(key);
     }
-    
+
     /**
      * Make a resource path from the object key, used when the bucket name pearing in the endpoint.
      */
-    public static String makeResourcePath(String key) {
+    public static String makeResourcePath(final String key) {
         return key != null ? OSSUtils.urlEncodeKey(key) : null;
     }
 
     /**
      * Make a resource path from the bucket name and the object key.
      */
-    public static String makeResourcePath(String bucket, String key) {
+    public static String makeResourcePath(final String bucket, final String key) {
         if (bucket != null) {
             return bucket + "/" + (key != null ? OSSUtils.urlEncodeKey(key) : "");
         } else {
@@ -190,10 +188,10 @@ public class OSSUtils {
     /**
      * Encode object URI.
      */
-    private static String urlEncodeKey(String key) {
-        StringBuffer resultUri = new StringBuffer();
+    private static String urlEncodeKey(final String key) {
+        final StringBuffer resultUri = new StringBuffer();
 
-        String[] keys = key.split("/");
+        final String[] keys = key.split("/");
         resultUri.append(HttpUtil.urlEncode(keys[0], DEFAULT_CHARSET_NAME));
         for (int i = 1; i < keys.length; i++) {
             resultUri.append("/").append(HttpUtil.urlEncode(keys[i], DEFAULT_CHARSET_NAME));
@@ -218,10 +216,10 @@ public class OSSUtils {
     /**
      * Populate metadata to headers.
      */
-    public static void populateRequestMetadata(Map<String, String> headers, ObjectMetadata metadata) {
-        Map<String, Object> rawMetadata = metadata.getRawMetadata();
+    public static void populateRequestMetadata(final Map<String, String> headers, final ObjectMetadata metadata) {
+        final Map<String, Object> rawMetadata = metadata.getRawMetadata();
         if (rawMetadata != null) {
-            for (Entry<String, Object> entry : rawMetadata.entrySet()) {
+            for (final Entry<String, Object> entry : rawMetadata.entrySet()) {
                 if (entry.getKey() != null && entry.getValue() != null) {
                     String key = entry.getKey();
                     String value = entry.getValue().toString();
@@ -232,9 +230,9 @@ public class OSSUtils {
             }
         }
 
-        Map<String, String> userMetadata = metadata.getUserMetadata();
+        final Map<String, String> userMetadata = metadata.getUserMetadata();
         if (userMetadata != null) {
-            for (Entry<String, String> entry : userMetadata.entrySet()) {
+            for (final Entry<String, String> entry : userMetadata.entrySet()) {
                 if (entry.getKey() != null && entry.getValue() != null) {
                     String key = entry.getKey();
                     String value = entry.getValue();
@@ -245,173 +243,173 @@ public class OSSUtils {
             }
         }
     }
- 
-    public static void addHeader(Map<String, String> headers, String header, String value) {
+
+    public static void addHeader(final Map<String, String> headers, final String header, final String value) {
         if (value != null) {
             headers.put(header, value);
         }
     }
 
-    public static void addDateHeader(Map<String, String> headers, String header, Date value) {
+    public static void addDateHeader(final Map<String, String> headers, final String header, final Date value) {
         if (value != null) {
             headers.put(header, DateUtil.formatRfc822Date(value));
         }
     }
 
-    public static void addStringListHeader(Map<String, String> headers, String header, 
-            List<String> values) {
+    public static void addStringListHeader(final Map<String, String> headers, final String header,
+            final List<String> values) {
         if (values != null && !values.isEmpty()) {
             headers.put(header, join(values));
         }
     }
-    
-    public static void removeHeader(Map<String, String> headers, String header) {
+
+    public static void removeHeader(final Map<String, String> headers, final String header) {
         if (header != null && headers.containsKey(header)) {
             headers.remove(header);
         }
     }
-     
-    public static String join(List<String> strings) {
-        
-        StringBuilder sb = new StringBuilder();
+
+    public static String join(final List<String> strings) {
+
+        final StringBuilder sb = new StringBuilder();
         boolean first = true;
-        
-        for (String s : strings) {
+
+        for (final String s : strings) {
             if (!first) {
                 sb.append(", ");
             }
             sb.append(s);
-            
+
             first = false;
         }
 
         return sb.toString();
     }
-    
+
     public static String trimQuotes(String s) {
-        
+
         if (s == null) {
             return null;
         }
 
         s = s.trim();
         if (s.startsWith("\"")) {
-            s = s.substring(1);            
+            s = s.substring(1);
         }
         if (s.endsWith("\"")) {
-            s = s.substring(0, s.length() - 1);            
+            s = s.substring(0, s.length() - 1);
         }
 
         return s;
     }
 
-    public static void populateResponseHeaderParameters(Map<String, String> params, 
-            ResponseHeaderOverrides responseHeaders) {        
-        
+    public static void populateResponseHeaderParameters(final Map<String, String> params,
+            final ResponseHeaderOverrides responseHeaders) {
+
         if (responseHeaders != null) {
             if (responseHeaders.getCacheControl() != null) {
-                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CACHE_CONTROL, 
+                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CACHE_CONTROL,
                         responseHeaders.getCacheControl());
             }
-            
+
             if (responseHeaders.getContentDisposition() != null) {
-                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_DISPOSITION, 
+                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_DISPOSITION,
                         responseHeaders.getContentDisposition());
             }
-            
+
             if (responseHeaders.getContentEncoding() != null) {
-                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_ENCODING, 
+                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_ENCODING,
                         responseHeaders.getContentEncoding());
             }
-            
+
             if (responseHeaders.getContentLangauge() != null) {
-                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_LANGUAGE, 
+                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_LANGUAGE,
                         responseHeaders.getContentLangauge());
             }
-            
+
             if (responseHeaders.getContentType() != null) {
-                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_TYPE, 
+                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_CONTENT_TYPE,
                         responseHeaders.getContentType());
             }
-            
+
             if (responseHeaders.getExpires() != null) {
-                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_EXPIRES, 
+                params.put(ResponseHeaderOverrides.RESPONSE_HEADER_EXPIRES,
                         responseHeaders.getExpires());
             }
         }
     }
 
-    public static void safeCloseResponse(ResponseMessage response) {
+    public static void safeCloseResponse(final ResponseMessage response) {
         try {
             response.close();
-        } catch(IOException e) { }
+        } catch(final IOException e) { }
     }
-    
-    public static void mandatoryCloseResponse(ResponseMessage response) {
+
+    public static void mandatoryCloseResponse(final ResponseMessage response) {
         try {
             response.abort();
-        } catch(IOException e) { }
+        } catch(final IOException e) { }
     }
-    
-    public static long determineInputStreamLength(InputStream instream, long hintLength) {
-        
+
+    public static long determineInputStreamLength(final InputStream instream, final long hintLength) {
+
         if (hintLength <= 0 || !instream.markSupported()) {
             return -1;
-        } 
-        
+        }
+
         return hintLength;
     }
-    
-    public static long determineInputStreamLength(InputStream instream, long hintLength, 
-            boolean useChunkEncoding) {
-        
+
+    public static long determineInputStreamLength(final InputStream instream, final long hintLength,
+            final boolean useChunkEncoding) {
+
         if (useChunkEncoding) {
             return -1;
         }
-        
+
         if (hintLength <= 0 || !instream.markSupported()) {
             return -1;
-        } 
-        
+        }
+
         return hintLength;
     }
-    
-    public static String joinETags(List<String> eTags) {
-        
-        StringBuilder sb = new StringBuilder();
+
+    public static String joinETags(final List<String> eTags) {
+
+        final StringBuilder sb = new StringBuilder();
         boolean first = true;
-        
-        for (String eTag : eTags) {
+
+        for (final String eTag : eTags) {
             if (!first) {
                 sb.append(", ");
             }
             sb.append(eTag);
-            
+
             first = false;
         }
 
         return sb.toString();
     }
-    
-    public static String composeRequestAuthorization(String accessKeyId, String signature) {
-        return OSS_AUTHORIZATION_PREFIX + accessKeyId + OSS_AUTHORIZATION_SEPERATOR + signature;
+
+    public static String composeRequestAuthorization(final String accessKeyId, final String signature) {
+        return "OSS " + accessKeyId + ":" + signature;
     }
-    
+
     /**
      * 用JSON格式编码Callback
      */
-    public static String jsonizeCallback (Callback callback) {
-        StringBuffer jsonBody = new StringBuffer();
-        
+    public static String jsonizeCallback (final Callback callback) {
+        final StringBuffer jsonBody = new StringBuffer();
+
         jsonBody.append("{");
         // url, required
         jsonBody.append("\"callbackUrl\":" + "\"" + callback.getCallbackUrl() + "\"");
-        
+
         // host, optional
         if (callback.getCallbackHost() != null && !callback.getCallbackHost().isEmpty()) {
             jsonBody.append(",\"callbackHost\":" + "\"" + callback.getCallbackHost() + "\"");
         }
-        
+
         // body, require
         jsonBody.append(",\"callbackBody\":" + "\"" + callback.getCallbackBody() + "\"");
 
@@ -422,18 +420,18 @@ public class OSSUtils {
             jsonBody.append(",\"callbackBodyType\":\"application/x-www-form-urlencoded\"");
         }
         jsonBody.append("}");
-        
+
         return jsonBody.toString();
     }
-    
+
     /**
      * 用JSON格式编码CallbackVar
      */
-    public static String jsonizeCallbackVar(Callback callback) {
-        StringBuffer jsonBody = new StringBuffer();
+    public static String jsonizeCallbackVar(final Callback callback) {
+        final StringBuffer jsonBody = new StringBuffer();
 
         jsonBody.append("{");
-        for (Map.Entry<String, String> entry : callback.getCallbackVar().entrySet()) {
+        for (final Map.Entry<String, String> entry : callback.getCallbackVar().entrySet()) {
             if (entry.getKey() != null && entry.getValue() != null) {
                 if (!jsonBody.toString().equals("{")) {
                     jsonBody.append(",");
@@ -445,44 +443,44 @@ public class OSSUtils {
 
         return jsonBody.toString();
     }
-    
+
     /**
      * 确认回调参数有效
      */
-    public static void ensureCallbackValid(Callback callback) {
+    public static void ensureCallbackValid(final Callback callback) {
         if (callback != null) {
             CodingUtils.assertStringNotNullOrEmpty(callback.getCallbackUrl(), "Callback.callbackUrl");
             CodingUtils.assertParameterNotNull(callback.getCallbackBody(), "Callback.callbackBody");
         }
     }
-    
+
     /**
      * 回调参数放入消息头
      */
-    public static void populateRequestCallback(Map<String, String> headers, Callback callback) {
+    public static void populateRequestCallback(final Map<String, String> headers, final Callback callback) {
         if (callback != null) {
-            String jsonCb = jsonizeCallback(callback);
-            String base64Cb = BinaryUtil.toBase64String(jsonCb.getBytes());
+            final String jsonCb = jsonizeCallback(callback);
+            final String base64Cb = BinaryUtil.toBase64String(jsonCb.getBytes());
 
             headers.put(OSSHeaders.OSS_HEADER_CALLBACK, base64Cb);
-            
+
             if (callback.hasCallbackVar()) {
-                String jsonCbVar = jsonizeCallbackVar(callback);
+                final String jsonCbVar = jsonizeCallbackVar(callback);
                 String base64CbVar = BinaryUtil.toBase64String(jsonCbVar.getBytes());
                 base64CbVar = base64CbVar.replaceAll("\n", "").replaceAll("\r", "");
                 headers.put(OSSHeaders.OSS_HEADER_CALLBACK_VAR, base64CbVar);
             }
         }
     }
-    
+
     /**
      * 检测OSS和SDK计算的校验和是否相同，不同抛异常InconsistentException
      */
-    public static void checkChecksum(Long clientChecksum, Long serverChecksum, String requestId) {
-        if (clientChecksum != null && serverChecksum != null && 
+    public static void checkChecksum(final Long clientChecksum, final Long serverChecksum, final String requestId) {
+        if (clientChecksum != null && serverChecksum != null &&
                 !clientChecksum.equals(serverChecksum)) {
             throw new InconsistentException(clientChecksum, serverChecksum, requestId);
         }
     }
-    
+
 }

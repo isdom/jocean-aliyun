@@ -4,13 +4,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import org.jocean.http.Interact;
 import org.jocean.rpc.annotation.ConstParams;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
 import rx.Observable;
-import rx.Observable.Transformer;
 
 // https://help.aliyun.com/document_detail/102988.html?spm=a2c4g.11186623.6.1069.118a79e0WI5Er2
 
@@ -484,7 +482,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstances"})
-        Transformer<Interact, DescribeInstancesResponse> call();
+        Observable<DescribeInstancesResponse> call();
     }
 
     DescribeInstancesBuilder describeInstances();
@@ -583,7 +581,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeSpotPriceHistory"})
-        Transformer<Interact, DescribeSpotPriceHistoryResponse> call();
+        Observable<DescribeSpotPriceHistoryResponse> call();
     }
 
     DescribeSpotPriceHistoryBuilder describeSpotPriceHistory();
@@ -761,7 +759,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StartInstance"})
-        Transformer<Interact, StartInstanceResponse> call();
+        Observable<StartInstanceResponse> call();
     }
 
     StartInstanceBuilder startInstance();
@@ -781,7 +779,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RebootInstance"})
-        Transformer<Interact, RebootInstanceResponse> call();
+        Observable<RebootInstanceResponse> call();
     }
 
     RebootInstanceBuilder rebootInstance();
@@ -804,7 +802,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StopInstance"})
-        Transformer<Interact, StopInstanceResponse> call();
+        Observable<StopInstanceResponse> call();
     }
 
     StopInstanceBuilder stopInstance();
@@ -824,7 +822,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DeleteInstance"})
-        Transformer<Interact, DeleteInstanceResponse> call();
+        Observable<DeleteInstanceResponse> call();
     }
 
     DeleteInstanceBuilder deleteInstance();
@@ -905,7 +903,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "AttachInstanceRamRole"})
-        Transformer<Interact, AttachInstanceRamRoleResponse> call();
+        Observable<AttachInstanceRamRoleResponse> call();
     }
 
     AttachInstanceRamRoleBuilder attachInstanceRamRole();
@@ -1002,7 +1000,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DetachInstanceRamRole"})
-        Transformer<Interact, DetachInstanceRamRoleResponse> call();
+        Observable<DetachInstanceRamRoleResponse> call();
     }
 
     DetachInstanceRamRoleBuilder detachInstanceRamRole();
@@ -1051,7 +1049,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceStatus"})
-        Transformer<Interact, DescribeInstanceStatusResponse> call();
+        Observable<DescribeInstanceStatusResponse> call();
     }
 
     DescribeInstanceStatusBuilder describeInstanceStatus();
@@ -1084,7 +1082,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RenewInstance"})
-        Transformer<Interact, RenewInstanceResponse> call();
+        Observable<RenewInstanceResponse> call();
     }
 
     RenewInstanceBuilder renewInstance();
@@ -1100,7 +1098,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "ReactivateInstances"})
-        Transformer<Interact, ReactivateInstancesResponse> call();
+        Observable<ReactivateInstancesResponse> call();
     }
 
     ReactivateInstancesBuilder reactivateInstances();
@@ -1119,7 +1117,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RedeployInstanceBuilder regionId(final String regionId);
 
-        Transformer<Interact, RedeployInstanceResponse> call();
+        Observable<RedeployInstanceResponse> call();
     }
 
     RedeployInstanceBuilder redeployInstance();
@@ -1141,7 +1139,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceVncUrl"})
-        Transformer<Interact, DescribeInstanceVncUrlResponse> call();
+        Observable<DescribeInstanceVncUrlResponse> call();
     }
 
     DescribeInstanceVncUrlBuilder describeInstanceVncUrl();
@@ -1177,7 +1175,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeUserData"})
-        Transformer<Interact, DescribeUserDataResponse> call();
+        Observable<DescribeUserDataResponse> call();
     }
 
     DescribeUserDataBuilder describeUserData();
@@ -1248,7 +1246,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceAutoRenewAttribute"})
-        Transformer<Interact, DescribeInstanceAutoRenewAttributeResponse> call();
+        Observable<DescribeInstanceAutoRenewAttributeResponse> call();
     }
 
     DescribeInstanceAutoRenewAttributeBuilder describeInstanceAutoRenewAttribute();
@@ -1290,7 +1288,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceRamRole"})
-        Transformer<Interact, DescribeInstanceRamRoleResponse> call();
+        Observable<DescribeInstanceRamRoleResponse> call();
     }
 
     DescribeInstanceRamRoleBuilder describeInstanceRamRole();
@@ -1308,7 +1306,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceTypeFamiliesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeInstanceTypeFamiliesResponse> call();
+        Observable<DescribeInstanceTypeFamiliesResponse> call();
     }
 
     DescribeInstanceTypeFamiliesBuilder describeInstanceTypeFamilies();
@@ -1326,7 +1324,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceTypesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeInstanceTypesResponse> call();
+        Observable<DescribeInstanceTypesResponse> call();
     }
 
     DescribeInstanceTypesBuilder describeInstanceTypes();
@@ -1344,7 +1342,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceVpcAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceVpcAttributeResponse> call();
+        Observable<ModifyInstanceVpcAttributeResponse> call();
     }
 
     ModifyInstanceVpcAttributeBuilder modifyInstanceVpcAttribute();
@@ -1362,7 +1360,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceAttributeResponse> call();
+        Observable<ModifyInstanceAttributeResponse> call();
     }
 
     ModifyInstanceAttributeBuilder modifyInstanceAttribute();
@@ -1380,7 +1378,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceVncPasswdBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceVncPasswdResponse> call();
+        Observable<ModifyInstanceVncPasswdResponse> call();
     }
 
     ModifyInstanceVncPasswdBuilder modifyInstanceVncPasswd();
@@ -1398,7 +1396,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAutoReleaseTimeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceAutoReleaseTimeResponse> call();
+        Observable<ModifyInstanceAutoReleaseTimeResponse> call();
     }
 
     ModifyInstanceAutoReleaseTimeBuilder modifyInstanceAutoReleaseTime();
@@ -1416,7 +1414,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAutoRenewAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceAutoRenewAttributeResponse> call();
+        Observable<ModifyInstanceAutoRenewAttributeResponse> call();
     }
 
     ModifyInstanceAutoRenewAttributeBuilder modifyInstanceAutoRenewAttribute();
@@ -1434,7 +1432,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceChargeTypeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceChargeTypeResponse> call();
+        Observable<ModifyInstanceChargeTypeResponse> call();
     }
 
     ModifyInstanceChargeTypeBuilder modifyInstanceChargeType();
@@ -1452,7 +1450,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceSpecBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceSpecResponse> call();
+        Observable<ModifyInstanceSpecResponse> call();
     }
 
     ModifyInstanceSpecBuilder modifyInstanceSpec();
@@ -1470,7 +1468,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyPrepayInstanceSpecBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyPrepayInstanceSpecResponse> call();
+        Observable<ModifyPrepayInstanceSpecResponse> call();
     }
 
     ModifyPrepayInstanceSpecBuilder modifyPrepayInstanceSpec();
@@ -1488,7 +1486,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstancesFullStatusBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeInstancesFullStatusResponse> call();
+        Observable<DescribeInstancesFullStatusResponse> call();
     }
 
     DescribeInstancesFullStatusBuilder describeInstancesFullStatus();
@@ -1507,7 +1505,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceHistoryEventsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeInstanceHistoryEventsResponse> call();
+        Observable<DescribeInstanceHistoryEventsResponse> call();
     }
 
     DescribeInstanceHistoryEventsBuilder describeInstanceHistoryEvents();
@@ -1526,7 +1524,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeDisksFullStatusBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeDisksFullStatusResponse> call();
+        Observable<DescribeDisksFullStatusResponse> call();
     }
 
     DescribeDisksFullStatusBuilder describeDisksFullStatus();
@@ -1545,7 +1543,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelSimulatedSystemEventsBuilder regionId(final String regionId);
 
-        Transformer<Interact, CancelSimulatedSystemEventsResponse> call();
+        Observable<CancelSimulatedSystemEventsResponse> call();
     }
 
     CancelSimulatedSystemEventsBuilder cancelSimulatedSystemEvents();
@@ -1564,7 +1562,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateSimulatedSystemEventsBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateSimulatedSystemEventsResponse> call();
+        Observable<CreateSimulatedSystemEventsResponse> call();
     }
 
     CreateSimulatedSystemEventsBuilder createSimulatedSystemEvents();
@@ -1584,7 +1582,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeEniMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeEniMonitorDataResponse> call();
+        Observable<DescribeEniMonitorDataResponse> call();
     }
 
     DescribeEniMonitorDataBuilder describeEniMonitorData();
@@ -1603,7 +1601,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeDiskMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeDiskMonitorDataResponse> call();
+        Observable<DescribeDiskMonitorDataResponse> call();
     }
 
     DescribeDiskMonitorDataBuilder describeDiskMonitorData();
@@ -1622,7 +1620,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeInstanceMonitorDataResponse> call();
+        Observable<DescribeInstanceMonitorDataResponse> call();
     }
 
     DescribeInstanceMonitorDataBuilder describeInstanceMonitorData();
@@ -1641,7 +1639,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         GetInstanceScreenshotBuilder regionId(final String regionId);
 
-        Transformer<Interact, GetInstanceScreenshotResponse> call();
+        Observable<GetInstanceScreenshotResponse> call();
     }
 
     GetInstanceScreenshotBuilder getInstanceScreenshot();
@@ -1660,7 +1658,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         GetInstanceConsoleOutputBuilder regionId(final String regionId);
 
-        Transformer<Interact, GetInstanceConsoleOutputResponse> call();
+        Observable<GetInstanceConsoleOutputResponse> call();
     }
 
     GetInstanceConsoleOutputBuilder getInstanceConsoleOutput();
@@ -1679,7 +1677,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotMonitorDataBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSnapshotMonitorDataResponse> call();
+        Observable<DescribeSnapshotMonitorDataResponse> call();
     }
 
     DescribeSnapshotMonitorDataBuilder describeSnapshotMonitorData();
@@ -1698,7 +1696,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeRegionsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeRegionsResponse> call();
+        Observable<DescribeRegionsResponse> call();
     }
 
     DescribeRegionsBuilder describeRegions();
@@ -1717,7 +1715,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeZonesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeZonesResponse> call();
+        Observable<DescribeZonesResponse> call();
     }
 
     DescribeZonesBuilder describeZones();
@@ -1736,7 +1734,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeResourcesModificationBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeResourcesModificationResponse> call();
+        Observable<DescribeResourcesModificationResponse> call();
     }
 
     DescribeResourcesModificationBuilder describeResourcesModification();
@@ -1755,7 +1753,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeAvailableResourceBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeAvailableResourceResponse> call();
+        Observable<DescribeAvailableResourceResponse> call();
     }
 
     DescribeAvailableResourceBuilder describeAvailableResource();
@@ -1775,7 +1773,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateKeyPairBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateKeyPairResponse> call();
+        Observable<CreateKeyPairResponse> call();
     }
 
     CreateKeyPairBuilder createKeyPair();
@@ -1794,7 +1792,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ImportKeyPairBuilder regionId(final String regionId);
 
-        Transformer<Interact, ImportKeyPairResponse> call();
+        Observable<ImportKeyPairResponse> call();
     }
 
     ImportKeyPairBuilder importKeyPair();
@@ -1813,7 +1811,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachKeyPairBuilder regionId(final String regionId);
 
-        Transformer<Interact, AttachKeyPairResponse> call();
+        Observable<AttachKeyPairResponse> call();
     }
 
     AttachKeyPairBuilder attachKeyPair();
@@ -1832,7 +1830,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachKeyPairBuilder regionId(final String regionId);
 
-        Transformer<Interact, DetachKeyPairResponse> call();
+        Observable<DetachKeyPairResponse> call();
     }
 
     DetachKeyPairBuilder detachKeyPair();
@@ -1851,7 +1849,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteKeyPairsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DeleteKeyPairsResponse> call();
+        Observable<DeleteKeyPairsResponse> call();
     }
 
     DeleteKeyPairsBuilder deleteKeyPairs();
@@ -1870,7 +1868,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeKeyPairsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeKeyPairsResponse> call();
+        Observable<DescribeKeyPairsResponse> call();
     }
 
     DescribeKeyPairsBuilder describeKeyPairs();
@@ -1890,7 +1888,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AllocatePublicIpAddressBuilder regionId(final String regionId);
 
-        Transformer<Interact, AllocatePublicIpAddressResponse> call();
+        Observable<AllocatePublicIpAddressResponse> call();
     }
 
     AllocatePublicIpAddressBuilder allocatePublicIpAddress();
@@ -1909,7 +1907,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ConvertNatPublicIpToEipBuilder regionId(final String regionId);
 
-        Transformer<Interact, ConvertNatPublicIpToEipResponse> call();
+        Observable<ConvertNatPublicIpToEipResponse> call();
     }
 
     ConvertNatPublicIpToEipBuilder convertNatPublicIpToEip();
@@ -1928,7 +1926,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachClassicLinkVpcBuilder regionId(final String regionId);
 
-        Transformer<Interact, AttachClassicLinkVpcResponse> call();
+        Observable<AttachClassicLinkVpcResponse> call();
     }
 
     AttachClassicLinkVpcBuilder attachClassicLinkVpc();
@@ -1947,7 +1945,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachClassicLinkVpcBuilder regionId(final String regionId);
 
-        Transformer<Interact, DetachClassicLinkVpcResponse> call();
+        Observable<DetachClassicLinkVpcResponse> call();
     }
 
     DetachClassicLinkVpcBuilder detachClassicLinkVpc();
@@ -1966,7 +1964,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeBandwidthLimitationBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeBandwidthLimitationResponse> call();
+        Observable<DescribeBandwidthLimitationResponse> call();
     }
 
     DescribeBandwidthLimitationBuilder describeBandwidthLimitation();
@@ -1985,7 +1983,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeClassicLinkInstancesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeClassicLinkInstancesResponse> call();
+        Observable<DescribeClassicLinkInstancesResponse> call();
     }
 
     DescribeClassicLinkInstancesBuilder describeClassicLinkInstances();
@@ -2004,7 +2002,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceNetworkSpecBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyInstanceNetworkSpecResponse> call();
+        Observable<ModifyInstanceNetworkSpecResponse> call();
     }
 
     ModifyInstanceNetworkSpecBuilder modifyInstanceNetworkSpec();
@@ -2024,7 +2022,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateSecurityGroupResponse> call();
+        Observable<CreateSecurityGroupResponse> call();
     }
 
     CreateSecurityGroupBuilder createSecurityGroup();
@@ -2043,7 +2041,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AuthorizeSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<Interact, AuthorizeSecurityGroupResponse> call();
+        Observable<AuthorizeSecurityGroupResponse> call();
     }
 
     AuthorizeSecurityGroupBuilder authorizeSecurityGroup();
@@ -2062,7 +2060,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AuthorizeSecurityGroupEgressBuilder regionId(final String regionId);
 
-        Transformer<Interact, AuthorizeSecurityGroupEgressResponse> call();
+        Observable<AuthorizeSecurityGroupEgressResponse> call();
     }
 
     AuthorizeSecurityGroupEgressBuilder authorizeSecurityGroupEgress();
@@ -2081,7 +2079,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RevokeSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<Interact, RevokeSecurityGroupResponse> call();
+        Observable<RevokeSecurityGroupResponse> call();
     }
 
     RevokeSecurityGroupBuilder revokeSecurityGroup();
@@ -2100,7 +2098,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RevokeSecurityGroupEgressBuilder regionId(final String regionId);
 
-        Transformer<Interact, RevokeSecurityGroupEgressResponse> call();
+        Observable<RevokeSecurityGroupEgressResponse> call();
     }
 
     RevokeSecurityGroupEgressBuilder revokeSecurityGroupEgress();
@@ -2119,7 +2117,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         JoinSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<Interact, JoinSecurityGroupResponse> call();
+        Observable<JoinSecurityGroupResponse> call();
     }
 
     JoinSecurityGroupBuilder joinSecurityGroup();
@@ -2138,7 +2136,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         LeaveSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<Interact, LeaveSecurityGroupResponse> call();
+        Observable<LeaveSecurityGroupResponse> call();
     }
 
     LeaveSecurityGroupBuilder leaveSecurityGroup();
@@ -2157,7 +2155,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteSecurityGroupBuilder regionId(final String regionId);
 
-        Transformer<Interact, DeleteSecurityGroupResponse> call();
+        Observable<DeleteSecurityGroupResponse> call();
     }
 
     DeleteSecurityGroupBuilder deleteSecurityGroup();
@@ -2176,7 +2174,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSecurityGroupAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSecurityGroupAttributeResponse> call();
+        Observable<DescribeSecurityGroupAttributeResponse> call();
     }
 
     DescribeSecurityGroupAttributeBuilder describeSecurityGroupAttribute();
@@ -2195,7 +2193,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSecurityGroupsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSecurityGroupsResponse> call();
+        Observable<DescribeSecurityGroupsResponse> call();
     }
 
     DescribeSecurityGroupsBuilder describeSecurityGroups();
@@ -2214,7 +2212,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSecurityGroupReferencesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSecurityGroupReferencesResponse> call();
+        Observable<DescribeSecurityGroupReferencesResponse> call();
     }
 
     DescribeSecurityGroupReferencesBuilder describeSecurityGroupReferences();
@@ -2233,7 +2231,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifySecurityGroupAttributeResponse> call();
+        Observable<ModifySecurityGroupAttributeResponse> call();
     }
 
     ModifySecurityGroupAttributeBuilder modifySecurityGroupAttribute();
@@ -2252,7 +2250,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupEgressRuleBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifySecurityGroupEgressRuleResponse> call();
+        Observable<ModifySecurityGroupEgressRuleResponse> call();
     }
 
     ModifySecurityGroupEgressRuleBuilder modifySecurityGroupEgressRule();
@@ -2271,7 +2269,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupPolicyBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifySecurityGroupPolicyResponse> call();
+        Observable<ModifySecurityGroupPolicyResponse> call();
     }
 
     ModifySecurityGroupPolicyBuilder modifySecurityGroupPolicy();
@@ -2290,7 +2288,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySecurityGroupRuleBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifySecurityGroupRuleResponse> call();
+        Observable<ModifySecurityGroupRuleResponse> call();
     }
 
     ModifySecurityGroupRuleBuilder modifySecurityGroupRule();
@@ -2310,7 +2308,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateImageBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateImageResponse> call();
+        Observable<CreateImageResponse> call();
     }
 
     CreateImageBuilder createImage();
@@ -2329,7 +2327,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ImportImageBuilder regionId(final String regionId);
 
-        Transformer<Interact, ImportImageResponse> call();
+        Observable<ImportImageResponse> call();
     }
 
     ImportImageBuilder importImage();
@@ -2348,7 +2346,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CopyImageBuilder regionId(final String regionId);
 
-        Transformer<Interact, CopyImageResponse> call();
+        Observable<CopyImageResponse> call();
     }
 
     CopyImageBuilder copyImage();
@@ -2367,7 +2365,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelCopyImageBuilder regionId(final String regionId);
 
-        Transformer<Interact, CancelCopyImageResponse> call();
+        Observable<CancelCopyImageResponse> call();
     }
 
     CancelCopyImageBuilder cancelCopyImage();
@@ -2386,7 +2384,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ExportImageBuilder regionId(final String regionId);
 
-        Transformer<Interact, ExportImageResponse> call();
+        Observable<ExportImageResponse> call();
     }
 
     ExportImageBuilder exportImage();
@@ -2405,7 +2403,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeImagesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeImagesResponse> call();
+        Observable<DescribeImagesResponse> call();
     }
 
     DescribeImagesBuilder describeImages();
@@ -2424,7 +2422,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteImageBuilder regionId(final String regionId);
 
-        Transformer<Interact, DeleteImageResponse> call();
+        Observable<DeleteImageResponse> call();
     }
 
     DeleteImageBuilder deleteImage();
@@ -2443,7 +2441,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeImageSharePermissionBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeImageSharePermissionResponse> call();
+        Observable<DescribeImageSharePermissionResponse> call();
     }
 
     DescribeImageSharePermissionBuilder describeImageSharePermission();
@@ -2462,7 +2460,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyImageAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyImageAttributeResponse> call();
+        Observable<ModifyImageAttributeResponse> call();
     }
 
     ModifyImageAttributeBuilder modifyImageAttribute();
@@ -2481,7 +2479,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyImageSharePermissionBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyImageSharePermissionResponse> call();
+        Observable<ModifyImageSharePermissionResponse> call();
     }
 
     ModifyImageSharePermissionBuilder modifyImageSharePermission();
@@ -2500,7 +2498,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeImageSupportInstanceTypesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeImageSupportInstanceTypesResponse> call();
+        Observable<DescribeImageSupportInstanceTypesResponse> call();
     }
 
     DescribeImageSupportInstanceTypesBuilder describeImageSupportInstanceTypes();
@@ -2520,7 +2518,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateSnapshotBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateSnapshotResponse> call();
+        Observable<CreateSnapshotResponse> call();
     }
 
     CreateSnapshotBuilder createSnapshot();
@@ -2539,7 +2537,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteSnapshotBuilder regionId(final String regionId);
 
-        Transformer<Interact, DeleteSnapshotResponse> call();
+        Observable<DeleteSnapshotResponse> call();
     }
 
     DeleteSnapshotBuilder deleteSnapshot();
@@ -2558,7 +2556,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSnapshotsResponse> call();
+        Observable<DescribeSnapshotsResponse> call();
     }
 
     DescribeSnapshotsBuilder describeSnapshots();
@@ -2577,7 +2575,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotsUsageBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSnapshotsUsageResponse> call();
+        Observable<DescribeSnapshotsUsageResponse> call();
     }
 
     DescribeSnapshotsUsageBuilder describeSnapshotsUsage();
@@ -2596,7 +2594,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotPackageBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSnapshotPackageResponse> call();
+        Observable<DescribeSnapshotPackageResponse> call();
     }
 
     DescribeSnapshotPackageBuilder describeSnapshotPackage();
@@ -2615,7 +2613,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotLinksBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeSnapshotLinksResponse> call();
+        Observable<DescribeSnapshotLinksResponse> call();
     }
 
     DescribeSnapshotLinksBuilder describeSnapshotLinks();
@@ -2634,7 +2632,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifySnapshotAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifySnapshotAttributeResponse> call();
+        Observable<ModifySnapshotAttributeResponse> call();
     }
 
     ModifySnapshotAttributeBuilder modifySnapshotAttribute();
@@ -2653,7 +2651,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateAutoSnapshotPolicyResponse> call();
+        Observable<CreateAutoSnapshotPolicyResponse> call();
     }
 
     CreateAutoSnapshotPolicyBuilder createAutoSnapshotPolicy();
@@ -2672,7 +2670,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ApplyAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<Interact, ApplyAutoSnapshotPolicyResponse> call();
+        Observable<ApplyAutoSnapshotPolicyResponse> call();
     }
 
     ApplyAutoSnapshotPolicyBuilder applyAutoSnapshotPolicy();
@@ -2691,7 +2689,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<Interact, CancelAutoSnapshotPolicyResponse> call();
+        Observable<CancelAutoSnapshotPolicyResponse> call();
     }
 
     CancelAutoSnapshotPolicyBuilder cancelAutoSnapshotPolicy();
@@ -2710,7 +2708,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteAutoSnapshotPolicyBuilder regionId(final String regionId);
 
-        Transformer<Interact, DeleteAutoSnapshotPolicyResponse> call();
+        Observable<DeleteAutoSnapshotPolicyResponse> call();
     }
 
     DeleteAutoSnapshotPolicyBuilder deleteAutoSnapshotPolicy();
@@ -2729,7 +2727,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeAutoSnapshotPolicyEXBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeAutoSnapshotPolicyEXResponse> call();
+        Observable<DescribeAutoSnapshotPolicyEXResponse> call();
     }
 
     DescribeAutoSnapshotPolicyEXBuilder describeAutoSnapshotPolicyEX();
@@ -2748,7 +2746,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyAutoSnapshotPolicyExBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyAutoSnapshotPolicyExResponse> call();
+        Observable<ModifyAutoSnapshotPolicyExResponse> call();
     }
 
     ModifyAutoSnapshotPolicyExBuilder modifyAutoSnapshotPolicyEx();
@@ -2768,7 +2766,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ListTagResourcesBuilder regionId(final String regionId);
 
-        Transformer<Interact, ListTagResourcesResponse> call();
+        Observable<ListTagResourcesResponse> call();
     }
 
     ListTagResourcesBuilder listTagResources();
@@ -2787,7 +2785,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         TagResourcesBuilder regionId(final String regionId);
 
-        Transformer<Interact, TagResourcesResponse> call();
+        Observable<TagResourcesResponse> call();
     }
 
     TagResourcesBuilder tagResources();
@@ -2806,7 +2804,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         UntagResourcesBuilder regionId(final String regionId);
 
-        Transformer<Interact, UntagResourcesResponse> call();
+        Observable<UntagResourcesResponse> call();
     }
 
     UntagResourcesBuilder untagResources();
@@ -2826,7 +2824,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelTaskBuilder regionId(final String regionId);
 
-        Transformer<Interact, CancelTaskResponse> call();
+        Observable<CancelTaskResponse> call();
     }
 
     CancelTaskBuilder cancelTask();
@@ -2845,7 +2843,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeTasksBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeTasksResponse> call();
+        Observable<DescribeTasksResponse> call();
     }
 
     DescribeTasksBuilder describeTasks();
@@ -2864,7 +2862,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeTaskAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeTaskAttributeResponse> call();
+        Observable<DescribeTaskAttributeResponse> call();
     }
 
     DescribeTaskAttributeBuilder describeTaskAttribute();
@@ -2883,7 +2881,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeAccountAttributesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeAccountAttributesResponse> call();
+        Observable<DescribeAccountAttributesResponse> call();
     }
 
     DescribeAccountAttributesBuilder describeAccountAttributes();
@@ -2902,7 +2900,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribePriceBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribePriceResponse> call();
+        Observable<DescribePriceResponse> call();
     }
 
     DescribePriceBuilder describePrice();
@@ -2921,7 +2919,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         JoinResourceGroupBuilder regionId(final String regionId);
 
-        Transformer<Interact, JoinResourceGroupResponse> call();
+        Observable<JoinResourceGroupResponse> call();
     }
 
     JoinResourceGroupBuilder joinResourceGroup();
@@ -2941,7 +2939,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateCommandBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateCommandResponse> call();
+        Observable<CreateCommandResponse> call();
     }
 
     CreateCommandBuilder createCommand();
@@ -2960,7 +2958,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         InstallCloudAssistantBuilder regionId(final String regionId);
 
-        Transformer<Interact, InstallCloudAssistantResponse> call();
+        Observable<InstallCloudAssistantResponse> call();
     }
 
     InstallCloudAssistantBuilder installCloudAssistant();
@@ -2979,7 +2977,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         InvokeCommandBuilder regionId(final String regionId);
 
-        Transformer<Interact, InvokeCommandResponse> call();
+        Observable<InvokeCommandResponse> call();
     }
 
     InvokeCommandBuilder invokeCommand();
@@ -2998,7 +2996,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         StopInvocationBuilder regionId(final String regionId);
 
-        Transformer<Interact, StopInvocationResponse> call();
+        Observable<StopInvocationResponse> call();
     }
 
     StopInvocationBuilder stopInvocation();
@@ -3017,7 +3015,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteCommandBuilder regionId(final String regionId);
 
-        Transformer<Interact, DeleteCommandResponse> call();
+        Observable<DeleteCommandResponse> call();
     }
 
     DeleteCommandBuilder deleteCommand();
@@ -3036,7 +3034,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeCloudAssistantStatusBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeCloudAssistantStatusResponse> call();
+        Observable<DescribeCloudAssistantStatusResponse> call();
     }
 
     DescribeCloudAssistantStatusBuilder describeCloudAssistantStatus();
@@ -3055,7 +3053,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeCommandsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeCommandsResponse> call();
+        Observable<DescribeCommandsResponse> call();
     }
 
     DescribeCommandsBuilder describeCommands();
@@ -3074,7 +3072,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInvocationsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeInvocationsResponse> call();
+        Observable<DescribeInvocationsResponse> call();
     }
 
     DescribeInvocationsBuilder describeInvocations();
@@ -3093,7 +3091,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInvocationResultsBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeInvocationResultsResponse> call();
+        Observable<DescribeInvocationResultsResponse> call();
     }
 
     DescribeInvocationResultsBuilder describeInvocationResults();
@@ -3112,7 +3110,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RunCommandBuilder regionId(final String regionId);
 
-        Transformer<Interact, RunCommandResponse> call();
+        Observable<RunCommandResponse> call();
     }
 
     RunCommandBuilder runCommand();
@@ -3132,7 +3130,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<Interact, CreateNetworkInterfaceResponse> call();
+        Observable<CreateNetworkInterfaceResponse> call();
     }
 
     CreateNetworkInterfaceBuilder createNetworkInterface();
@@ -3151,7 +3149,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<Interact, AttachNetworkInterfaceResponse> call();
+        Observable<AttachNetworkInterfaceResponse> call();
     }
 
     AttachNetworkInterfaceBuilder attachNetworkInterface();
@@ -3170,7 +3168,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AssignPrivateIpAddressesBuilder regionId(final String regionId);
 
-        Transformer<Interact, AssignPrivateIpAddressesResponse> call();
+        Observable<AssignPrivateIpAddressesResponse> call();
     }
 
     AssignPrivateIpAddressesBuilder assignPrivateIpAddresses();
@@ -3189,7 +3187,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         UnassignPrivateIpAddressesBuilder regionId(final String regionId);
 
-        Transformer<Interact, UnassignPrivateIpAddressesResponse> call();
+        Observable<UnassignPrivateIpAddressesResponse> call();
     }
 
     UnassignPrivateIpAddressesBuilder unassignPrivateIpAddresses();
@@ -3208,7 +3206,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<Interact, DetachNetworkInterfaceResponse> call();
+        Observable<DetachNetworkInterfaceResponse> call();
     }
 
     DetachNetworkInterfaceBuilder detachNetworkInterface();
@@ -3227,7 +3225,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteNetworkInterfaceBuilder regionId(final String regionId);
 
-        Transformer<Interact, DeleteNetworkInterfaceResponse> call();
+        Observable<DeleteNetworkInterfaceResponse> call();
     }
 
     DeleteNetworkInterfaceBuilder deleteNetworkInterface();
@@ -3246,7 +3244,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeNetworkInterfacesBuilder regionId(final String regionId);
 
-        Transformer<Interact, DescribeNetworkInterfacesResponse> call();
+        Observable<DescribeNetworkInterfacesResponse> call();
     }
 
     DescribeNetworkInterfacesBuilder describeNetworkInterfaces();
@@ -3265,7 +3263,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyNetworkInterfaceAttributeBuilder regionId(final String regionId);
 
-        Transformer<Interact, ModifyNetworkInterfaceAttributeResponse> call();
+        Observable<ModifyNetworkInterfaceAttributeResponse> call();
     }
 
     ModifyNetworkInterfaceAttributeBuilder modifyNetworkInterfaceAttribute();
@@ -3284,7 +3282,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AssignIpv6AddressesBuilder regionId(final String regionId);
 
-        Transformer<Interact, AssignIpv6AddressesResponse> call();
+        Observable<AssignIpv6AddressesResponse> call();
     }
 
     AssignIpv6AddressesBuilder assignIpv6Addresses();
@@ -3303,7 +3301,7 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         UnassignIpv6AddressesBuilder regionId(final String regionId);
 
-        Transformer<Interact, UnassignIpv6AddressesResponse> call();
+        Observable<UnassignIpv6AddressesResponse> call();
     }
 
     UnassignIpv6AddressesBuilder unassignIpv6Addresses();

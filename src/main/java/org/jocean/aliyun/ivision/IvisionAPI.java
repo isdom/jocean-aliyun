@@ -4,12 +4,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import org.jocean.http.Interact;
 import org.jocean.http.RpcRunner;
 import org.jocean.rpc.annotation.ConstParams;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import rx.Observable;
 import rx.Observable.Transformer;
 
 @Path("http://ivision.cn-beijing.aliyuncs.com/")
@@ -416,7 +416,7 @@ public interface IvisionAPI {
         public void setStatus(final String status);
     }
 
-    //  https://help.aliyun.com/document_detail/95921.html?spm=a2c4g.11186623.6.564.71014dc0SBzhhV
+    //  https://help.aliyun.com/document_detail/127736.html?spm=a2c4g.11186623.6.569.5c1b33c0sL9SrT
     public interface ImagePredictResponse extends IvisionResponse {
         @JSONField(name="ImagePredict")
         public ImagePredict getImagePredict();
@@ -434,7 +434,7 @@ public interface IvisionAPI {
 
         @GET
         @ConstParams({"Action", "ImagePredict"})
-        Transformer<Interact, ImagePredictResponse> call();
+        Observable<ImagePredictResponse> call();
     }
 
     public ImagePredictBuilder imagePredict();

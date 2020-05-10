@@ -4,13 +4,11 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import org.jocean.http.RpcRunner;
 import org.jocean.rpc.annotation.ConstParams;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
 import rx.Observable;
-import rx.Observable.Transformer;
 
 @Path("http://ivision.cn-beijing.aliyuncs.com/")
 @ConstParams({"Version", "2019-03-08"})
@@ -228,7 +226,7 @@ public interface IvisionAPI {
         @QueryParam("ProType")
         CreateProjectBuilder proType(final String proType);
 
-        Transformer<RpcRunner, CreateProjectResponse> call();
+        Observable<CreateProjectResponse> call();
     }
 
     public CreateProjectBuilder createProject();
@@ -248,7 +246,7 @@ public interface IvisionAPI {
         @QueryParam("IterationIds")
         DescribeIterationsBuilder iterationIds(final String iterationIds);
 
-        Transformer<RpcRunner, DescribeIterationsResponse> call();
+        Observable<DescribeIterationsResponse> call();
     }
 
     public DescribeIterationsBuilder describeIterations();
@@ -268,7 +266,7 @@ public interface IvisionAPI {
         @QueryParam("IterationId")
         DeleteIterationBuilder iterationId(final String iterationId);
 
-        Transformer<RpcRunner, DeleteIterationResponse> call();
+        Observable<DeleteIterationResponse> call();
     }
 
     public DeleteIterationBuilder deleteIteration();
@@ -320,7 +318,7 @@ public interface IvisionAPI {
         @QueryParam("DataUrls")
         PredictImageBuilder imgurls(final String imgurls);
 
-        Transformer<RpcRunner, PredictImageResponse> call();
+        Observable<PredictImageResponse> call();
     }
 
     public PredictImageBuilder predictImage();
@@ -343,7 +341,7 @@ public interface IvisionAPI {
         @QueryParam("DataIds")
         DescribePredictDatasBuilder dataIds(final String dataIds);
 
-        Transformer<RpcRunner, DescribePredictDatasResponse> call();
+        Observable<DescribePredictDatasResponse> call();
     }
 
     public DescribePredictDatasBuilder describePredictDatas();
@@ -361,7 +359,7 @@ public interface IvisionAPI {
         @QueryParam("DataIds")
         DeletePredictDatasBuilder dataIds(final String dataIds);
 
-        Transformer<RpcRunner, DeletePredictDatasResponse> call();
+        Observable<DeletePredictDatasResponse> call();
     }
 
     public DeletePredictDatasBuilder deletePredictDatas();

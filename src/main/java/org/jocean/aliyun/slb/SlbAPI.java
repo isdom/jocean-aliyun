@@ -1,6 +1,7 @@
 package org.jocean.aliyun.slb;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.QueryParam;
 
 import org.jocean.rpc.annotation.ConstParams;
 
@@ -36,6 +37,17 @@ public interface SlbAPI {
 
     // https://help.aliyun.com/document_detail/27577.html?spm=a2c4g.11186623.6.704.63de1771E9lN47
     interface CreateLoadBalancerBuilder {
+        @QueryParam("RegionId")
+        CreateLoadBalancerBuilder regionId(final String regionId);
+
+        @QueryParam("AddressType")
+        CreateLoadBalancerBuilder addressType(final String addressType);
+
+        @QueryParam("InternetChargeType")
+        CreateLoadBalancerBuilder internetChargeType(final String internetChargeType);
+
+        @QueryParam("Bandwidth")
+        CreateLoadBalancerBuilder bandwidth(final Integer bandwidth);
 
         @GET
         @ConstParams({"Action", "CreateLoadBalancer"})

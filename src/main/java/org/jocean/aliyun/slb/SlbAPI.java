@@ -32,7 +32,59 @@ public interface SlbAPI {
     }
 
     interface CreateLoadBalancerResponse extends SLBAPIResponse {
+        @JSONField(name="LoadBalancerId")
+        String getLoadBalancerId();
 
+        @JSONField(name="LoadBalancerId")
+        void setLoadBalancerId(final String loadBalancerId);
+
+        @JSONField(name="ResourceGroupId")
+        String getResourceGroupId();
+
+        @JSONField(name="ResourceGroupId")
+        void setResourceGroupId(final String resourceGroupId);
+
+        @JSONField(name="Address")
+        String getAddress();
+
+        @JSONField(name="Address")
+        void setAddress(final String address);
+
+        @JSONField(name="LoadBalancerName")
+        String getLoadBalancerName();
+
+        @JSONField(name="LoadBalancerName")
+        void setLoadBalancerName(final String loadBalancerName);
+
+        @JSONField(name="VpcId")
+        String getVpcId();
+
+        @JSONField(name="VpcId")
+        void setVpcId(final String vpcId);
+
+        @JSONField(name="VSwitchId")
+        String getVSwitchId();
+
+        @JSONField(name="VSwitchId")
+        void setVSwitchId(final String vSwitchId);
+
+        @JSONField(name="NetworkType")
+        String getNetworkType();
+
+        @JSONField(name="NetworkType")
+        void setNetworkType(final String networkType);
+
+        @JSONField(name="OrderId")
+        Long getOrderId();
+
+        @JSONField(name="OrderId")
+        void setOrderId(final Long orderId);
+
+        @JSONField(name="AddressIPVersion")
+        String getAddressIPVersion();
+
+        @JSONField(name="AddressIPVersion")
+        void setAddressIPVersion(final String addressIPVersion);
     }
 
     interface ClientTokenable<T> {

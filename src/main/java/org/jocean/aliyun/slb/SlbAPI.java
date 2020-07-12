@@ -1,7 +1,10 @@
 package org.jocean.aliyun.slb;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import org.jocean.rpc.annotation.ConstParams;
 
@@ -9,6 +12,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import rx.Observable;
 
+// https://help.aliyun.com/document_detail/27570.html?spm=a2c4g.11186623.6.698.4a1f4fadlRqxeD
+@Path("http://slb.aliyuncs.com/")
+@ConstParams({"Version", "2014-05-15"})
 public interface SlbAPI {
 
     interface SLBAPIResponse {
@@ -319,6 +325,7 @@ public interface SlbAPI {
 
         @GET
         @ConstParams({"Action", "CreateLoadBalancer"})
+        @Consumes(MediaType.APPLICATION_JSON)
         Observable<CreateLoadBalancerResponse> call();
     }
 
@@ -329,4 +336,106 @@ public interface SlbAPI {
     // TODO : CreateVServerGroup: 调用CreateVServerGroup向指定的后端服务器组中添加后端服务器。
 //  @Produces(MediaType.APPLICATION_JSON)
 //  SlbXXXBuilder content(final SlbRequest content);
+
+//    product:Slb
+//    action:SetVServerGroupAttribute
+//    params:
+//    RegionId: "cn-beijing"LoadBalancerId: "lb-2zevw0mj6xjt37a0xyc8l"VServerGroupId: "rsp-2zehmkunz529y"VServerGroupName: "bgw"BackendServers: "[{\"Type\":\"ecs\",\"ServerId\":\"i-2zedtq67d9fm3bvq6r76\",\"Port\":8081,\"Weight\":100}]"
+
+    interface BackendServer {
+        @JSONField(name="ServerId")
+        String getServerId();
+
+        @JSONField(name="ServerId")
+        void setServerId(final String serverId);
+
+        @JSONField(name="Port")
+        Integer getPort();
+
+        @JSONField(name="Port")
+        void setPort(final Integer port);
+
+        @JSONField(name="Weight")
+        Integer getWeight();
+
+        @JSONField(name="Weight")
+        void setWeight(final Integer weight);
+
+        @JSONField(name="Description")
+        String getDescription();
+
+        @JSONField(name="Description")
+        void setDescription(final String description);
+
+        @JSONField(name="Type")
+        String getType();
+
+        @JSONField(name="Type")
+        void setType(final String type);
+    }
+
+    interface SetVServerGroupAttributeResponse extends SLBAPIResponse {
+        @JSONField(name="VServerGroupId")
+        String getVServerGroupId();
+
+        @JSONField(name="VServerGroupId")
+        void setVServerGroupId(final String vServerGroupId);
+
+        @JSONField(name="VServerGroupName")
+        String getVServerGroupName();
+
+        @JSONField(name="VServerGroupName")
+        void setVServerGroupName(final String vServerGroupName);
+    }
+
+    // https://help.aliyun.com/document_detail/35217.html?spm=a2c4g.11186623.6.741.6e2c7b92lpw1MB
+    interface SetVServerGroupAttributeBuilder {
+        /**
+         *
+         * @param regionId
+         * @return SetVServerGroupAttributeBuilder
+         *  必选，样例：cn-hangzhou
+         *  负载均衡地域ID。
+         */
+        @QueryParam("RegionId")
+        SetVServerGroupAttributeBuilder regionId(final String regionId);
+
+        /**
+         *
+         * @param vServerGroupId
+         * @return SetVServerGroupAttributeBuilder
+         *  必选，样例：rsp-cige6******
+         *  后端服务器组ID。
+         */
+        @QueryParam("VServerGroupId")
+        SetVServerGroupAttributeBuilder vServerGroupId(final String vServerGroupId);
+
+        /**
+         *
+         * @param vServerGroupName
+         * @return SetVServerGroupAttributeBuilder
+         *  非必选，样例：Group1
+         *  虚拟服务器组名称。
+         */
+        @QueryParam("VServerGroupName")
+        SetVServerGroupAttributeBuilder vServerGroupName(final String vServerGroupName);
+
+        /**
+         *
+         * @param backendServers
+         * @return SetVServerGroupAttributeBuilder
+         *  非必选，样例：[{ "ServerId": "eni-xxxxxxxxx", "Weight": "100", "Type": "eni", "ServerIp": "192.168.**.**", "Port":"80","Description":"test-112" },{ "ServerId": "eni-xxxxxxxxx", "Weight": "100", "Type": "eni", "ServerIp": "172.166.**.**", "Port":"80","Description":"test-113" }]
+         *  虚拟服务器组列表。
+            单次调用最多可添加20个后端服务器。
+         */
+        @QueryParam("BackendServers")
+        SetVServerGroupAttributeBuilder backendServers(final String backendServers);
+
+        @GET
+        @ConstParams({"Action", "SetVServerGroupAttribute"})
+        @Consumes(MediaType.APPLICATION_JSON)
+        Observable<SetVServerGroupAttributeResponse> call();
+    }
+
+    public SetVServerGroupAttributeBuilder setVServerGroupAttribute();
 }

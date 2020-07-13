@@ -374,6 +374,14 @@ public interface SlbAPI {
         void setType(final String type);
     }
 
+    interface BackendServers {
+        @JSONField(name="BackendServer")
+        BackendServer[] getBackendServer();
+
+        @JSONField(name="BackendServer")
+        void setBackendServer(final BackendServer[] servers);
+    }
+
     interface SetVServerGroupAttributeResponse extends SLBAPIResponse {
         @JSONField(name="VServerGroupId")
         String getVServerGroupId();
@@ -386,6 +394,12 @@ public interface SlbAPI {
 
         @JSONField(name="VServerGroupName")
         void setVServerGroupName(final String vServerGroupName);
+
+        @JSONField(name="BackendServers")
+        BackendServers getBackendServers();
+
+        @JSONField(name="BackendServers")
+        void setBackendServers(final BackendServers backendServers);
     }
 
     // https://help.aliyun.com/document_detail/35217.html?spm=a2c4g.11186623.6.741.6e2c7b92lpw1MB
@@ -438,4 +452,6 @@ public interface SlbAPI {
     }
 
     public SetVServerGroupAttributeBuilder setVServerGroupAttribute();
+
+//    AddVServerGroupBackendServers
 }

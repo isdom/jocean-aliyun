@@ -453,8 +453,13 @@ public interface SlbAPI {
 
     public SetVServerGroupAttributeBuilder setVServerGroupAttribute();
 
+    interface AddVServerGroupBackendServersResponse extends SLBAPIResponse {
+
+    }
+
     // https://help.aliyun.com/document_detail/35218.html?spm=a2c4g.11186623.6.731.7b3e5cf8eNcIAh
     interface AddVServerGroupBackendServersBuilder {
+        Observable<AddVServerGroupBackendServersResponse> call();
     }
 
     public AddVServerGroupBackendServersBuilder addVServerGroupBackendServers();

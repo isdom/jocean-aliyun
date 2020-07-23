@@ -457,10 +457,21 @@ public interface SlbAPI {
 
     }
 
-    // https://help.aliyun.com/document_detail/35218.html?spm=a2c4g.11186623.6.731.7b3e5cf8eNcIAh
     interface AddVServerGroupBackendServersBuilder {
         Observable<AddVServerGroupBackendServersResponse> call();
     }
 
+    // https://help.aliyun.com/document_detail/35218.html?spm=a2c4g.11186623.6.731.7b3e5cf8eNcIAh
     public AddVServerGroupBackendServersBuilder addVServerGroupBackendServers();
+
+    interface RemoveVServerGroupBackendServersResponse extends SLBAPIResponse {
+
+    }
+
+    interface RemoveVServerGroupBackendServersBuilder {
+        Observable<RemoveVServerGroupBackendServersResponse> call();
+    }
+
+    // https://help.aliyun.com/document_detail/35219.html?spm=a2c4g.11186623.6.732.23355cf8jUIMah
+    public RemoveVServerGroupBackendServersBuilder removeVServerGroupBackendServers();
 }

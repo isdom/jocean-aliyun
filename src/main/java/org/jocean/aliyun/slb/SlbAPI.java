@@ -469,6 +469,18 @@ public interface SlbAPI {
     }
 
     interface RemoveVServerGroupBackendServersBuilder {
+        @QueryParam("BackendServers")
+        RemoveVServerGroupBackendServersBuilder backendServers(final String backendServers);
+
+        @QueryParam("RegionId")
+        RemoveVServerGroupBackendServersBuilder regionId(final String regionId);
+
+        @QueryParam("VServerGroupId")
+        RemoveVServerGroupBackendServersBuilder vServerGroupId(final String vServerGroupId);
+
+        @GET
+        @ConstParams({"Action", "RemoveVServerGroupBackendServers"})
+        @Consumes(MediaType.APPLICATION_JSON)
         Observable<RemoveVServerGroupBackendServersResponse> call();
     }
 

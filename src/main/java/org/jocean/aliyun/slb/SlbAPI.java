@@ -465,7 +465,12 @@ public interface SlbAPI {
     public AddVServerGroupBackendServersBuilder addVServerGroupBackendServers();
 
     interface RemoveVServerGroupBackendServersResponse extends SLBAPIResponse {
+        // rsp-cige6j*****  服务器组ID。
+        @JSONField(name="VServerGroupId")
+        String getVServerGroupId();
 
+        @JSONField(name="VServerGroupId")
+        void setVServerGroupId(final String vServerGroupId);
     }
 
     interface RemoveVServerGroupBackendServersBuilder {

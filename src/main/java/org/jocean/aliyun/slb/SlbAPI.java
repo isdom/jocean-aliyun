@@ -471,6 +471,12 @@ public interface SlbAPI {
 
         @JSONField(name="VServerGroupId")
         void setVServerGroupId(final String vServerGroupId);
+
+        @JSONField(name="BackendServers")
+        BackendServers getBackendServers();
+
+        @JSONField(name="BackendServers")
+        void setBackendServers(final BackendServers backendServers);
     }
 
     interface RemoveVServerGroupBackendServersBuilder {

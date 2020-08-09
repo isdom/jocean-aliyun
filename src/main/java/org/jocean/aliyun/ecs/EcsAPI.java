@@ -563,6 +563,7 @@ public interface EcsAPI {
         void setSpotPrices(final SpotPrices spotPrices);
     }
 
+    @RpcBuilder
     interface DescribeSpotPriceHistoryBuilder {
         //  String   是   cn-hangzhou
         //  实例所属的地域ID。您可以调用DescribeRegions查看最新的阿里云地域列表。
@@ -597,6 +598,7 @@ public interface EcsAPI {
         void setInstanceId(final String instanceId);
     }
 
+    @RpcBuilder
     interface CreateInstanceBuilder {
         @QueryParam("ClientToken")
         CreateInstanceBuilder clientToken(final String clientToken);
@@ -749,6 +751,7 @@ public interface EcsAPI {
     interface StartInstanceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface StartInstanceBuilder {
         @QueryParam("InstanceId")
         StartInstanceBuilder instanceId(final String instanceId);
@@ -769,6 +772,7 @@ public interface EcsAPI {
     interface RebootInstanceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface RebootInstanceBuilder {
         @QueryParam("InstanceId")
         RebootInstanceBuilder instanceId(final String instanceId);
@@ -789,6 +793,7 @@ public interface EcsAPI {
     interface StopInstanceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface StopInstanceBuilder {
         @QueryParam("InstanceId")
         StopInstanceBuilder instanceId(final String instanceId);
@@ -812,6 +817,7 @@ public interface EcsAPI {
     interface DeleteInstanceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteInstanceBuilder {
         @QueryParam("InstanceId")
         DeleteInstanceBuilder instanceId(final String instanceId);
@@ -889,6 +895,7 @@ public interface EcsAPI {
         void setTotalCount(final Integer totalCount);
     }
 
+    @RpcBuilder
     interface AttachInstanceRamRoleBuilder {
         //  必选   [“i-bp14ss25xca5ex1u****”, “i-bp154z5o1qjalfse****”, “i-bp10ws62o04ubhvi****”…]
         //  实例ID。取值可以由多个实例ID组成一个JSON数组，最多支持100个ID，ID之间用半角逗号（,）隔开。
@@ -990,6 +997,7 @@ public interface EcsAPI {
         void setTotalCount(final Integer totalCount);
     }
 
+    @RpcBuilder
     interface DetachInstanceRamRoleBuilder {
         @QueryParam("InstanceIds")
         DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
@@ -1038,6 +1046,7 @@ public interface EcsAPI {
     }
 
     // https://help.aliyun.com/document_detail/25505.html?spm=a2c4g.11186623.6.1204.7c3f649fZpm8hA
+    @RpcBuilder
     interface DescribeInstanceStatusBuilder extends PageableBuilder<DescribeInstanceStatusBuilder>  {
 
         @QueryParam("RegionId")
@@ -1060,6 +1069,7 @@ public interface EcsAPI {
 
     }
 
+    @RpcBuilder
     interface RenewInstanceBuilder {
         // 必选    i-bp67acfmxazb4ph***            需要续费的实例ID。
         @QueryParam("InstanceId")
@@ -1093,6 +1103,7 @@ public interface EcsAPI {
 
     }
 
+    @RpcBuilder
     interface ReactivateInstancesBuilder {
         //  必选   需要重开机的实例 ID。
         @QueryParam("InstanceId")
@@ -1109,6 +1120,7 @@ public interface EcsAPI {
 
     }
 
+    @RpcBuilder
     interface RedeployInstanceBuilder {
         @QueryParam("InstanceIds")
         RedeployInstanceBuilder instanceIds(final String[] instanceIds);
@@ -1132,6 +1144,7 @@ public interface EcsAPI {
         void setVncUrl(final String vncUrl);
     }
 
+    @RpcBuilder
     interface DescribeInstanceVncUrlBuilder {
         @QueryParam("InstanceId")
         DescribeInstanceVncUrlBuilder instanceId(final String instanceId);
@@ -1166,6 +1179,7 @@ public interface EcsAPI {
         void setUserData(final String userData);
     }
 
+    @RpcBuilder
     interface DescribeUserDataBuilder {
         //  必选   i-instanceid1           要查询的实例 ID。
         @QueryParam("InstanceId")
@@ -1230,6 +1244,7 @@ public interface EcsAPI {
         void setInstanceRenewAttributes(final InstanceRenewAttributes instanceRenewAttributes);
     }
 
+    @RpcBuilder
     interface DescribeInstanceAutoRenewAttributeBuilder extends PageableBuilder<DescribeInstanceAutoRenewAttributeBuilder> {
         //  必选   cn-hangzhou  实例所属的地域ID。
         @QueryParam("RegionId")
@@ -1275,6 +1290,7 @@ public interface EcsAPI {
         void setInstanceRamRoleSets(final InstanceRamRoleSets instanceRamRoleSets);
     }
 
+    @RpcBuilder
     interface DescribeInstanceRamRoleBuilder extends PageableBuilder<DescribeInstanceRamRoleBuilder> {
         //  可选   ["i-bp67acfmxazb4ph***", "i-bp67acfmxazb4pi***", "bp67acfmxazb4pj***"…]  指定查询的实例ID的集合。最多支持一次查询100台实例。InstanceIds与RamRoleName参数必须至少填写一个。
         @QueryParam("InstanceIds")
@@ -1298,6 +1314,7 @@ public interface EcsAPI {
     interface DescribeInstanceTypeFamiliesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeInstanceTypeFamiliesBuilder {
         @QueryParam("InstanceIds")
         DescribeInstanceTypeFamiliesBuilder instanceIds(final String[] instanceIds);
@@ -1316,6 +1333,7 @@ public interface EcsAPI {
     interface DescribeInstanceTypesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeInstanceTypesBuilder {
         @QueryParam("InstanceIds")
         DescribeInstanceTypesBuilder instanceIds(final String[] instanceIds);
@@ -1334,6 +1352,7 @@ public interface EcsAPI {
     interface ModifyInstanceVpcAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceVpcAttributeBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceVpcAttributeBuilder instanceIds(final String[] instanceIds);
@@ -1352,6 +1371,7 @@ public interface EcsAPI {
     interface ModifyInstanceAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceAttributeBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceAttributeBuilder instanceIds(final String[] instanceIds);
@@ -1370,6 +1390,7 @@ public interface EcsAPI {
     interface ModifyInstanceVncPasswdResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceVncPasswdBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceVncPasswdBuilder instanceIds(final String[] instanceIds);
@@ -1388,6 +1409,7 @@ public interface EcsAPI {
     interface ModifyInstanceAutoReleaseTimeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceAutoReleaseTimeBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceAutoReleaseTimeBuilder instanceIds(final String[] instanceIds);
@@ -1406,6 +1428,7 @@ public interface EcsAPI {
     interface ModifyInstanceAutoRenewAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceAutoRenewAttributeBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceAutoRenewAttributeBuilder instanceIds(final String[] instanceIds);
@@ -1424,6 +1447,7 @@ public interface EcsAPI {
     interface ModifyInstanceChargeTypeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceChargeTypeBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceChargeTypeBuilder instanceIds(final String[] instanceIds);
@@ -1442,6 +1466,7 @@ public interface EcsAPI {
     interface ModifyInstanceSpecResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceSpecBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceSpecBuilder instanceIds(final String[] instanceIds);
@@ -1460,6 +1485,7 @@ public interface EcsAPI {
     interface ModifyPrepayInstanceSpecResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyPrepayInstanceSpecBuilder {
         @QueryParam("InstanceIds")
         ModifyPrepayInstanceSpecBuilder instanceIds(final String[] instanceIds);
@@ -1478,6 +1504,7 @@ public interface EcsAPI {
     interface DescribeInstancesFullStatusResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeInstancesFullStatusBuilder {
         @QueryParam("InstanceIds")
         DescribeInstancesFullStatusBuilder instanceIds(final String[] instanceIds);
@@ -1497,6 +1524,7 @@ public interface EcsAPI {
     interface DescribeInstanceHistoryEventsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeInstanceHistoryEventsBuilder {
         @QueryParam("InstanceIds")
         DescribeInstanceHistoryEventsBuilder instanceIds(final String[] instanceIds);
@@ -1516,6 +1544,7 @@ public interface EcsAPI {
     interface DescribeDisksFullStatusResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeDisksFullStatusBuilder {
         @QueryParam("InstanceIds")
         DescribeDisksFullStatusBuilder instanceIds(final String[] instanceIds);
@@ -1535,6 +1564,7 @@ public interface EcsAPI {
     interface CancelSimulatedSystemEventsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CancelSimulatedSystemEventsBuilder {
         @QueryParam("InstanceIds")
         CancelSimulatedSystemEventsBuilder instanceIds(final String[] instanceIds);
@@ -1554,6 +1584,7 @@ public interface EcsAPI {
     interface CreateSimulatedSystemEventsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateSimulatedSystemEventsBuilder {
         @QueryParam("InstanceIds")
         CreateSimulatedSystemEventsBuilder instanceIds(final String[] instanceIds);
@@ -1574,6 +1605,7 @@ public interface EcsAPI {
     interface DescribeEniMonitorDataResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeEniMonitorDataBuilder {
         @QueryParam("InstanceIds")
         DescribeEniMonitorDataBuilder instanceIds(final String[] instanceIds);
@@ -1593,6 +1625,7 @@ public interface EcsAPI {
     interface DescribeDiskMonitorDataResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeDiskMonitorDataBuilder {
         @QueryParam("InstanceIds")
         DescribeDiskMonitorDataBuilder instanceIds(final String[] instanceIds);
@@ -1612,6 +1645,7 @@ public interface EcsAPI {
     interface DescribeInstanceMonitorDataResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeInstanceMonitorDataBuilder {
         @QueryParam("InstanceIds")
         DescribeInstanceMonitorDataBuilder instanceIds(final String[] instanceIds);

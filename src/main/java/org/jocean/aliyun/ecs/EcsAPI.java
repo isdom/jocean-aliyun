@@ -1665,6 +1665,7 @@ public interface EcsAPI {
     interface GetInstanceScreenshotResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface GetInstanceScreenshotBuilder {
         @QueryParam("InstanceIds")
         GetInstanceScreenshotBuilder instanceIds(final String[] instanceIds);
@@ -1684,6 +1685,7 @@ public interface EcsAPI {
     interface GetInstanceConsoleOutputResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface GetInstanceConsoleOutputBuilder {
         @QueryParam("InstanceIds")
         GetInstanceConsoleOutputBuilder instanceIds(final String[] instanceIds);
@@ -1703,6 +1705,7 @@ public interface EcsAPI {
     interface DescribeSnapshotMonitorDataResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSnapshotMonitorDataBuilder {
         @QueryParam("InstanceIds")
         DescribeSnapshotMonitorDataBuilder instanceIds(final String[] instanceIds);
@@ -1722,6 +1725,7 @@ public interface EcsAPI {
     interface DescribeRegionsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeRegionsBuilder {
         @QueryParam("InstanceIds")
         DescribeRegionsBuilder instanceIds(final String[] instanceIds);
@@ -1741,6 +1745,7 @@ public interface EcsAPI {
     interface DescribeZonesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeZonesBuilder {
         @QueryParam("InstanceIds")
         DescribeZonesBuilder instanceIds(final String[] instanceIds);
@@ -1760,6 +1765,7 @@ public interface EcsAPI {
     interface DescribeResourcesModificationResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeResourcesModificationBuilder {
         @QueryParam("InstanceIds")
         DescribeResourcesModificationBuilder instanceIds(final String[] instanceIds);
@@ -1779,6 +1785,7 @@ public interface EcsAPI {
     interface DescribeAvailableResourceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeAvailableResourceBuilder {
         @QueryParam("InstanceIds")
         DescribeAvailableResourceBuilder instanceIds(final String[] instanceIds);
@@ -1799,6 +1806,7 @@ public interface EcsAPI {
     interface CreateKeyPairResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateKeyPairBuilder {
         @QueryParam("InstanceIds")
         CreateKeyPairBuilder instanceIds(final String[] instanceIds);
@@ -1818,6 +1826,7 @@ public interface EcsAPI {
     interface ImportKeyPairResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ImportKeyPairBuilder {
         @QueryParam("InstanceIds")
         ImportKeyPairBuilder instanceIds(final String[] instanceIds);
@@ -1837,6 +1846,7 @@ public interface EcsAPI {
     interface AttachKeyPairResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AttachKeyPairBuilder {
         @QueryParam("InstanceIds")
         AttachKeyPairBuilder instanceIds(final String[] instanceIds);
@@ -1856,6 +1866,7 @@ public interface EcsAPI {
     interface DetachKeyPairResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DetachKeyPairBuilder {
         @QueryParam("InstanceIds")
         DetachKeyPairBuilder instanceIds(final String[] instanceIds);
@@ -1875,6 +1886,7 @@ public interface EcsAPI {
     interface DeleteKeyPairsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteKeyPairsBuilder {
         @QueryParam("InstanceIds")
         DeleteKeyPairsBuilder instanceIds(final String[] instanceIds);
@@ -1894,6 +1906,7 @@ public interface EcsAPI {
     interface DescribeKeyPairsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeKeyPairsBuilder {
         @QueryParam("InstanceIds")
         DescribeKeyPairsBuilder instanceIds(final String[] instanceIds);
@@ -1914,6 +1927,7 @@ public interface EcsAPI {
     interface AllocatePublicIpAddressResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AllocatePublicIpAddressBuilder {
         @QueryParam("InstanceIds")
         AllocatePublicIpAddressBuilder instanceIds(final String[] instanceIds);
@@ -1933,6 +1947,7 @@ public interface EcsAPI {
     interface ConvertNatPublicIpToEipResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ConvertNatPublicIpToEipBuilder {
         @QueryParam("InstanceIds")
         ConvertNatPublicIpToEipBuilder instanceIds(final String[] instanceIds);
@@ -1952,6 +1967,7 @@ public interface EcsAPI {
     interface AttachClassicLinkVpcResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AttachClassicLinkVpcBuilder {
         @QueryParam("InstanceIds")
         AttachClassicLinkVpcBuilder instanceIds(final String[] instanceIds);
@@ -1971,6 +1987,7 @@ public interface EcsAPI {
     interface DetachClassicLinkVpcResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DetachClassicLinkVpcBuilder {
         @QueryParam("InstanceIds")
         DetachClassicLinkVpcBuilder instanceIds(final String[] instanceIds);
@@ -1990,6 +2007,7 @@ public interface EcsAPI {
     interface DescribeBandwidthLimitationResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeBandwidthLimitationBuilder {
         @QueryParam("InstanceIds")
         DescribeBandwidthLimitationBuilder instanceIds(final String[] instanceIds);
@@ -2009,6 +2027,7 @@ public interface EcsAPI {
     interface DescribeClassicLinkInstancesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeClassicLinkInstancesBuilder {
         @QueryParam("InstanceIds")
         DescribeClassicLinkInstancesBuilder instanceIds(final String[] instanceIds);
@@ -2028,6 +2047,7 @@ public interface EcsAPI {
     interface ModifyInstanceNetworkSpecResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyInstanceNetworkSpecBuilder {
         @QueryParam("InstanceIds")
         ModifyInstanceNetworkSpecBuilder instanceIds(final String[] instanceIds);
@@ -2048,6 +2068,7 @@ public interface EcsAPI {
     interface CreateSecurityGroupResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateSecurityGroupBuilder {
         @QueryParam("InstanceIds")
         CreateSecurityGroupBuilder instanceIds(final String[] instanceIds);
@@ -2067,6 +2088,7 @@ public interface EcsAPI {
     interface AuthorizeSecurityGroupResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AuthorizeSecurityGroupBuilder {
         @QueryParam("InstanceIds")
         AuthorizeSecurityGroupBuilder instanceIds(final String[] instanceIds);
@@ -2086,6 +2108,7 @@ public interface EcsAPI {
     interface AuthorizeSecurityGroupEgressResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AuthorizeSecurityGroupEgressBuilder {
         @QueryParam("InstanceIds")
         AuthorizeSecurityGroupEgressBuilder instanceIds(final String[] instanceIds);
@@ -2105,6 +2128,7 @@ public interface EcsAPI {
     interface RevokeSecurityGroupResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface RevokeSecurityGroupBuilder {
         @QueryParam("InstanceIds")
         RevokeSecurityGroupBuilder instanceIds(final String[] instanceIds);
@@ -2124,6 +2148,7 @@ public interface EcsAPI {
     interface RevokeSecurityGroupEgressResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface RevokeSecurityGroupEgressBuilder {
         @QueryParam("InstanceIds")
         RevokeSecurityGroupEgressBuilder instanceIds(final String[] instanceIds);
@@ -2143,6 +2168,7 @@ public interface EcsAPI {
     interface JoinSecurityGroupResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface JoinSecurityGroupBuilder {
         @QueryParam("InstanceIds")
         JoinSecurityGroupBuilder instanceIds(final String[] instanceIds);
@@ -2162,6 +2188,7 @@ public interface EcsAPI {
     interface LeaveSecurityGroupResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface LeaveSecurityGroupBuilder {
         @QueryParam("InstanceIds")
         LeaveSecurityGroupBuilder instanceIds(final String[] instanceIds);
@@ -2181,6 +2208,7 @@ public interface EcsAPI {
     interface DeleteSecurityGroupResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteSecurityGroupBuilder {
         @QueryParam("InstanceIds")
         DeleteSecurityGroupBuilder instanceIds(final String[] instanceIds);
@@ -2200,6 +2228,7 @@ public interface EcsAPI {
     interface DescribeSecurityGroupAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSecurityGroupAttributeBuilder {
         @QueryParam("InstanceIds")
         DescribeSecurityGroupAttributeBuilder instanceIds(final String[] instanceIds);
@@ -2219,6 +2248,7 @@ public interface EcsAPI {
     interface DescribeSecurityGroupsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSecurityGroupsBuilder {
         @QueryParam("InstanceIds")
         DescribeSecurityGroupsBuilder instanceIds(final String[] instanceIds);
@@ -2238,6 +2268,7 @@ public interface EcsAPI {
     interface DescribeSecurityGroupReferencesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSecurityGroupReferencesBuilder {
         @QueryParam("InstanceIds")
         DescribeSecurityGroupReferencesBuilder instanceIds(final String[] instanceIds);
@@ -2257,6 +2288,7 @@ public interface EcsAPI {
     interface ModifySecurityGroupAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifySecurityGroupAttributeBuilder {
         @QueryParam("InstanceIds")
         ModifySecurityGroupAttributeBuilder instanceIds(final String[] instanceIds);
@@ -2276,6 +2308,7 @@ public interface EcsAPI {
     interface ModifySecurityGroupEgressRuleResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifySecurityGroupEgressRuleBuilder {
         @QueryParam("InstanceIds")
         ModifySecurityGroupEgressRuleBuilder instanceIds(final String[] instanceIds);
@@ -2295,6 +2328,7 @@ public interface EcsAPI {
     interface ModifySecurityGroupPolicyResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifySecurityGroupPolicyBuilder {
         @QueryParam("InstanceIds")
         ModifySecurityGroupPolicyBuilder instanceIds(final String[] instanceIds);
@@ -2314,6 +2348,7 @@ public interface EcsAPI {
     interface ModifySecurityGroupRuleResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifySecurityGroupRuleBuilder {
         @QueryParam("InstanceIds")
         ModifySecurityGroupRuleBuilder instanceIds(final String[] instanceIds);
@@ -2334,6 +2369,7 @@ public interface EcsAPI {
     interface CreateImageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateImageBuilder {
         @QueryParam("InstanceIds")
         CreateImageBuilder instanceIds(final String[] instanceIds);
@@ -2353,6 +2389,7 @@ public interface EcsAPI {
     interface ImportImageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ImportImageBuilder {
         @QueryParam("InstanceIds")
         ImportImageBuilder instanceIds(final String[] instanceIds);
@@ -2372,6 +2409,7 @@ public interface EcsAPI {
     interface CopyImageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CopyImageBuilder {
         @QueryParam("InstanceIds")
         CopyImageBuilder instanceIds(final String[] instanceIds);
@@ -2391,6 +2429,7 @@ public interface EcsAPI {
     interface CancelCopyImageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CancelCopyImageBuilder {
         @QueryParam("InstanceIds")
         CancelCopyImageBuilder instanceIds(final String[] instanceIds);
@@ -2410,6 +2449,7 @@ public interface EcsAPI {
     interface ExportImageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ExportImageBuilder {
         @QueryParam("InstanceIds")
         ExportImageBuilder instanceIds(final String[] instanceIds);
@@ -2429,6 +2469,7 @@ public interface EcsAPI {
     interface DescribeImagesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeImagesBuilder {
         @QueryParam("InstanceIds")
         DescribeImagesBuilder instanceIds(final String[] instanceIds);
@@ -2448,6 +2489,7 @@ public interface EcsAPI {
     interface DeleteImageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteImageBuilder {
         @QueryParam("InstanceIds")
         DeleteImageBuilder instanceIds(final String[] instanceIds);
@@ -2467,6 +2509,7 @@ public interface EcsAPI {
     interface DescribeImageSharePermissionResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeImageSharePermissionBuilder {
         @QueryParam("InstanceIds")
         DescribeImageSharePermissionBuilder instanceIds(final String[] instanceIds);
@@ -2486,6 +2529,7 @@ public interface EcsAPI {
     interface ModifyImageAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyImageAttributeBuilder {
         @QueryParam("InstanceIds")
         ModifyImageAttributeBuilder instanceIds(final String[] instanceIds);
@@ -2505,6 +2549,7 @@ public interface EcsAPI {
     interface ModifyImageSharePermissionResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyImageSharePermissionBuilder {
         @QueryParam("InstanceIds")
         ModifyImageSharePermissionBuilder instanceIds(final String[] instanceIds);
@@ -2524,6 +2569,7 @@ public interface EcsAPI {
     interface DescribeImageSupportInstanceTypesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeImageSupportInstanceTypesBuilder {
         @QueryParam("InstanceIds")
         DescribeImageSupportInstanceTypesBuilder instanceIds(final String[] instanceIds);
@@ -2544,6 +2590,7 @@ public interface EcsAPI {
     interface CreateSnapshotResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateSnapshotBuilder {
         @QueryParam("InstanceIds")
         CreateSnapshotBuilder instanceIds(final String[] instanceIds);
@@ -2563,6 +2610,7 @@ public interface EcsAPI {
     interface DeleteSnapshotResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteSnapshotBuilder {
         @QueryParam("InstanceIds")
         DeleteSnapshotBuilder instanceIds(final String[] instanceIds);
@@ -2582,6 +2630,7 @@ public interface EcsAPI {
     interface DescribeSnapshotsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSnapshotsBuilder {
         @QueryParam("InstanceIds")
         DescribeSnapshotsBuilder instanceIds(final String[] instanceIds);
@@ -2601,6 +2650,7 @@ public interface EcsAPI {
     interface DescribeSnapshotsUsageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSnapshotsUsageBuilder {
         @QueryParam("InstanceIds")
         DescribeSnapshotsUsageBuilder instanceIds(final String[] instanceIds);
@@ -2620,6 +2670,7 @@ public interface EcsAPI {
     interface DescribeSnapshotPackageResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSnapshotPackageBuilder {
         @QueryParam("InstanceIds")
         DescribeSnapshotPackageBuilder instanceIds(final String[] instanceIds);
@@ -2639,6 +2690,7 @@ public interface EcsAPI {
     interface DescribeSnapshotLinksResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeSnapshotLinksBuilder {
         @QueryParam("InstanceIds")
         DescribeSnapshotLinksBuilder instanceIds(final String[] instanceIds);
@@ -2658,6 +2710,7 @@ public interface EcsAPI {
     interface ModifySnapshotAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifySnapshotAttributeBuilder {
         @QueryParam("InstanceIds")
         ModifySnapshotAttributeBuilder instanceIds(final String[] instanceIds);
@@ -2677,6 +2730,7 @@ public interface EcsAPI {
     interface CreateAutoSnapshotPolicyResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateAutoSnapshotPolicyBuilder {
         @QueryParam("InstanceIds")
         CreateAutoSnapshotPolicyBuilder instanceIds(final String[] instanceIds);
@@ -2696,6 +2750,7 @@ public interface EcsAPI {
     interface ApplyAutoSnapshotPolicyResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ApplyAutoSnapshotPolicyBuilder {
         @QueryParam("InstanceIds")
         ApplyAutoSnapshotPolicyBuilder instanceIds(final String[] instanceIds);
@@ -2715,6 +2770,7 @@ public interface EcsAPI {
     interface CancelAutoSnapshotPolicyResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CancelAutoSnapshotPolicyBuilder {
         @QueryParam("InstanceIds")
         CancelAutoSnapshotPolicyBuilder instanceIds(final String[] instanceIds);
@@ -2734,6 +2790,7 @@ public interface EcsAPI {
     interface DeleteAutoSnapshotPolicyResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteAutoSnapshotPolicyBuilder {
         @QueryParam("InstanceIds")
         DeleteAutoSnapshotPolicyBuilder instanceIds(final String[] instanceIds);
@@ -2753,6 +2810,7 @@ public interface EcsAPI {
     interface DescribeAutoSnapshotPolicyEXResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeAutoSnapshotPolicyEXBuilder {
         @QueryParam("InstanceIds")
         DescribeAutoSnapshotPolicyEXBuilder instanceIds(final String[] instanceIds);
@@ -2772,6 +2830,7 @@ public interface EcsAPI {
     interface ModifyAutoSnapshotPolicyExResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyAutoSnapshotPolicyExBuilder {
         @QueryParam("InstanceIds")
         ModifyAutoSnapshotPolicyExBuilder instanceIds(final String[] instanceIds);
@@ -2792,6 +2851,7 @@ public interface EcsAPI {
     interface ListTagResourcesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ListTagResourcesBuilder {
         @QueryParam("InstanceIds")
         ListTagResourcesBuilder instanceIds(final String[] instanceIds);
@@ -2811,6 +2871,7 @@ public interface EcsAPI {
     interface TagResourcesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface TagResourcesBuilder {
         @QueryParam("InstanceIds")
         TagResourcesBuilder instanceIds(final String[] instanceIds);
@@ -2830,6 +2891,7 @@ public interface EcsAPI {
     interface UntagResourcesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface UntagResourcesBuilder {
         @QueryParam("InstanceIds")
         UntagResourcesBuilder instanceIds(final String[] instanceIds);
@@ -2850,6 +2912,7 @@ public interface EcsAPI {
     interface CancelTaskResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CancelTaskBuilder {
         @QueryParam("InstanceIds")
         CancelTaskBuilder instanceIds(final String[] instanceIds);
@@ -2869,6 +2932,7 @@ public interface EcsAPI {
     interface DescribeTasksResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeTasksBuilder {
         @QueryParam("InstanceIds")
         DescribeTasksBuilder instanceIds(final String[] instanceIds);
@@ -2888,6 +2952,7 @@ public interface EcsAPI {
     interface DescribeTaskAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeTaskAttributeBuilder {
         @QueryParam("InstanceIds")
         DescribeTaskAttributeBuilder instanceIds(final String[] instanceIds);
@@ -2907,6 +2972,7 @@ public interface EcsAPI {
     interface DescribeAccountAttributesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeAccountAttributesBuilder {
         @QueryParam("InstanceIds")
         DescribeAccountAttributesBuilder instanceIds(final String[] instanceIds);
@@ -2926,6 +2992,7 @@ public interface EcsAPI {
     interface DescribePriceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribePriceBuilder {
         @QueryParam("InstanceIds")
         DescribePriceBuilder instanceIds(final String[] instanceIds);
@@ -2945,6 +3012,7 @@ public interface EcsAPI {
     interface JoinResourceGroupResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface JoinResourceGroupBuilder {
         @QueryParam("InstanceIds")
         JoinResourceGroupBuilder instanceIds(final String[] instanceIds);
@@ -2965,6 +3033,7 @@ public interface EcsAPI {
     interface CreateCommandResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateCommandBuilder {
         @QueryParam("InstanceIds")
         CreateCommandBuilder instanceIds(final String[] instanceIds);
@@ -2984,6 +3053,7 @@ public interface EcsAPI {
     interface InstallCloudAssistantResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface InstallCloudAssistantBuilder {
         @QueryParam("InstanceIds")
         InstallCloudAssistantBuilder instanceIds(final String[] instanceIds);
@@ -3003,6 +3073,7 @@ public interface EcsAPI {
     interface InvokeCommandResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface InvokeCommandBuilder {
         @QueryParam("InstanceIds")
         InvokeCommandBuilder instanceIds(final String[] instanceIds);
@@ -3022,6 +3093,7 @@ public interface EcsAPI {
     interface StopInvocationResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface StopInvocationBuilder {
         @QueryParam("InstanceIds")
         StopInvocationBuilder instanceIds(final String[] instanceIds);
@@ -3041,6 +3113,7 @@ public interface EcsAPI {
     interface DeleteCommandResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteCommandBuilder {
         @QueryParam("InstanceIds")
         DeleteCommandBuilder instanceIds(final String[] instanceIds);
@@ -3060,6 +3133,7 @@ public interface EcsAPI {
     interface DescribeCloudAssistantStatusResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeCloudAssistantStatusBuilder {
         @QueryParam("InstanceIds")
         DescribeCloudAssistantStatusBuilder instanceIds(final String[] instanceIds);
@@ -3079,6 +3153,7 @@ public interface EcsAPI {
     interface DescribeCommandsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeCommandsBuilder {
         @QueryParam("InstanceIds")
         DescribeCommandsBuilder instanceIds(final String[] instanceIds);
@@ -3098,6 +3173,7 @@ public interface EcsAPI {
     interface DescribeInvocationsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeInvocationsBuilder {
         @QueryParam("InstanceIds")
         DescribeInvocationsBuilder instanceIds(final String[] instanceIds);
@@ -3117,6 +3193,7 @@ public interface EcsAPI {
     interface DescribeInvocationResultsResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeInvocationResultsBuilder {
         @QueryParam("InstanceIds")
         DescribeInvocationResultsBuilder instanceIds(final String[] instanceIds);
@@ -3136,6 +3213,7 @@ public interface EcsAPI {
     interface RunCommandResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface RunCommandBuilder {
         @QueryParam("InstanceIds")
         RunCommandBuilder instanceIds(final String[] instanceIds);
@@ -3156,6 +3234,7 @@ public interface EcsAPI {
     interface CreateNetworkInterfaceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateNetworkInterfaceBuilder {
         @QueryParam("InstanceIds")
         CreateNetworkInterfaceBuilder instanceIds(final String[] instanceIds);
@@ -3175,6 +3254,7 @@ public interface EcsAPI {
     interface AttachNetworkInterfaceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AttachNetworkInterfaceBuilder {
         @QueryParam("InstanceIds")
         AttachNetworkInterfaceBuilder instanceIds(final String[] instanceIds);
@@ -3194,6 +3274,7 @@ public interface EcsAPI {
     interface AssignPrivateIpAddressesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AssignPrivateIpAddressesBuilder {
         @QueryParam("InstanceIds")
         AssignPrivateIpAddressesBuilder instanceIds(final String[] instanceIds);
@@ -3213,6 +3294,7 @@ public interface EcsAPI {
     interface UnassignPrivateIpAddressesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface UnassignPrivateIpAddressesBuilder {
         @QueryParam("InstanceIds")
         UnassignPrivateIpAddressesBuilder instanceIds(final String[] instanceIds);
@@ -3232,6 +3314,7 @@ public interface EcsAPI {
     interface DetachNetworkInterfaceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DetachNetworkInterfaceBuilder {
         @QueryParam("InstanceIds")
         DetachNetworkInterfaceBuilder instanceIds(final String[] instanceIds);
@@ -3251,6 +3334,7 @@ public interface EcsAPI {
     interface DeleteNetworkInterfaceResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteNetworkInterfaceBuilder {
         @QueryParam("InstanceIds")
         DeleteNetworkInterfaceBuilder instanceIds(final String[] instanceIds);
@@ -3270,6 +3354,7 @@ public interface EcsAPI {
     interface DescribeNetworkInterfacesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeNetworkInterfacesBuilder {
         @QueryParam("InstanceIds")
         DescribeNetworkInterfacesBuilder instanceIds(final String[] instanceIds);
@@ -3289,6 +3374,7 @@ public interface EcsAPI {
     interface ModifyNetworkInterfaceAttributeResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyNetworkInterfaceAttributeBuilder {
         @QueryParam("InstanceIds")
         ModifyNetworkInterfaceAttributeBuilder instanceIds(final String[] instanceIds);
@@ -3308,6 +3394,7 @@ public interface EcsAPI {
     interface AssignIpv6AddressesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface AssignIpv6AddressesBuilder {
         @QueryParam("InstanceIds")
         AssignIpv6AddressesBuilder instanceIds(final String[] instanceIds);
@@ -3327,6 +3414,7 @@ public interface EcsAPI {
     interface UnassignIpv6AddressesResponse extends ECSAPIResponse {
     }
 
+    @RpcBuilder
     interface UnassignIpv6AddressesBuilder {
         @QueryParam("InstanceIds")
         UnassignIpv6AddressesBuilder instanceIds(final String[] instanceIds);

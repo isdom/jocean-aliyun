@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.FullMessage;
 import org.jocean.http.MessageBody;
+import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.aliyun.oss.model.Bucket;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
@@ -100,6 +101,7 @@ public interface OssAPI {
     }
 
     // https://help.aliyun.com/document_detail/31978.html?spm=a2c4g.11186623.6.1596.4fb211a06jVZO2
+    @RpcBuilder
     interface PutObjectBuilder extends Objectable<PutObjectBuilder>, StoreOperation<PutObjectBuilder> {
 
         // 用于检查消息内容是否与发送时一致。Content-MD5是一串由MD5算法生成的值。上传了Content-MD5请求头后，OSS会计算消息体的Content-MD5并检查一致性。
@@ -129,6 +131,7 @@ public interface OssAPI {
 
     PutObjectBuilder putObject();
 
+    @RpcBuilder
     interface GetObjectBuilder extends Objectable<GetObjectBuilder> {
 
         //说明 OSS不支持多Range参数，即不支持指定多个范围。ByteRange指请求资源的范围，单位为Byte（字节），ByteRange有效区间在0至object size - 1的范围内。
@@ -622,6 +625,7 @@ public interface OssAPI {
     }
 
     //  https://help.aliyun.com/document_detail/31965.html?spm=a2c4g.11186623.6.1570.68afb81eXwEqgq
+    @RpcBuilder
     interface ListObjectsBuilder extends Bucketable<ListObjectsBuilder> {
 
         @QueryParam("prefix")
@@ -648,6 +652,7 @@ public interface OssAPI {
     ListObjectsBuilder listObjects();
 
     // https://help.aliyun.com/document_detail/31985.html?spm=a2c4g.11186623.6.1603.15ec810cYy37lP
+    @RpcBuilder
     interface GetObjectMetaBuilder extends Objectable<GetObjectMetaBuilder> {
 
         @HEAD
@@ -665,6 +670,7 @@ public interface OssAPI {
     Authorization: SignatureValue
     x-oss-copy-source: /SourceBucketName/SourceObjectName
     */
+    @RpcBuilder
     interface CopyObjectBuilder extends Bucketable<CopyObjectBuilder> {
 
         @PathParam("destObject")
@@ -681,6 +687,7 @@ public interface OssAPI {
 
     CopyObjectBuilder copyObject();
 
+    @RpcBuilder
     interface DeleteObjectBuilder extends Objectable<DeleteObjectBuilder> {
 
         @DELETE
@@ -690,6 +697,7 @@ public interface OssAPI {
 
     DeleteObjectBuilder deleteObject();
 
+    @RpcBuilder
     interface PutSymlinkBuilder extends Bucketable<PutSymlinkBuilder> {
 
         @PathParam("symlinkObject")
@@ -706,6 +714,7 @@ public interface OssAPI {
     PutSymlinkBuilder putSymlink();
 
     // https://help.aliyun.com/document_detail/45146.html?spm=a2c4g.11186623.6.1609.a8eeb81ed5SIWi
+    @RpcBuilder
     interface GetSymlinkBuilder extends Bucketable<GetSymlinkBuilder> {
 
         @PathParam("symlinkObject")
@@ -767,6 +776,7 @@ public interface OssAPI {
 
     // https://help.aliyun.com/document_detail/31991.html?spm=a2c4g.11186623.3.3.552a79det2Ev6r
     // 关于MultipartUpload的操作
+    @RpcBuilder
     interface InitiateMultipartUploadBuilder extends
         Objectable<InitiateMultipartUploadBuilder>, StoreOperation<InitiateMultipartUploadBuilder> {
 
@@ -779,6 +789,7 @@ public interface OssAPI {
     InitiateMultipartUploadBuilder initiateMultipartUpload();
 
     // https://help.aliyun.com/document_detail/31993.html?spm=a2c4g.11186623.6.1625.405a79deMFs3vX
+    @RpcBuilder
     interface UploadPartBuilder extends Objectable<UploadPartBuilder> {
 
         //调用该接口上传Part数据前，必须先调用InitiateMultipartUpload接口来获取一个OSS服务器颁发的Upload ID。Upload ID用于唯一标识上传的part属于哪个Object。
@@ -928,6 +939,7 @@ public interface OssAPI {
 
 
     // https://help.aliyun.com/document_detail/31995.html?spm=a2c4g.11186623.6.1627.83272d74mdlAp3
+    @RpcBuilder
     interface CompleteMultipartUploadBuilder extends Objectable<CompleteMultipartUploadBuilder> {
 
         // CompleteMultipartUpload时会确认除最后一块以外所有块的大小是否都大于100KB，并检查用户提交的Part列表中的每一个Part号码和Etag。
@@ -965,6 +977,7 @@ public interface OssAPI {
     */
 
     // https://help.aliyun.com/document_detail/31996.html?spm=a2c4g.11186623.6.1628.60233dc1EYbByM
+    @RpcBuilder
     interface AbortMultipartUploadBuilder extends Objectable<AbortMultipartUploadBuilder> {
 
         // 当一个MultipartUpload事件被中止后，您无法再使用这个Upload ID做任何操作，已经上传的Part数据也会被删除。

@@ -8,11 +8,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
-import org.jocean.http.Interact;
+import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-import rx.Observable.Transformer;
+import rx.Observable;
 
 // https://help.aliyun.com/knowledge_detail/49122.html#concept-j5w-pj4-xdb
 //      实例元数据: 实例元数据包含了ECS实例在阿里云系统中的基本信息，例如实例ID、IP地址、网卡MAC地址和操作系统类型等。您可以使用元数据管理或配置ECS实例。
@@ -33,47 +33,51 @@ import rx.Observable.Transformer;
 
 public interface MetadataAPI {
 
+    @RpcBuilder
     interface HostnameBuilder {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/hostname")
         @Consumes(MediaType.TEXT_PLAIN)
-        Transformer<Interact, String> call();
+        Observable<String> call();
     }
 
     //  获取实例的主机名
     HostnameBuilder hostname();
 
-
+    @RpcBuilder
     interface RegionIdBuilder {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/region-id")
         @Consumes(MediaType.TEXT_PLAIN)
-        Transformer<Interact, String> call();
+        Observable<String> call();
     }
 
     //  获取实例所属地域
     RegionIdBuilder regionId();
 
+    @RpcBuilder
     interface InstanceIdBuilder {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/instance-id")
         @Consumes(MediaType.TEXT_PLAIN)
-        Transformer<Interact, String> call();
+        Observable<String> call();
     }
 
     //  获取实例ID
     InstanceIdBuilder instanceId();
 
+    @RpcBuilder
     interface PrivateIpv4Builder {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/private-ipv4")
         @Consumes(MediaType.TEXT_PLAIN)
-        Transformer<Interact, String> call();
+        Observable<String> call();
     }
 
     //  获取实例主网卡的私网IPv4地址。
     PrivateIpv4Builder privateIpv4();
 
+    @RpcBuilder
     public interface STSTokenResponse {
         @JSONField(name = "Code")
         public String getCode();
@@ -114,6 +118,7 @@ public interface MetadataAPI {
         public Date getLastUpdated();
     }
 
+    @RpcBuilder
     interface STSTokenBuilder {
         @PathParam("roleName")
         STSTokenBuilder roleName(final String roleName);
@@ -121,7 +126,7 @@ public interface MetadataAPI {
         @GET
         @Path("http://100.100.100.200/latest/meta-data/ram/security-credentials/{roleName}")
         @Consumes(MediaType.APPLICATION_JSON)
-        Transformer<Interact, STSTokenResponse> call();
+        Observable<STSTokenResponse> call();
     }
 
     //  访问 http://100.100.100.200/latest/meta-data/ram/security-credentials/RoleXXX 获取 STS 临时凭证。

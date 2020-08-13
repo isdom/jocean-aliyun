@@ -6,6 +6,7 @@ import javax.ws.rs.QueryParam;
 
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
+import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -40,6 +41,7 @@ public interface NlsAPI {
         public void setResult(final String result);
     }
 
+    @RpcBuilder
     interface StreamAsrV1Builder {
         @QueryParam("format")
         StreamAsrV1Builder format(final String format);
@@ -51,7 +53,7 @@ public interface NlsAPI {
 
         @POST
         @Path("http://nls-gateway.cn-shanghai.aliyuncs.com/stream/v1/asr")
-        Transformer<Interact, AsrResponse> call();
+        Observable<AsrResponse> call();
     }
 
     // https://help.aliyun.com/document_detail/92131.html?spm=a2c4g.11186623.6.573.68fc7142HRaq2y

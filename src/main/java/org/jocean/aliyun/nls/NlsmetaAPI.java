@@ -5,12 +5,12 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
-import org.jocean.http.Interact;
 import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
-import rx.Observable.Transformer;
+import rx.Observable;
 
 public interface NlsmetaAPI {
     public interface NlsResponse {
@@ -61,12 +61,13 @@ public interface NlsmetaAPI {
         public void setNlsToken(final NlsToken token);
     }
 
+    @RpcBuilder
     interface CreateTokenBuilder {
         @GET
         @Path("http://nls-meta.cn-shanghai.aliyuncs.com/")
         @ConstParams({"Action", "CreateToken", "Version", "2019-02-28", "RegionId", "cn-shanghai"})
         @Consumes(MediaType.APPLICATION_JSON)
-        Transformer<Interact, CreateTokenResponse> call();
+        Observable<CreateTokenResponse> call();
     }
 
     // https://help.aliyun.com/document_detail/113251.html?spm=a2c4g.11186623.2.16.5bca7229C5kw00

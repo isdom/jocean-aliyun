@@ -5,6 +5,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
 import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -215,6 +216,7 @@ public interface IvisionAPI {
         public void setProject(final Project project);
     }
 
+    @RpcBuilder
     interface CreateProjectBuilder {
         @QueryParam("Name")
         CreateProjectBuilder name(final String name);
@@ -239,6 +241,7 @@ public interface IvisionAPI {
         public void setIterationId(final String iterationId);
     }
 
+    @RpcBuilder
     interface DescribeIterationsBuilder {
         @QueryParam("ProjectId")
         DescribeIterationsBuilder projectId(final String projectId);
@@ -259,6 +262,7 @@ public interface IvisionAPI {
         public void setIterationId(final String iterationId);
     }
 
+    @RpcBuilder
     interface DeleteIterationBuilder {
         @QueryParam("ProjectId")
         DeleteIterationBuilder projectId(final String projectId);
@@ -308,6 +312,7 @@ public interface IvisionAPI {
         public void setPredictDatas(final PredictDatas datas);
     }
 
+    @RpcBuilder
     interface PredictImageBuilder {
         @QueryParam("ProjectId")
         PredictImageBuilder projectId(final String projectId);
@@ -331,6 +336,7 @@ public interface IvisionAPI {
         public void setPredictDatas(final PredictDatas datas);
     }
 
+    @RpcBuilder
     interface DescribePredictDatasBuilder {
         @QueryParam("ProjectId")
         DescribePredictDatasBuilder projectId(final String projectId);
@@ -349,6 +355,7 @@ public interface IvisionAPI {
     public interface DeletePredictDatasResponse extends IvisionResponse {
     }
 
+    @RpcBuilder
     interface DeletePredictDatasBuilder {
         @QueryParam("ProjectId")
         DeletePredictDatasBuilder projectId(final String projectId);
@@ -423,6 +430,7 @@ public interface IvisionAPI {
         public void setImagePredict(final ImagePredict imagePredict);
     }
 
+    @RpcBuilder
     interface ImagePredictBuilder {
         @QueryParam("ModelId")
         ImagePredictBuilder modelId(final String modelId);

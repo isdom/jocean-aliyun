@@ -7,6 +7,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
@@ -99,6 +100,7 @@ public interface SlbAPI {
     }
 
     // https://help.aliyun.com/document_detail/27577.html?spm=a2c4g.11186623.6.704.63de1771E9lN47
+    @RpcBuilder
     interface CreateLoadBalancerBuilder extends ClientTokenable<CreateLoadBalancerBuilder> {
         /**
          *
@@ -403,6 +405,7 @@ public interface SlbAPI {
     }
 
     // https://help.aliyun.com/document_detail/35217.html?spm=a2c4g.11186623.6.741.6e2c7b92lpw1MB
+    @RpcBuilder
     interface SetVServerGroupAttributeBuilder {
         /**
          *

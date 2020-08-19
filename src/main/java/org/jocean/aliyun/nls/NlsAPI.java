@@ -4,14 +4,12 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
-import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
 import rx.Observable;
-import rx.Observable.Transformer;
 
 public interface NlsAPI {
 
@@ -58,10 +56,4 @@ public interface NlsAPI {
 
     // https://help.aliyun.com/document_detail/92131.html?spm=a2c4g.11186623.6.573.68fc7142HRaq2y
     public StreamAsrV1Builder streamAsrV1();
-
-    public Transformer<Interact, AsrResponse> streamAsrV1(
-            final String token,
-            final MessageBody content,
-            final String format,
-            final int sample_rate);
 }

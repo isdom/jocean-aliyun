@@ -500,4 +500,30 @@ public interface SlbAPI {
 
     // https://help.aliyun.com/document_detail/35219.html?spm=a2c4g.11186623.6.732.23355cf8jUIMah
     public RemoveVServerGroupBackendServersBuilder removeVServerGroupBackendServers();
+
+
+    interface ModifyVServerGroupBackendServersResponse extends SLBAPIResponse {
+
+    }
+    interface ModifyVServerGroupBackendServersBuilder {
+        @QueryParam("RegionId")
+        ModifyVServerGroupBackendServersBuilder regionId(final String regionId);
+
+        @QueryParam("VServerGroupId")
+        ModifyVServerGroupBackendServersBuilder vServerGroupId(final String vServerGroupId);
+
+        @QueryParam("OldBackendServers")
+        ModifyVServerGroupBackendServersBuilder oldBackendServers(final String oldBackendServers);
+
+        @QueryParam("NewBackendServers")
+        ModifyVServerGroupBackendServersBuilder newBackendServers(final String newBackendServers);
+
+        @GET
+        @ConstParams({"Action", "ModifyVServerGroupBackendServers"})
+        @Consumes(MediaType.APPLICATION_JSON)
+        Observable<ModifyVServerGroupBackendServersResponse> call();
+    }
+
+    // https://help.aliyun.com/document_detail/35220.html?spm=a2c4g.11186623.6.733.3db61acaPWckA6
+    public ModifyVServerGroupBackendServersBuilder modifyVServerGroupBackendServers();
 }

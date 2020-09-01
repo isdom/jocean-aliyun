@@ -545,4 +545,23 @@ public interface SlbAPI {
 
     // https://help.aliyun.com/document_detail/35221.html?spm=a2c4g.11186623.6.734.6e063221MqYOpg
     public DeleteVServerGroupServersBuilder deleteVServerGroup();
+
+    interface DescribeVServerGroupsResponse extends SLBAPIResponse {
+
+    }
+    interface DescribeVServerGroupsBuilder {
+        @QueryParam("RegionId")
+        DescribeVServerGroupsBuilder regionId(final String regionId);
+
+        @QueryParam("LoadBalancerId")
+        DescribeVServerGroupsBuilder loadBalancerId(final String loadBalancerId);
+
+        @GET
+        @ConstParams({"Action", "DescribeVServerGroups"})
+        @Consumes(MediaType.APPLICATION_JSON)
+        Observable<DescribeVServerGroupsResponse> call();
+    }
+
+    // https://help.aliyun.com/document_detail/35222.html?spm=a2c4g.11186623.6.735.23473b9bJMIsMa
+    public DescribeVServerGroupsBuilder describeVServerGroups();
 }

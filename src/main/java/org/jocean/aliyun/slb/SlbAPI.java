@@ -564,4 +564,26 @@ public interface SlbAPI {
 
     // https://help.aliyun.com/document_detail/35222.html?spm=a2c4g.11186623.6.735.23473b9bJMIsMa
     public DescribeVServerGroupsBuilder describeVServerGroups();
+
+    interface DescribeVServerGroupAttributeResponse extends SLBAPIResponse {
+    }
+
+    interface DescribeVServerGroupAttributeBuilder {
+        @QueryParam("RegionId")
+        DescribeVServerGroupAttributeBuilder regionId(final String regionId);
+
+        @QueryParam("VServerGroupId")
+        DescribeVServerGroupAttributeBuilder vServerGroupId(final String vServerGroupId);
+
+        @QueryParam("OwnerAccount")
+        DescribeVServerGroupAttributeBuilder ownerAccount(final String ownerAccount);
+
+        @GET
+        @ConstParams({"Action", "DescribeVServerGroupAttribute"})
+        @Consumes(MediaType.APPLICATION_JSON)
+        Observable<DescribeVServerGroupAttributeResponse> call();
+    }
+
+    // https://help.aliyun.com/document_detail/35224.html?spm=a2c4g.11186623.6.736.424f52abd6XuJh
+    public DescribeVServerGroupAttributeBuilder describeVServerGroupAttribute();
 }

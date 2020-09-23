@@ -730,6 +730,28 @@ public interface SlbAPI {
     // https://help.aliyun.com/document_detail/27596.html?spm=a2c4g.11186623.6.723.125c1a84OmUino
     public DeleteLoadBalancerListenerBuilder deleteLoadBalancerListener();
 
+    interface AddBackendServersResponse extends SLBAPIResponse {
+    }
+
+    interface AddBackendServersBuilder {
+        @QueryParam("RegionId")
+        AddBackendServersBuilder regionId(final String regionId);
+
+        @QueryParam("LoadBalancerId")
+        AddBackendServersBuilder loadBalancerId(final String loadBalancerId);
+
+        @QueryParam("ListenerPort")
+        AddBackendServersBuilder listenerPort(final int listenerPort);
+
+        @GET
+        @ConstParams({"Action", "AddBackendServers"})
+        @Consumes(MediaType.APPLICATION_JSON)
+        Observable<AddBackendServersResponse> call();
+    }
+
+    // https://help.aliyun.com/document_detail/27632.html?spm=a2c4g.11186623.6.725.58424d63syzT0P
+    public AddBackendServersBuilder addBackendServers();
+
     // https://help.aliyun.com/document_detail/35215.html?spm=a2c4g.11186623.6.742.22274267oYul4v
 
     // TODO : CreateVServerGroup: 调用CreateVServerGroup向指定的后端服务器组中添加后端服务器。

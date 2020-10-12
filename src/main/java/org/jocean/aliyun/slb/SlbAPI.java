@@ -1148,6 +1148,28 @@ public interface SlbAPI {
     // https://help.aliyun.com/document_detail/144394.html?spm=a2c4g.11186623.6.760.12905c8cbgT0g0
     public ListTagResourcesBuilder listTagResources();
 
+    interface TagResourcesResponse extends SLBAPIResponse {
+    }
+
+    interface TagResourcesBuilder {
+        @QueryParam("RegionId")
+        TagResourcesBuilder regionId(final String regionId);
+
+        @QueryParam("LoadBalancerId")
+        TagResourcesBuilder loadBalancerId(final String loadBalancerId);
+
+        @QueryParam("ListenerPort")
+        TagResourcesBuilder listenerPort(final int listenerPort);
+
+        @GET
+        @ConstParams({"Action", "TagResources"})
+        @Consumes(MediaType.APPLICATION_JSON)
+        Observable<TagResourcesResponse> call();
+    }
+
+    // https://help.aliyun.com/document_detail/144396.html?spm=a2c4g.11186623.6.761.4e1534afcuELZB
+    public TagResourcesBuilder tagResources();
+
     // https://help.aliyun.com/document_detail/35215.html?spm=a2c4g.11186623.6.742.22274267oYul4v
 
     // TODO : CreateVServerGroup: 调用CreateVServerGroup向指定的后端服务器组中添加后端服务器。

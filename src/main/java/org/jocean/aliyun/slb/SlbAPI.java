@@ -360,6 +360,55 @@ public interface SlbAPI {
 
         @QueryParam("LoadBalancerId")
         ModifyLoadBalancerPayTypeBuilder loadBalancerId(final String loadBalancerId);
+
+        /**
+         *
+        实例的计费类型，取值：
+
+        PayOnDemand：按量计费。
+        PrePay：包年包月。
+        按量计费转为包年包月计费，该参数取值只能为PrePay，且该实例之前的计费类型必须为PayOnDemand。
+         */
+        @QueryParam("PayType")
+        ModifyLoadBalancerPayTypeBuilder payType(final String payType);
+
+        /**
+         *
+        计费周期。
+
+        取值：year|month 。
+         */
+        @QueryParam("PricingCycle")
+        ModifyLoadBalancerPayTypeBuilder pricingCycle(final String pricingCycle);
+
+        /**
+        *
+        * @param duration
+        * @return ModifyLoadBalancerPayTypeBuilder
+        *  非必选，样例：1
+        *  预付费公网实例的购买时长，取值：
+           如果PricingCycle为month，取值为1~9。
+           如果PricingCycle为year，取值为1~3。
+           说明
+           仅对包年包月实例有效，即PayType的参数值为PrePay时有效。
+        */
+       @QueryParam("Duration")
+       ModifyLoadBalancerPayTypeBuilder duration(final Integer duration);
+
+       /**
+        *
+        * @param autoPay
+        * @return ModifyLoadBalancerPayTypeBuilder
+        *  非必选，样例：true
+        *  是否是自动支付预付费公网实例的账单。
+           取值：true|false（默认）。
+           说明
+           该参数仅适用于中国站。
+           仅对包年包月实例有效，即PayType的参数值为PrePay时有效。
+        */
+       @QueryParam("AutoPay")
+       ModifyLoadBalancerPayTypeBuilder autoPay(final Boolean autoPay);
+
         @GET
         @ConstParams({"Action", "ModifyLoadBalancerPayType"})
         @Consumes(MediaType.APPLICATION_JSON)

@@ -472,6 +472,10 @@ public interface SlbAPI {
     }
 
     // https://help.aliyun.com/document_detail/53360.html?spm=a2c4g.11186623.6.694.7eee6554xoKouH
+    /**
+     * 修改负载均衡的实例规格。
+     * @return
+     */
     public ModifyLoadBalancerInstanceSpecBuilder modifyLoadBalancerInstanceSpec();
 
     interface DescribeZonesResponse extends SLBAPIResponse {

@@ -419,6 +419,15 @@ public interface SlbAPI {
     public ModifyLoadBalancerPayTypeBuilder modifyLoadBalancerPayType();
 
     interface ModifyLoadBalancerInstanceSpecResponse extends SLBAPIResponse {
+        /**
+         *
+        预付费实例的订单ID。
+         */
+        @JSONField(name="OrderId")
+        Long getOrderId();
+
+        @JSONField(name="OrderId")
+        void setOrderId(final Long orderId);
     }
 
     interface ModifyLoadBalancerInstanceSpecBuilder {
@@ -427,6 +436,35 @@ public interface SlbAPI {
 
         @QueryParam("LoadBalancerId")
         ModifyLoadBalancerInstanceSpecBuilder loadBalancerId(final String loadBalancerId);
+
+        /**
+         *
+        负载均衡实例的规格。取值：
+
+        slb.s1.small
+        slb.s2.small
+        slb.s2.medium
+        slb.s3.small
+        slb.s3.medium
+        slb.s3.large
+        每个地域支持的规格不同。关于每种规格的说明，参见性能保障型实例。
+        */
+        @QueryParam("LoadBalancerSpec")
+        ModifyLoadBalancerInstanceSpecBuilder loadBalancerSpec(final String loadBalancerSpec);
+
+        /**
+        *
+        * @param autoPay
+        * @return ModifyLoadBalancerInstanceSpecBuilder
+        *  非必选，样例：true
+        *  是否自动付费。
+
+        取值为true则自动支付订单。
+        取值为false则需要在订单中心中进行支付。
+        */
+       @QueryParam("AutoPay")
+       ModifyLoadBalancerInstanceSpecBuilder autoPay(final Boolean autoPay);
+
         @GET
         @ConstParams({"Action", "ModifyLoadBalancerInstanceSpec"})
         @Consumes(MediaType.APPLICATION_JSON)

@@ -478,10 +478,68 @@ public interface SlbAPI {
      */
     public ModifyLoadBalancerInstanceSpecBuilder modifyLoadBalancerInstanceSpec();
 
+    interface SlaveZone {
+        @JSONField(name="ZoneId")
+        String getZoneId();
+
+        @JSONField(name="ZoneId")
+        void setZoneId(final String zoneId);
+
+        @JSONField(name="LocalName")
+        String getLocalName();
+
+        @JSONField(name="LocalName")
+        void setLocalName(final String localName);
+    }
+
+    interface SlaveZones {
+        @JSONField(name="SlaveZone")
+        SlaveZone[] getSlaveZone();
+
+        @JSONField(name="SlaveZone")
+        void setSlaveZone(final SlaveZone[] slaveZone);
+    }
+
+    interface Zone {
+        @JSONField(name="SlaveZones")
+        SlaveZones getSlaveZones();
+
+        @JSONField(name="SlaveZones")
+        void setSlaveZones(final SlaveZones slaveZones);
+
+        @JSONField(name="ZoneId")
+        String getZoneId();
+
+        @JSONField(name="ZoneId")
+        void setZoneId(final String zoneId);
+
+        @JSONField(name="LocalName")
+        String getLocalName();
+
+        @JSONField(name="LocalName")
+        void setLocalName(final String localName);
+    }
+
+    interface Zones {
+        @JSONField(name="Zone")
+        Zone[] getZone();
+
+        @JSONField(name="Zone")
+        void setZone(final Zone[] zone);
+    }
+
     interface DescribeZonesResponse extends SLBAPIResponse {
+        @JSONField(name="Zones")
+        Zones getZones();
+
+        @JSONField(name="Zones")
+        void setZones(final Zones zones);
     }
 
     interface DescribeZonesBuilder {
+        /**
+         * cn-hangzhou   所属地域ID。
+         */
         @QueryParam("RegionId")
         DescribeZonesBuilder regionId(final String regionId);
 

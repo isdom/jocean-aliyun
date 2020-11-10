@@ -555,6 +555,14 @@ public interface SlbAPI {
     // https://help.aliyun.com/document_detail/27585.html?spm=a2c4g.11186623.6.695.2e921b0eLXm2aa
     public DescribeZonesBuilder describeZones();
 
+    interface Region {
+
+    }
+
+    interface Regions {
+
+    }
+
     interface DescribeRegionsResponse extends SLBAPIResponse {
     }
 

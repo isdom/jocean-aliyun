@@ -556,14 +556,39 @@ public interface SlbAPI {
     public DescribeZonesBuilder describeZones();
 
     interface Region {
+        @JSONField(name="RegionId")
+        String getRegionId();
 
+        @JSONField(name="RegionId")
+        void setRegionId(final String regionId);
+
+        @JSONField(name="RegionEndpoint")
+        String getRegionEndpoint();
+
+        @JSONField(name="RegionEndpoint")
+        void setRegionEndpoint(final String regionEndpoint);
+
+        @JSONField(name="LocalName")
+        String getLocalName();
+
+        @JSONField(name="LocalName")
+        void setLocalName(final String localName);
     }
 
     interface Regions {
+        @JSONField(name="Region")
+        Region[] getRegion();
 
+        @JSONField(name="Region")
+        void setRegion(final Region[] region);
     }
 
     interface DescribeRegionsResponse extends SLBAPIResponse {
+        @JSONField(name="Regions")
+        Regions getRegions();
+
+        @JSONField(name="Regions")
+        void setRegions(final Regions regions);
     }
 
     interface DescribeRegionsBuilder {

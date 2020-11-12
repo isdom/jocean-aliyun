@@ -18,6 +18,26 @@ import rx.Observable;
 @ConstParams({"Version", "2014-05-15"})
 public interface SlbAPI {
 
+    interface Pageable {
+        @JSONField(name="PageNumber")
+        Integer getPageNumber();
+
+        @JSONField(name="PageNumber")
+        void setPageNumber(final Integer pageNumber);
+
+        @JSONField(name="PageSize")
+        Integer getPageSize();
+
+        @JSONField(name="PageSize")
+        void setPageSize(final Integer pageSize);
+
+        @JSONField(name="TotalCount")
+        Integer getTotalCount();
+
+        @JSONField(name="TotalCount")
+        void setTotalCount(final Integer totalCount);
+    }
+
     interface SLBAPIResponse {
         @JSONField(name="RequestId")
         String getRequestId();
@@ -607,15 +627,271 @@ public interface SlbAPI {
     // https://help.aliyun.com/document_detail/27584.html?spm=a2c4g.11186623.6.696.373f50f5BL3ayX
     public DescribeRegionsBuilder describeRegions();
 
-    interface DescribeLoadBalancersResponse extends SLBAPIResponse {
+    interface LoadBalancer {
+        /**
+         * 负载均衡实例ID。
+         */
+        @JSONField(name="LoadBalancerId")
+        String getLoadBalancerId();
+
+        @JSONField(name="LoadBalancerId")
+        void setLoadBalancerId(final String loadBalancerId);
+
+        /**
+         * 负载均衡实例的名称。
+         */
+        @JSONField(name="LoadBalancerName")
+        String getLoadBalancerName();
+
+        @JSONField(name="LoadBalancerName")
+        void setLoadBalancerName(final String loadBalancerName);
+
+        /**
+         * 负载均衡实例状态：
+
+            inactive: 此状态的实例监听不会再转发流量。
+            active: 实例创建后，默认状态为active。
+            locked: 实例已经被锁定。
+         */
+        @JSONField(name="LoadBalancerStatus")
+        String getLoadBalancerStatus();
+
+        @JSONField(name="LoadBalancerStatus")
+        void setLoadBalancerStatus(final String loadBalancerStatus);
+
+        /**
+         * 负载均衡实例服务地址。
+         */
+        @JSONField(name="Address")
+        String getAddress();
+
+        @JSONField(name="Address")
+        void setAddress(final String address);
+
+        /**
+         * 负载均衡实例的网络类型。
+         */
+        @JSONField(name="AddressType")
+        String getAddressType();
+
+        @JSONField(name="AddressType")
+        void setAddressType(final String addressType);
+
+        /**
+         * 负载均衡实例的地域ID。
+         */
+        @JSONField(name="RegionId")
+        String getRegionId();
+
+        @JSONField(name="RegionId")
+        void setRegionId(final String regionId);
+
+        /**
+         * 负载均衡实例的地域名称。
+         */
+        @JSONField(name="RegionIdAlias")
+        String getRegionIdAlias();
+
+        @JSONField(name="RegionIdAlias")
+        void setRegionIdAlias(final String regionIdAlias);
+
+        /**
+         * 私网负载均衡实例的交换机ID。
+         */
+        @JSONField(name="VSwitchId")
+        String getVSwitchId();
+
+        @JSONField(name="VSwitchId")
+        void setVSwitchId(final String vSwitchId);
+
+        /**
+         * 私网负载均衡实例的专有网络ID。
+         */
+        @JSONField(name="VpcId")
+        String getVpcId();
+
+        @JSONField(name="VpcId")
+        void setVpcId(final String vpcId);
+
+        /**
+         * 私网负载均衡实例的网络类型，取值：
+
+            vpc：专有网络实例。
+            classic：经典网络实例。
+         */
+        @JSONField(name="NetworkType")
+        String getNetworkType();
+
+        @JSONField(name="NetworkType")
+        void setNetworkType(final String networkType);
+
+        /**
+         * 实例的主可用区ID。
+         */
+        @JSONField(name="MasterZoneId")
+        String getMasterZoneId();
+
+        @JSONField(name="MasterZoneId")
+        void setMasterZoneId(final String masterZoneId);
+
+        /**
+         * 实例的备可用区ID。
+         */
+        @JSONField(name="SlaveZoneId")
+        String getSlaveZoneId();
+
+        @JSONField(name="SlaveZoneId")
+        void setSlaveZoneId(final String slaveZoneId);
+
+        /**
+         * 公网实例的计费方式。取值：
+
+            3：paybybandwidth，按带宽计费。
+            4：paybytraffic，按流量计费（默认值）。
+            说明 当PayType参数的值为PrePay时，只支持按带宽计费。
+         */
+        @JSONField(name="InternetChargeType")
+        String getInternetChargeType();
+
+        @JSONField(name="InternetChargeType")
+        void setInternetChargeType(final String internetChargeType);
+
+        /**
+         * 负载均衡实例创建时间。
+         */
+        @JSONField(name="CreateTime")
+        String getCreateTime();
+
+        @JSONField(name="CreateTime")
+        void setCreateTime(final String createTime);
+
+        /**
+         * 负载均衡实例创建时间戳。
+         */
+        @JSONField(name="CreateTimeStamp")
+        Long getCreateTimeStamp();
+
+        @JSONField(name="CreateTimeStamp")
+        void setCreateTimeStamp(final Long createTimeStamp);
+
+        /**
+         * 负载均衡实例付费类型，取值PayOnDemand或者PrePay。
+         */
+        @JSONField(name="PayType")
+        String getPayType();
+
+        @JSONField(name="PayType")
+        void setPayType(final String payType);
+
+        /**
+         * 企业资源组ID。
+         */
+        @JSONField(name="ResourceGroupId")
+        String getResourceGroupId();
+
+        @JSONField(name="ResourceGroupId")
+        void setResourceGroupId(final String resourceGroupId);
+
+        /**
+         * IP版本，可以设置为ipv4或者ipv6。
+         */
+        @JSONField(name="AddressIPVersion")
+        String getAddressIPVersion();
+
+        @JSONField(name="AddressIPVersion")
+        void setAddressIPVersion(final String addressIPVersion);
+    }
+
+    interface LoadBalancers {
+        @JSONField(name="LoadBalancer")
+        LoadBalancer[] getLoadBalancer();
+
+        @JSONField(name="LoadBalancer")
+        void setLoadBalancer(final LoadBalancer[] loadBalancer);
+    }
+
+    interface DescribeLoadBalancersResponse extends SLBAPIResponse, Pageable {
+        @JSONField(name="LoadBalancers")
+        LoadBalancers getLoadBalancers();
+
+        @JSONField(name="LoadBalancers")
+        void setLoadBalancers(final LoadBalancers loadBalancers);
     }
 
     interface DescribeLoadBalancersBuilder {
         @QueryParam("RegionId")
         DescribeLoadBalancersBuilder regionId(final String regionId);
 
+        @QueryParam("ServerId")
+        DescribeLoadBalancersBuilder serverId(final String serverId);
+
+        @QueryParam("AddressIPVersion")
+        DescribeLoadBalancersBuilder addressIPVersion(final String addressIPVersion);
+
+        /**
+         * 负载均衡实例状态：
+            inactive: 此状态的实例监听不会再转发流量。
+            active: 实例创建后，默认状态为active。
+            locked: 实例已经被锁定。
+         */
+        @QueryParam("LoadBalancerStatus")
+        DescribeLoadBalancersBuilder loadBalancerStatus(final String loadBalancerStatus);
+
         @QueryParam("LoadBalancerId")
         DescribeLoadBalancersBuilder loadBalancerId(final String loadBalancerId);
+
+        @QueryParam("LoadBalancerName")
+        DescribeLoadBalancersBuilder LoadBalancerName(final String loadBalancerName);
+
+        @QueryParam("ServerIntranetAddress")
+        DescribeLoadBalancersBuilder serverIntranetAddress(final String serverIntranetAddress);
+
+        /**
+         * 负载均衡实例的网络类型。
+
+            取值：intranet或internet。
+
+            internet：创建公网负载均衡实例后，系统会分配一个公网IP地址，可以转发公网请求。
+            intranet：创建内网负载均衡实例后，系统会分配一个内网IP地址，仅可转发内网请求。
+         */
+        @QueryParam("AddressType")
+        DescribeLoadBalancersBuilder addressType(final String addressType);
+
+        @QueryParam("InternetChargeType")
+        DescribeLoadBalancersBuilder internetChargeType(final String internetChargeType);
+
+        @QueryParam("VpcId")
+        DescribeLoadBalancersBuilder vpcId(final String vpcId);
+
+        @QueryParam("VSwitchId")
+        DescribeLoadBalancersBuilder vSwitchId(final String vSwitchId);
+
+        @QueryParam("NetworkType")
+        DescribeLoadBalancersBuilder networkType(final String networkType);
+
+        @QueryParam("Address")
+        DescribeLoadBalancersBuilder address(final String address);
+
+        @QueryParam("MasterZoneId")
+        DescribeLoadBalancersBuilder masterZoneId(final String masterZoneId);
+
+        @QueryParam("SlaveZoneId")
+        DescribeLoadBalancersBuilder slaveZoneId(final String slaveZoneId);
+
+        @QueryParam("Tags")
+        DescribeLoadBalancersBuilder tags(final String tags);
+
+        @QueryParam("PayType")
+        DescribeLoadBalancersBuilder payType(final String payType);
+
+        @QueryParam("ResourceGroupId")
+        DescribeLoadBalancersBuilder resourceGroupId(final String resourceGroupId);
+
+        @QueryParam("PageNumber")
+        DescribeLoadBalancersBuilder pageNumber(final Integer pageNumber);
+
+        @QueryParam("PageSize")
+        DescribeLoadBalancersBuilder pageSize(final Integer pageSize);
 
         @GET
         @ConstParams({"Action", "DescribeLoadBalancers"})

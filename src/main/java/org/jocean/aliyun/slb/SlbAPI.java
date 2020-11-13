@@ -947,6 +947,11 @@ public interface SlbAPI {
     public SetLoadBalancerStatusBuilder setLoadBalancerStatus();
 
     interface ModifyLoadBalancerInternetSpecResponse extends SLBAPIResponse {
+        @JSONField(name="OrderId")
+        Long getOrderId();
+
+        @JSONField(name="OrderId")
+        void setOrderId(final Long orderId);
     }
 
     interface ModifyLoadBalancerInternetSpecBuilder {
@@ -958,6 +963,12 @@ public interface SlbAPI {
 
         @QueryParam("InternetChargeType")
         ModifyLoadBalancerInternetSpecBuilder internetChargeType(final String internetChargeType);
+
+        @QueryParam("Bandwidth")
+        ModifyLoadBalancerInternetSpecBuilder bandwidth(final Integer bandwidth);
+
+        @QueryParam("AutoPay")
+        ModifyLoadBalancerInternetSpecBuilder autoPay(final Boolean autoPay);
 
         @GET
         @ConstParams({"Action", "ModifyLoadBalancerInternetSpec"})

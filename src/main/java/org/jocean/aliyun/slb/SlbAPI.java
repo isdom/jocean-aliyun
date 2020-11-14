@@ -992,6 +992,9 @@ public interface SlbAPI {
         @QueryParam("DeleteProtection")
         SetLoadBalancerDeleteProtectionBuilder deleteProtection(final String deleteProtection);
 
+        @QueryParam("OwnerAccount")
+        SetLoadBalancerDeleteProtectionBuilder ownerAccount(final String ownerAccount);
+
         @GET
         @ConstParams({"Action", "SetLoadBalancerDeleteProtection"})
         @Consumes(MediaType.APPLICATION_JSON)

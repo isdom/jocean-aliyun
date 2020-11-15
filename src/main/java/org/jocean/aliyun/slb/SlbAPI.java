@@ -1014,8 +1014,22 @@ public interface SlbAPI {
         @QueryParam("LoadBalancerId")
         CreateLoadBalancerHTTPListenerBuilder loadBalancerId(final String loadBalancerId);
 
+        /**
+         * 是否开启健康检查。
+            取值：on | off。
+         */
+        @QueryParam("HealthCheck")
+        CreateLoadBalancerHTTPListenerBuilder healthCheck(final String healthCheck);
+
         @QueryParam("ListenerPort")
         CreateLoadBalancerHTTPListenerBuilder listenerPort(final int listenerPort);
+
+        /**
+         * 是否开启会话保持。
+            取值：on | off。
+         */
+        @QueryParam("StickySession")
+        CreateLoadBalancerHTTPListenerBuilder stickySession(final String stickySession);
 
         @GET
         @ConstParams({"Action", "CreateLoadBalancerHTTPListener"})

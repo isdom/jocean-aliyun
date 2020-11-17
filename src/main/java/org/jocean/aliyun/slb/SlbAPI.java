@@ -1281,7 +1281,250 @@ public interface SlbAPI {
     // https://help.aliyun.com/document_detail/27592.html?spm=a2c4g.11186623.6.713.6be528d3HFwHR0
     public CreateLoadBalancerHTTPListenerBuilder createLoadBalancerHTTPListener();
 
+    interface Rule {
+        @JSONField(name="RuleId")
+        String getRuleId();
+
+        @JSONField(name="RuleId")
+        void setRuleId(final String ruleId);
+
+        @JSONField(name="RuleName")
+        String getRuleName();
+
+        @JSONField(name="RuleName")
+        void setRuleName(final String ruleName);
+
+        @JSONField(name="Domain")
+        String getDomain();
+
+        @JSONField(name="Domain")
+        void setDomain(final String domain);
+
+        @JSONField(name="Url")
+        String getUrl();
+
+        @JSONField(name="Url")
+        void setUrl(final String url);
+
+        @JSONField(name="VServerGroupId")
+        String getVServerGroupId();
+
+        @JSONField(name="VServerGroupId")
+        void setVServerGroupId(final String vServerGroupId);
+    }
+
+    interface Rules {
+        @JSONField(name="Rule")
+        Rule[] getRule();
+
+        @JSONField(name="Rule")
+        void setRule(final Rule[] rule);
+    }
+
     interface DescribeLoadBalancerHTTPListenerAttributeResponse extends SLBAPIResponse {
+        @JSONField(name="ListenerPort")
+        Integer getListenerPort();
+
+        @JSONField(name="ListenerPort")
+        void setListenerPort(final Integer listenerPort);
+
+        @JSONField(name="BackendServerPort")
+        Integer getBackendServerPort();
+
+        @JSONField(name="BackendServerPort")
+        void setBackendServerPort(final Integer backendServerPort);
+
+        @JSONField(name="Bandwidth")
+        Integer getBandwidth();
+
+        @JSONField(name="Bandwidth")
+        void setBandwidth(final Integer bandwidth);
+
+        @JSONField(name="Status")
+        String getStatus();
+
+        @JSONField(name="Status")
+        void setStatus(final String status);
+
+        @JSONField(name="SecurityStatus")
+        String getSecurityStatus();
+
+        @JSONField(name="SecurityStatus")
+        void setSecurityStatus(final String securityStatus);
+
+        @JSONField(name="XForwardedFor")
+        String getXForwardedFor();
+
+        @JSONField(name="XForwardedFor")
+        void setXForwardedFor(final String xForwardedFor);
+
+        @JSONField(name="Scheduler")
+        String getScheduler();
+
+        @JSONField(name="Scheduler")
+        void setScheduler(final String scheduler);
+
+        @JSONField(name="StickySession")
+        String getStickySession();
+
+        @JSONField(name="StickySession")
+        void setStickySession(final String stickySession);
+
+        @JSONField(name="StickySessionType")
+        String getStickySessionType();
+
+        @JSONField(name="StickySessionType")
+        void setStickySessionType(final String stickySessionType);
+
+        @JSONField(name="CookieTimeout")
+        Integer getCookieTimeout();
+
+        @JSONField(name="CookieTimeout")
+        void setCookieTimeout(final Integer cookieTimeout);
+
+        @JSONField(name="Cookie")
+        String getCookie();
+
+        @JSONField(name="Cookie")
+        void setCookie(final String cookie);
+
+        @JSONField(name="HealthCheck")
+        String getHealthCheck();
+
+        @JSONField(name="HealthCheck")
+        void setHealthCheck(final String healthCheck);
+
+        @JSONField(name="HealthCheckDomain")
+        String getHealthCheckDomain();
+
+        @JSONField(name="HealthCheckDomain")
+        void setHealthCheckDomain(final String healthCheckDomain);
+
+        @JSONField(name="HealthCheckURI")
+        String getHealthCheckURI();
+
+        @JSONField(name="HealthCheckURI")
+        void setHealthCheckURI(final String healthCheckURI);
+
+        @JSONField(name="HealthyThreshold")
+        Integer getHealthyThreshold();
+
+        @JSONField(name="HealthyThreshold")
+        void setHealthyThreshold(final Integer healthyThreshold);
+
+        @JSONField(name="UnhealthyThreshold")
+        Integer getUnhealthyThreshold();
+
+        @JSONField(name="UnhealthyThreshold")
+        void setUnhealthyThreshold(final Integer unhealthyThreshold);
+
+        @JSONField(name="HealthCheckTimeout")
+        Integer getHealthCheckTimeout();
+
+        @JSONField(name="HealthCheckTimeout")
+        void setHealthCheckTimeout(final Integer healthCheckTimeout);
+
+        @JSONField(name="HealthCheckInterval")
+        Integer getHealthCheckInterval();
+
+        @JSONField(name="HealthCheckInterval")
+        void setHealthCheckInterval(final Integer healthCheckInterval);
+
+        @JSONField(name="HealthCheckConnectPort")
+        Integer getHealthCheckConnectPort();
+
+        @JSONField(name="HealthCheckConnectPort")
+        void setHealthCheckConnectPort(final Integer healthCheckConnectPort);
+
+        @JSONField(name="HealthCheckHttpCode")
+        String getHealthCheckHttpCode();
+
+        @JSONField(name="HealthCheckHttpCode")
+        void setHealthCheckHttpCode(final String healthCheckHttpCode);
+
+        @JSONField(name="VServerGroupId")
+        String getVServerGroupId();
+
+        @JSONField(name="VServerGroupId")
+        void setVServerGroupId(final String vServerGroupId);
+
+        @JSONField(name="Gzip")
+        String getGzip();
+
+        @JSONField(name="Gzip")
+        void setGzip(final String gzip);
+
+        @JSONField(name="XForwardedFor_SLBIP")
+        String getXForwardedFor_SLBIP();
+
+        @JSONField(name="XForwardedFor_SLBIP")
+        void setXForwardedFor_SLBIP(final String xForwardedFor_SLBIP);
+
+        @JSONField(name="XForwardedFor_SLBID")
+        String getXForwardedFor_SLBID();
+
+        @JSONField(name="XForwardedFor_SLBID")
+        void setXForwardedFor_SLBID(final String xForwardedFor_SLBID);
+
+        @JSONField(name="XForwardedFor_proto")
+        String getXForwardedFor_proto();
+
+        @JSONField(name="XForwardedFor_proto")
+        void setXForwardedFor_proto(final String xForwardedFor_proto);
+
+        @JSONField(name="AclId")
+        String getAclId();
+
+        @JSONField(name="AclId")
+        void setAclId(final String aclId);
+
+        @JSONField(name="AclType")
+        String getAclType();
+
+        @JSONField(name="AclType")
+        void setAclType(final String aclType);
+
+        @JSONField(name="AclStatus")
+        String getAclStatus();
+
+        @JSONField(name="AclStatus")
+        void setAclStatus(final String aclStatus);
+
+        @JSONField(name="ListenerForward")
+        String getListenerForward();
+
+        @JSONField(name="ListenerForward")
+        void setListenerForward(final String listenerForward);
+
+        @JSONField(name="ForwardPort")
+        Integer getForwardPort();
+
+        @JSONField(name="ForwardPort")
+        void setForwardPort(final Integer forwardPort);
+
+        @JSONField(name="RequestTimeout")
+        Integer getRequestTimeout();
+
+        @JSONField(name="RequestTimeout")
+        void setRequestTimeout(final Integer requestTimeout);
+
+        @JSONField(name="IdleTimeout")
+        Integer getIdleTimeout();
+
+        @JSONField(name="IdleTimeout")
+        void setIdleTimeout(final Integer idleTimeout);
+
+        @JSONField(name="Description")
+        String getDescription();
+
+        @JSONField(name="Description")
+        void setDescription(final String description);
+
+        @JSONField(name="Rules")
+        Rules getRules();
+
+        @JSONField(name="Rules")
+        void setRules(final Rules rules);
     }
 
     interface DescribeLoadBalancerHTTPListenerAttributeBuilder {

@@ -1550,9 +1550,26 @@ public interface SlbAPI {
     }
 
     interface SetLoadBalancerHTTPListenerAttributeBuilder {
+        /**
+         * 是否必选:
+         * 是
+         * 示例值:
+         * cn-hangzhou
+         * 描述:
+         * 负载均衡实例的地域。
+            您可以从地域和可用区列表或通过调用DescribeRegions接口查询地域ID。
+         */
         @QueryParam("RegionId")
         SetLoadBalancerHTTPListenerAttributeBuilder regionId(final String regionId);
 
+        /**
+         * 是否必选:
+         * 是
+         * 示例值:
+         * lb-bp1qjwo61pqz3ah*****
+         * 描述:
+         * 负载均衡实例的ID。
+         */
         @QueryParam("LoadBalancerId")
         SetLoadBalancerHTTPListenerAttributeBuilder loadBalancerId(final String loadBalancerId);
 
@@ -1563,6 +1580,13 @@ public interface SlbAPI {
         @QueryParam("HealthCheck")
         SetLoadBalancerHTTPListenerAttributeBuilder healthCheck(final String healthCheck);
 
+        /**
+         * 描述:
+         * 负载均衡实例前端使用的端口。
+            取值：1-65535。
+         * @param listenerPort
+         * @return
+         */
         @QueryParam("ListenerPort")
         SetLoadBalancerHTTPListenerAttributeBuilder listenerPort(final int listenerPort);
 
@@ -1599,8 +1623,8 @@ public interface SlbAPI {
             取值：1~65535。
             说明 如果不使用服务器组（不指定VServerGroupId参数），则该参数必选。
          */
-        @QueryParam("BackendServerPort")
-        SetLoadBalancerHTTPListenerAttributeBuilder backendServerPort(final int backendServerPort);
+//        @QueryParam("BackendServerPort")
+//        SetLoadBalancerHTTPListenerAttributeBuilder backendServerPort(final int backendServerPort);
 
         /**
          * 是否开启通过X-Forwarded-For头字段获取来访者真实 IP。
@@ -1706,6 +1730,13 @@ public interface SlbAPI {
          */
         @QueryParam("HealthCheckHttpCode")
         SetLoadBalancerHTTPListenerAttributeBuilder healthCheckHttpCode(final String healthCheckHttpCode);
+
+        /**
+         * 是否使用虚拟服务器组。
+            取值：on|off。
+         */
+        @QueryParam("VServerGroup")
+        SetLoadBalancerHTTPListenerAttributeBuilder vServerGroup(final String vServerGroup);
 
         /**
          * 虚拟服务器组ID。

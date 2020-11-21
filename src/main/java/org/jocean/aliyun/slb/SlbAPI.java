@@ -356,6 +356,7 @@ public interface SlbAPI {
     interface DeleteLoadBalancerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteLoadBalancerBuilder {
         @QueryParam("RegionId")
         DeleteLoadBalancerBuilder regionId(final String regionId);
@@ -374,6 +375,7 @@ public interface SlbAPI {
     interface ModifyLoadBalancerPayTypeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface ModifyLoadBalancerPayTypeBuilder {
         @QueryParam("RegionId")
         ModifyLoadBalancerPayTypeBuilder regionId(final String regionId);
@@ -450,6 +452,7 @@ public interface SlbAPI {
         void setOrderId(final Long orderId);
     }
 
+    @RpcBuilder
     interface ModifyLoadBalancerInstanceSpecBuilder {
         @QueryParam("RegionId")
         ModifyLoadBalancerInstanceSpecBuilder regionId(final String regionId);
@@ -556,6 +559,7 @@ public interface SlbAPI {
         void setZones(final Zones zones);
     }
 
+    @RpcBuilder
     interface DescribeZonesBuilder {
         /**
          * cn-hangzhou   所属地域ID。
@@ -611,6 +615,7 @@ public interface SlbAPI {
         void setRegions(final Regions regions);
     }
 
+    @RpcBuilder
     interface DescribeRegionsBuilder {
         @QueryParam("RegionId")
         DescribeRegionsBuilder regionId(final String regionId);
@@ -818,6 +823,7 @@ public interface SlbAPI {
         void setLoadBalancers(final LoadBalancers loadBalancers);
     }
 
+    @RpcBuilder
     interface DescribeLoadBalancersBuilder {
         @QueryParam("RegionId")
         DescribeLoadBalancersBuilder regionId(final String regionId);
@@ -905,6 +911,7 @@ public interface SlbAPI {
     interface SetLoadBalancerNameResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetLoadBalancerNameBuilder {
         @QueryParam("RegionId")
         SetLoadBalancerNameBuilder regionId(final String regionId);
@@ -927,6 +934,7 @@ public interface SlbAPI {
     interface SetLoadBalancerStatusResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetLoadBalancerStatusBuilder {
         @QueryParam("RegionId")
         SetLoadBalancerStatusBuilder regionId(final String regionId);
@@ -954,6 +962,7 @@ public interface SlbAPI {
         void setOrderId(final Long orderId);
     }
 
+    @RpcBuilder
     interface ModifyLoadBalancerInternetSpecBuilder {
         @QueryParam("RegionId")
         ModifyLoadBalancerInternetSpecBuilder regionId(final String regionId);

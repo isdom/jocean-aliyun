@@ -991,6 +991,7 @@ public interface SlbAPI {
     interface SetLoadBalancerDeleteProtectionResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetLoadBalancerDeleteProtectionBuilder {
         @QueryParam("RegionId")
         SetLoadBalancerDeleteProtectionBuilder regionId(final String regionId);
@@ -1016,6 +1017,7 @@ public interface SlbAPI {
     interface CreateLoadBalancerHTTPListenerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateLoadBalancerHTTPListenerBuilder {
         @QueryParam("RegionId")
         CreateLoadBalancerHTTPListenerBuilder regionId(final String regionId);
@@ -1536,6 +1538,7 @@ public interface SlbAPI {
         void setRules(final Rules rules);
     }
 
+    @RpcBuilder
     interface DescribeLoadBalancerHTTPListenerAttributeBuilder {
         @QueryParam("RegionId")
         DescribeLoadBalancerHTTPListenerAttributeBuilder regionId(final String regionId);
@@ -1558,6 +1561,7 @@ public interface SlbAPI {
     interface SetLoadBalancerHTTPListenerAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetLoadBalancerHTTPListenerAttributeBuilder {
         /**
          * 是否必选:
@@ -1866,6 +1870,7 @@ public interface SlbAPI {
     interface CreateLoadBalancerHTTPSListenerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateLoadBalancerHTTPSListenerBuilder {
         @QueryParam("RegionId")
         CreateLoadBalancerHTTPSListenerBuilder regionId(final String regionId);
@@ -1888,6 +1893,7 @@ public interface SlbAPI {
     interface DescribeLoadBalancerHTTPSListenerAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeLoadBalancerHTTPSListenerAttributeBuilder {
         @QueryParam("RegionId")
         DescribeLoadBalancerHTTPSListenerAttributeBuilder regionId(final String regionId);

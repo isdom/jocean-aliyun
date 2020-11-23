@@ -1938,6 +1938,7 @@ public interface SlbAPI {
     interface StartLoadBalancerListenerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface StartLoadBalancerListenerBuilder {
         @QueryParam("RegionId")
         StartLoadBalancerListenerBuilder regionId(final String regionId);
@@ -1960,6 +1961,7 @@ public interface SlbAPI {
     interface StopLoadBalancerListenerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface StopLoadBalancerListenerBuilder {
         @QueryParam("RegionId")
         StopLoadBalancerListenerBuilder regionId(final String regionId);
@@ -1982,6 +1984,7 @@ public interface SlbAPI {
     interface DeleteLoadBalancerListenerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteLoadBalancerListenerBuilder {
         @QueryParam("RegionId")
         DeleteLoadBalancerListenerBuilder regionId(final String regionId);
@@ -2004,6 +2007,7 @@ public interface SlbAPI {
     interface AddBackendServersResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface AddBackendServersBuilder {
         @QueryParam("RegionId")
         AddBackendServersBuilder regionId(final String regionId);
@@ -2026,6 +2030,7 @@ public interface SlbAPI {
     interface RemoveBackendServersResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface RemoveBackendServersBuilder {
         @QueryParam("RegionId")
         RemoveBackendServersBuilder regionId(final String regionId);
@@ -2048,6 +2053,7 @@ public interface SlbAPI {
     interface SetBackendServersResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetBackendServersBuilder {
         @QueryParam("RegionId")
         SetBackendServersBuilder regionId(final String regionId);
@@ -2070,6 +2076,7 @@ public interface SlbAPI {
     interface DescribeHealthStatusResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeHealthStatusBuilder {
         @QueryParam("RegionId")
         DescribeHealthStatusBuilder regionId(final String regionId);
@@ -2092,6 +2099,7 @@ public interface SlbAPI {
     interface CreateVServerGroupResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateVServerGroupBuilder {
         @QueryParam("RegionId")
         CreateVServerGroupBuilder regionId(final String regionId);
@@ -2114,6 +2122,7 @@ public interface SlbAPI {
     interface UploadServerCertificateResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface UploadServerCertificateBuilder {
         @QueryParam("RegionId")
         UploadServerCertificateBuilder regionId(final String regionId);
@@ -2136,6 +2145,7 @@ public interface SlbAPI {
     interface DeleteServerCertificateResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteServerCertificateBuilder {
         @QueryParam("RegionId")
         DeleteServerCertificateBuilder regionId(final String regionId);
@@ -2158,6 +2168,7 @@ public interface SlbAPI {
     interface DescribeServerCertificatesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeServerCertificatesBuilder {
         @QueryParam("RegionId")
         DescribeServerCertificatesBuilder regionId(final String regionId);
@@ -2180,6 +2191,7 @@ public interface SlbAPI {
     interface SetServerCertificateNameResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetServerCertificateNameBuilder {
         @QueryParam("RegionId")
         SetServerCertificateNameBuilder regionId(final String regionId);
@@ -2202,6 +2214,7 @@ public interface SlbAPI {
     interface UploadCACertificateResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface UploadCACertificateBuilder {
         @QueryParam("RegionId")
         UploadCACertificateBuilder regionId(final String regionId);
@@ -2224,6 +2237,7 @@ public interface SlbAPI {
     interface DeleteCACertificateResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteCACertificateBuilder {
         @QueryParam("RegionId")
         DeleteCACertificateBuilder regionId(final String regionId);
@@ -2246,6 +2260,7 @@ public interface SlbAPI {
     interface DescribeCACertificatesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeCACertificatesBuilder {
         @QueryParam("RegionId")
         DescribeCACertificatesBuilder regionId(final String regionId);
@@ -2268,6 +2283,7 @@ public interface SlbAPI {
     interface SetCACertificateNameResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetCACertificateNameBuilder {
         @QueryParam("RegionId")
         SetCACertificateNameBuilder regionId(final String regionId);

@@ -2306,6 +2306,7 @@ public interface SlbAPI {
     interface CreateDomainExtensionResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateDomainExtensionBuilder {
         @QueryParam("RegionId")
         CreateDomainExtensionBuilder regionId(final String regionId);
@@ -2328,6 +2329,7 @@ public interface SlbAPI {
     interface DeleteDomainExtensionResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteDomainExtensionBuilder {
         @QueryParam("RegionId")
         DeleteDomainExtensionBuilder regionId(final String regionId);
@@ -2350,6 +2352,7 @@ public interface SlbAPI {
     interface DescribeDomainExtensionsResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeDomainExtensionsBuilder {
         @QueryParam("RegionId")
         DescribeDomainExtensionsBuilder regionId(final String regionId);
@@ -2372,6 +2375,7 @@ public interface SlbAPI {
     interface SetDomainExtensionAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetDomainExtensionAttributeBuilder {
         @QueryParam("RegionId")
         SetDomainExtensionAttributeBuilder regionId(final String regionId);
@@ -2394,6 +2398,7 @@ public interface SlbAPI {
     interface DescribeAvailableResourceResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeAvailableResourceBuilder {
         @QueryParam("RegionId")
         DescribeAvailableResourceBuilder regionId(final String regionId);
@@ -2416,6 +2421,7 @@ public interface SlbAPI {
     interface ListTagResourcesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface ListTagResourcesBuilder {
         @QueryParam("RegionId")
         ListTagResourcesBuilder regionId(final String regionId);
@@ -2438,6 +2444,7 @@ public interface SlbAPI {
     interface TagResourcesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface TagResourcesBuilder {
         @QueryParam("RegionId")
         TagResourcesBuilder regionId(final String regionId);
@@ -2460,6 +2467,7 @@ public interface SlbAPI {
     interface UntagResourcesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface UntagResourcesBuilder {
         @QueryParam("RegionId")
         UntagResourcesBuilder regionId(final String regionId);
@@ -2482,6 +2490,7 @@ public interface SlbAPI {
     interface CreateRulesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateRulesBuilder {
         @QueryParam("RegionId")
         CreateRulesBuilder regionId(final String regionId);
@@ -2504,6 +2513,7 @@ public interface SlbAPI {
     interface DeleteRulesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteRulesBuilder {
         @QueryParam("RegionId")
         DeleteRulesBuilder regionId(final String regionId);
@@ -2526,6 +2536,7 @@ public interface SlbAPI {
     interface SetRuleResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetRuleBuilder {
         @QueryParam("RegionId")
         SetRuleBuilder regionId(final String regionId);
@@ -2548,6 +2559,7 @@ public interface SlbAPI {
     interface DescribeRuleAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeRuleAttributeBuilder {
         @QueryParam("RegionId")
         DescribeRuleAttributeBuilder regionId(final String regionId);
@@ -2570,6 +2582,7 @@ public interface SlbAPI {
     interface DescribeRulesResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeRulesBuilder {
         @QueryParam("RegionId")
         DescribeRulesBuilder regionId(final String regionId);
@@ -2592,6 +2605,7 @@ public interface SlbAPI {
     interface CreateAccessControlListResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateAccessControlListBuilder {
         @QueryParam("RegionId")
         CreateAccessControlListBuilder regionId(final String regionId);
@@ -2614,6 +2628,7 @@ public interface SlbAPI {
     interface DeleteAccessControlListResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteAccessControlListBuilder {
         @QueryParam("RegionId")
         DeleteAccessControlListBuilder regionId(final String regionId);
@@ -2636,6 +2651,7 @@ public interface SlbAPI {
     interface DescribeAccessControlListsResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeAccessControlListsBuilder {
         @QueryParam("RegionId")
         DescribeAccessControlListsBuilder regionId(final String regionId);
@@ -2658,6 +2674,7 @@ public interface SlbAPI {
     interface DescribeAccessControlListAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeAccessControlListAttributeBuilder {
         @QueryParam("RegionId")
         DescribeAccessControlListAttributeBuilder regionId(final String regionId);
@@ -2680,6 +2697,7 @@ public interface SlbAPI {
     interface SetAccessControlListAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetAccessControlListAttributeBuilder {
         @QueryParam("RegionId")
         SetAccessControlListAttributeBuilder regionId(final String regionId);
@@ -2702,6 +2720,7 @@ public interface SlbAPI {
     interface AddAccessControlListEntryResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface AddAccessControlListEntryBuilder {
         @QueryParam("RegionId")
         AddAccessControlListEntryBuilder regionId(final String regionId);
@@ -2724,6 +2743,7 @@ public interface SlbAPI {
     interface RemoveAccessControlListEntryResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface RemoveAccessControlListEntryBuilder {
         @QueryParam("RegionId")
         RemoveAccessControlListEntryBuilder regionId(final String regionId);
@@ -2746,6 +2766,7 @@ public interface SlbAPI {
     interface DescribeLoadBalancerTCPListenerAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeLoadBalancerTCPListenerAttributeBuilder {
         @QueryParam("RegionId")
         DescribeLoadBalancerTCPListenerAttributeBuilder regionId(final String regionId);
@@ -2768,6 +2789,7 @@ public interface SlbAPI {
     interface CreateLoadBalancerTCPListenerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateLoadBalancerTCPListenerBuilder {
         @QueryParam("RegionId")
         CreateLoadBalancerTCPListenerBuilder regionId(final String regionId);
@@ -2790,6 +2812,7 @@ public interface SlbAPI {
     interface SetLoadBalancerTCPListenerAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetLoadBalancerTCPListenerAttributeBuilder {
         @QueryParam("RegionId")
         SetLoadBalancerTCPListenerAttributeBuilder regionId(final String regionId);
@@ -2812,6 +2835,7 @@ public interface SlbAPI {
     interface CreateLoadBalancerUDPListenerResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateLoadBalancerUDPListenerBuilder {
         @QueryParam("RegionId")
         CreateLoadBalancerUDPListenerBuilder regionId(final String regionId);
@@ -2834,6 +2858,7 @@ public interface SlbAPI {
     interface SetLoadBalancerUDPListenerAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface SetLoadBalancerUDPListenerAttributeBuilder {
         @QueryParam("RegionId")
         SetLoadBalancerUDPListenerAttributeBuilder regionId(final String regionId);
@@ -2856,6 +2881,7 @@ public interface SlbAPI {
     interface DescribeLoadBalancerUDPListenerAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeLoadBalancerUDPListenerAttributeBuilder {
         @QueryParam("RegionId")
         DescribeLoadBalancerUDPListenerAttributeBuilder regionId(final String regionId);
@@ -2878,6 +2904,7 @@ public interface SlbAPI {
     interface CreateMasterSlaveServerGroupResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface CreateMasterSlaveServerGroupBuilder {
         @QueryParam("RegionId")
         CreateMasterSlaveServerGroupBuilder regionId(final String regionId);
@@ -2900,6 +2927,7 @@ public interface SlbAPI {
     interface DeleteMasterSlaveServerGroupResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DeleteMasterSlaveServerGroupBuilder {
         @QueryParam("RegionId")
         DeleteMasterSlaveServerGroupBuilder regionId(final String regionId);
@@ -2922,6 +2950,7 @@ public interface SlbAPI {
     interface DescribeMasterSlaveServerGroupAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeMasterSlaveServerGroupAttributeBuilder {
         @QueryParam("RegionId")
         DescribeMasterSlaveServerGroupAttributeBuilder regionId(final String regionId);
@@ -2944,6 +2973,7 @@ public interface SlbAPI {
     interface DescribeMasterSlaveServerGroupsResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeMasterSlaveServerGroupsBuilder {
         @QueryParam("RegionId")
         DescribeMasterSlaveServerGroupsBuilder regionId(final String regionId);
@@ -3090,6 +3120,7 @@ public interface SlbAPI {
 
     }
 
+    @RpcBuilder
     interface AddVServerGroupBackendServersBuilder {
         Observable<AddVServerGroupBackendServersResponse> call();
     }
@@ -3112,6 +3143,7 @@ public interface SlbAPI {
         void setBackendServers(final BackendServers backendServers);
     }
 
+    @RpcBuilder
     interface RemoveVServerGroupBackendServersBuilder {
         @QueryParam("BackendServers")
         RemoveVServerGroupBackendServersBuilder backendServers(final String backendServers);
@@ -3133,8 +3165,9 @@ public interface SlbAPI {
 
 
     interface ModifyVServerGroupBackendServersResponse extends SLBAPIResponse {
-
     }
+
+    @RpcBuilder
     interface ModifyVServerGroupBackendServersBuilder {
         @QueryParam("RegionId")
         ModifyVServerGroupBackendServersBuilder regionId(final String regionId);
@@ -3160,6 +3193,8 @@ public interface SlbAPI {
     interface DeleteVServerGroupResponse extends SLBAPIResponse {
 
     }
+
+    @RpcBuilder
     interface DeleteVServerGroupServersBuilder {
         @QueryParam("RegionId")
         DeleteVServerGroupServersBuilder regionId(final String regionId);
@@ -3177,8 +3212,9 @@ public interface SlbAPI {
     public DeleteVServerGroupServersBuilder deleteVServerGroup();
 
     interface DescribeVServerGroupsResponse extends SLBAPIResponse {
-
     }
+
+    @RpcBuilder
     interface DescribeVServerGroupsBuilder {
         @QueryParam("RegionId")
         DescribeVServerGroupsBuilder regionId(final String regionId);
@@ -3198,6 +3234,7 @@ public interface SlbAPI {
     interface DescribeVServerGroupAttributeResponse extends SLBAPIResponse {
     }
 
+    @RpcBuilder
     interface DescribeVServerGroupAttributeBuilder {
         @QueryParam("RegionId")
         DescribeVServerGroupAttributeBuilder regionId(final String regionId);

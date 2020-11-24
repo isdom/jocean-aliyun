@@ -77,7 +77,6 @@ public interface MetadataAPI {
     //  获取实例主网卡的私网IPv4地址。
     PrivateIpv4Builder privateIpv4();
 
-    @RpcBuilder
     public interface STSTokenResponse {
         @JSONField(name = "Code")
         public String getCode();

@@ -49,21 +49,21 @@ public class DefaultSTSCredentials implements STSCredentials {
         }
     }
 
-    @Value("${instance_id}")
+    @Value("${sts.instance_id}")
     String _instanceId;
 
-    @Value("${accesskey_id(}")
+    @Value("${sts.ak_id}")
     String _accessKeyId;
 
-    @Value("${accesskey_secret}")
+    @Value("${sts.ak_secret}")
     String _accessKeySecret;
 
-    @Value("${security_token")
+    @Value("${sts.token")
     String _securityToken;
 
-    @Value("${expiration}")
+    @Value("${sts.expiration}")
     String _expiration;
 
-    @Value("${lastupdated}")
+    @Value("${sts.lastupdated}")
     String _lastUpdated;
 }

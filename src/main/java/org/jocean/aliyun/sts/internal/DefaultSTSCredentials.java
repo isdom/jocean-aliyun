@@ -1,9 +1,5 @@
 package org.jocean.aliyun.sts.internal;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Date;
-
 import org.jocean.aliyun.sts.STSCredentials;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -30,23 +26,25 @@ public class DefaultSTSCredentials implements STSCredentials {
     }
 
     @Override
-    public Date getExpiration() {
-        try {
-            return DateFormat.getDateTimeInstance().parse(_expiration);
-        } catch (final ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public /*Date*/String getExpiration() {
+        return _expiration;
+//        try {
+//            return DateFormat.getDateTimeInstance().parse(_expiration);
+//        } catch (final ParseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
     }
 
     @Override
-    public Date getLastUpdated() {
-        try {
-            return DateFormat.getDateTimeInstance().parse(_lastUpdated);
-        } catch (final ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public /*Date*/String getLastUpdated() {
+        return _lastUpdated;
+//        try {
+//            return DateFormat.getDateTimeInstance().parse(_lastUpdated);
+//        } catch (final ParseException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
     }
 
     @Value("${sts.instance_id}")

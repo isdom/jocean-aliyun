@@ -1,7 +1,5 @@
 package org.jocean.aliyun.ecs;
 
-import java.util.Date;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -104,17 +102,17 @@ public interface MetadataAPI {
 
         //  UTC 通用标准时
         @JSONField(name = "Expiration")
-        public void setExpiration(final Date expiration);
+        public void setExpiration(final /*Date*/String expiration);
 
         @JSONField(name = "Expiration")
-        public Date getExpiration();
+        public /*Date*/String getExpiration();
 
         //  UTC 通用标准时
         @JSONField(name = "LastUpdated")
-        public void setLastUpdated(final Date lastUpdated);
+        public void setLastUpdated(final /*Date*/String lastUpdated);
 
         @JSONField(name = "LastUpdated")
-        public Date getLastUpdated();
+        public /*Date*/String getLastUpdated();
     }
 
     @RpcBuilder

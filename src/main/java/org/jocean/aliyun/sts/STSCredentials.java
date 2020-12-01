@@ -3,8 +3,6 @@
  */
 package org.jocean.aliyun.sts;
 
-import java.util.Date;
-
 /**
  * @author isdom
  *
@@ -19,8 +17,8 @@ public interface STSCredentials {
     public String getSecurityToken();
 
     //  UTC 通用标准时
-    public Date getExpiration();
+    public /*Date*/String getExpiration();
 
     //  UTC 通用标准时
-    public Date getLastUpdated();
+    public /*Date*/String getLastUpdated();
 }

@@ -5,6 +5,17 @@ import org.springframework.beans.factory.annotation.Value;
 
 public class DefaultSTSCredentials implements STSCredentials {
 
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("DefaultSTSCredentials [instanceId=").append(_instanceId).append(", accessKeyId=")
+                .append(_accessKeyId).append(", accessKeySecret=").append(_accessKeySecret).append(", securityToken=")
+                .append(_securityToken).append(", expiration=").append(_expiration).append(", lastUpdated=")
+                .append(_lastUpdated).append("]");
+        return builder.toString();
+    }
+
     @Override
     public String getInstanceId() {
         return _instanceId;

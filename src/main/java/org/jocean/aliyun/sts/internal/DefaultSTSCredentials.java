@@ -67,7 +67,7 @@ public class DefaultSTSCredentials implements STSCredentials {
     @Value("${sts.ak_secret}")
     String _accessKeySecret;
 
-    @Value("${sts.token")
+    @Value("${sts.token}")
     String _securityToken;
 
     @Value("${sts.expiration}")

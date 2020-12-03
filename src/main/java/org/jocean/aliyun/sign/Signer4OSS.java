@@ -8,6 +8,7 @@ import java.util.TimeZone;
 import org.jocean.aliyun.oss.internal.OSSHeaders;
 import org.jocean.aliyun.oss.internal.OSSUtils;
 import org.jocean.aliyun.oss.internal.SignUtils;
+import org.jocean.aliyun.sts.STSCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +38,10 @@ public class Signer4OSS {
             if (obj instanceof HttpRequest) {
                 doSign((HttpRequest) obj, ak_id, ak_secret, ststoken);
             }};
+    }
+
+    public static Action1<Object> signRequest(final STSCredentials stsc) {
+        return signRequest(stsc.getAccessKeyId(), stsc.getAccessKeySecret(), stsc.getSecurityToken());
     }
 
     private static String buildGMT4Now(final Date date) {

@@ -2189,6 +2189,34 @@ public interface SlbAPI {
     // https://help.aliyun.com/document_detail/27593.html?spm=a2c4g.11186623.6.717.7c5ef5dbRQLorb
     public CreateLoadBalancerHTTPSListenerBuilder createLoadBalancerHTTPSListener();
 
+    interface DomainExtension {
+        @JSONField(name="DomainExtensionId")
+        String getDomainExtensionId();
+
+        @JSONField(name="DomainExtensionId")
+        void setDomainExtensionId(final String domainExtensionId);
+
+        @JSONField(name="Domain")
+        String getDomain();
+
+        @JSONField(name="Domain")
+        void setDomain(final String domain);
+
+        @JSONField(name="ServerCertificateId")
+        String getServerCertificateId();
+
+        @JSONField(name="ServerCertificateId")
+        void setServerCertificateId(final String serverCertificateId);
+    }
+
+    interface DomainExtensions {
+        @JSONField(name="DomainExtension")
+        DomainExtension[] getDomainExtension();
+
+        @JSONField(name="DomainExtension")
+        void setDomainExtension(final DomainExtension[] domainExtension);
+    }
+
     interface DescribeLoadBalancerHTTPSListenerAttributeResponse extends SLBAPIResponse {
         @JSONField(name="ListenerPort")
         Integer getListenerPort();
@@ -2388,11 +2416,53 @@ public interface SlbAPI {
         @JSONField(name="Description")
         void setDescription(final String description);
 
+        @JSONField(name="XForwardedFor_SLBPORT")
+        String getXForwardedFor_SLBPORT();
+
+        @JSONField(name="XForwardedFor_SLBPORT")
+        void setXForwardedFor_SLBPORT(final String xForwardedFor_SLBPORT);
+
+        @JSONField(name="XForwardedFor_ClientSrcPort")
+        String getXForwardedFor_ClientSrcPort();
+
+        @JSONField(name="XForwardedFor_ClientSrcPort")
+        void setXForwardedFor_ClientSrcPort(final String xForwardedFor_ClientSrcPort);
+
+        @JSONField(name="XForwardedFor_ClientCertSubjectDN")
+        String getXForwardedFor_ClientCertSubjectDN();
+
+        @JSONField(name="XForwardedFor_ClientCertSubjectDN")
+        void setXForwardedFor_ClientCertSubjectDN(final String xForwardedFor_ClientCertSubjectDN);
+
+        @JSONField(name="XForwardedFor_ClientCertIssuerDN")
+        String getXForwardedFor_ClientCertIssuerDN();
+
+        @JSONField(name="XForwardedFor_ClientCertIssuerDN")
+        void setXForwardedFor_ClientCertIssuerDN(final String xForwardedFor_ClientCertIssuerDN);
+
+        @JSONField(name="XForwardedFor_ClientCertFingerprint")
+        String getXForwardedFor_ClientCertFingerprint();
+
+        @JSONField(name="XForwardedFor_ClientCertFingerprint")
+        void setXForwardedFor_ClientCertFingerprint(final String xForwardedFor_ClientCertFingerprint);
+
+        @JSONField(name="XForwardedFor_ClientCertClientVerify")
+        String getXForwardedFor_ClientCertClientVerify();
+
+        @JSONField(name="XForwardedFor_ClientCertClientVerify")
+        void setXForwardedFor_ClientCertClientVerify(final String xForwardedFor_ClientCertClientVerify);
+
         @JSONField(name="Rules")
         Rules getRules();
 
         @JSONField(name="Rules")
         void setRules(final Rules rules);
+
+        @JSONField(name="DomainExtensions")
+        Rules getDomainExtensions();
+
+        @JSONField(name="DomainExtensions")
+        void setDomainExtensions(final DomainExtensions domainExtensions);
     }
 
     @RpcBuilder

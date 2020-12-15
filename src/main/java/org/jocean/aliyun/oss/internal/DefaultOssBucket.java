@@ -6,21 +6,15 @@ import org.jocean.aliyun.oss.OssBucket;
 import org.springframework.beans.factory.annotation.Value;
 
 class DefaultOssBucket implements OssBucket {
-
-    @SuppressWarnings("unchecked")
     @Override
     public <BUILDER> BUILDER apply(final Endpointable<BUILDER> endpointable) {
-        endpointable.endpoint(_ossEndpoint);
-
-        return (BUILDER) endpointable;
+        return endpointable.endpoint(_ossEndpoint);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <BUILDER> BUILDER apply(final Bucketable<BUILDER> bucketable) {
         bucketable.endpoint(_ossEndpoint);
-        bucketable.bucket(_ossBucket);
-        return (BUILDER) bucketable;
+        return bucketable.bucket(_ossBucket);
     }
 
     @Value("${oss.endpoint}")

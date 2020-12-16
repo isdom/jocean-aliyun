@@ -12,13 +12,13 @@ class DefaultOssBucket implements OssBucket {
 
     @Override
     public <BUILDER> BUILDER apply(final Endpointable<BUILDER> endpointable) {
-        LOG.debug("apply endpoint {} to {}", _ossEndpoint, endpointable);
+        LOG.debug("apply endpoint({}) to {}", _ossEndpoint, endpointable);
         return endpointable.endpoint(_ossEndpoint);
     }
 
     @Override
     public <BUILDER> BUILDER apply(final Bucketable<BUILDER> bucketable) {
-        LOG.debug("apply endpoint {} & bucket {} to {}", _ossEndpoint, _ossBucket, bucketable);
+        LOG.debug("apply endpoint({}) & bucket({}) to {}", _ossEndpoint, _ossBucket, bucketable);
         bucketable.endpoint(_ossEndpoint);
         return bucketable.bucket(_ossBucket);
     }

@@ -1,10 +1,19 @@
 package org.jocean.aliyun.sts.internal;
 
+import org.jocean.aliyun.sign.Signer4OSS;
 import org.jocean.aliyun.sts.STSCredentials;
+import org.jocean.http.Interact;
 import org.springframework.beans.factory.annotation.Value;
+
+import rx.Observable.Transformer;
 
 public class DefaultSTSCredentials implements STSCredentials {
 
+    @Override
+    public Transformer<Interact, Interact> ossSigner() {
+        return interacts -> interacts.doOnNext(
+                interact -> interact.onsending(Signer4OSS.signRequest(this)));
+    }
 
     @Override
     public String toString() {

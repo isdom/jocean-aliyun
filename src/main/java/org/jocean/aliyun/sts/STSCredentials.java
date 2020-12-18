@@ -3,6 +3,10 @@
  */
 package org.jocean.aliyun.sts;
 
+import org.jocean.http.Interact;
+
+import rx.Observable.Transformer;
+
 /**
  * @author isdom
  *
@@ -21,4 +25,6 @@ public interface STSCredentials {
 
     //  UTC 通用标准时
     public /*Date*/String getLastUpdated();
+
+    public Transformer<Interact, Interact> ossSigner();
 }

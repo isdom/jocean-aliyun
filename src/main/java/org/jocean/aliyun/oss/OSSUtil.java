@@ -12,7 +12,7 @@ public class OSSUtil {
     }
 
     public static <T> Observable<? extends T> extractAndReturnOSSError(final FullMessage<HttpResponse> resp,final String msg) {
-        return resp.body().flatMap(body -> MessageUtil.<OSSError>decodeXmlAs(body, OSSError.class))
+        return resp.body().flatMap(body -> MessageUtil.<OssError>decodeXmlAs(body, OssError.class))
                 .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));
     }
 }

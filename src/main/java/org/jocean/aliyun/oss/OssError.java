@@ -32,7 +32,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
  */
 @Consumes({"application/xml","text/xml"})
 @JacksonXmlRootElement(localName="Error")
-public class OSSError {
+public class OssError {
 
     //  Code：OSS返回给用户的错误码。
     private String _code;
@@ -45,6 +45,9 @@ public class OSSError {
 
     //  HostId：用于标识访问的OSS集群，与用户请求时使用的Host一致。
     private String _hostId; //消息发送时间  the number of seconds since January 1, 1970, 00:00:00 GMT
+
+    //  指定的 Object
+    private String _key;
 
     @JacksonXmlProperty(localName="Code")
     public String getCode() {
@@ -86,6 +89,17 @@ public class OSSError {
         return this._hostId;
     }
 
+    // GetObject REF: https://help.aliyun.com/document_detail/31980.html?spm=a2c4g.11186623.6.1657.58a16711j0zxaO
+    @JacksonXmlProperty(localName="Key")
+    public void setKey(final String key) {
+        this._key = key;
+    }
+
+    @JacksonXmlProperty(localName="Key")
+    public String getKey() {
+        return this._key;
+    }
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
@@ -111,7 +125,7 @@ public class OSSError {
                 ;
         final ObjectMapper mapper = new XmlMapper();
 
-        final OSSError ossError = mapper.readValue(xmlsrc, OSSError.class);
+        final OssError ossError = mapper.readValue(xmlsrc, OssError.class);
         System.out.println("error:" + ossError);
         System.out.println("as Xml:" + mapper.writeValueAsString(ossError) );
 

@@ -24,8 +24,7 @@ public class OssUtil {
                 return Observable.just(fullresp);
             } else {
                 return fullresp.body().<OssError>flatMap(body -> MessageUtil.decodeXmlAs(body, OssError.class))
-                        //.map(any -> fullresp);
-                        .doOnNext(error -> {throw new OssException(error, "");}).map(error -> fullresp);
+                        .flatMap(osserr -> Observable.<FullMessage<HttpResponse>>error(new OssException(osserr, "checkOssError")));
             }
         });
     }

@@ -3,7 +3,7 @@ package org.jocean.aliyun.oss.impl;
 import java.util.List;
 
 import org.jocean.aliyun.oss.OSSImageService;
-import org.jocean.aliyun.oss.OSSUtil;
+import org.jocean.aliyun.oss.OssUtil;
 import org.jocean.aliyun.oss.spi.GetImageInfoResponse;
 import org.jocean.aliyun.oss.spi.GetImageWithProcessRequest;
 import org.jocean.http.ContentUtil;
@@ -37,7 +37,7 @@ public class OSSImageServiceImpl implements OSSImageService {
                 .<GetImageInfoResponse>flatMap(fullresp -> {
                     final String contentType = fullresp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return OSSUtil.extractAndReturnOSSError(fullresp, "get info error");
+                        return OssUtil.extractAndReturnOSSError(fullresp, "get info error");
                     } else {
                         return fullresp.body().compose(MessageUtil.body2bean(ContentUtil.ASJSON, GetImageInfoResponse.class));
                     }
@@ -87,7 +87,7 @@ public class OSSImageServiceImpl implements OSSImageService {
                 final String contentType = fullmsg.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                 if (null != contentType && contentType.startsWith("application/xml")) {
 //                            throw new RuntimeException("error for process for oss object");
-                    return OSSUtil.extractAndReturnOSSError(fullmsg, "process oss object error");
+                    return OssUtil.extractAndReturnOSSError(fullmsg, "process oss object error");
                 } else {
                     return fullmsg.body();
                 }

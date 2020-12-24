@@ -8,8 +8,8 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import rx.Observable;
 import rx.Observable.Transformer;
 
-public class OSSUtil {
-    private OSSUtil() {
+public class OssUtil {
+    private OssUtil() {
         throw new IllegalStateException("No instances!");
     }
 

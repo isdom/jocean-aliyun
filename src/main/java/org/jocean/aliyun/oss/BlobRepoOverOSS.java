@@ -75,7 +75,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return OSSUtil.extractAndReturnOSSError(resp, "putObject error");
+                        return OssUtil.extractAndReturnOSSError(resp, "putObject error");
                     } else {
                         return Observable.just(resp.message());
                     }
@@ -107,7 +107,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return OSSUtil.extractAndReturnOSSError(resp, "getObject error");
+                        return OssUtil.extractAndReturnOSSError(resp, "getObject error");
                     } else {
                         return resp.body();
                     }
@@ -141,7 +141,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return OSSUtil.extractAndReturnOSSError(resp, "getSimplifiedObjectMeta error");
+                        return OssUtil.extractAndReturnOSSError(resp, "getSimplifiedObjectMeta error");
                     } else {
                         final String etag = resp.message().headers().get(HttpHeaderNames.ETAG);
                         final long size = HttpUtil.getContentLength(resp.message(), -1);
@@ -208,7 +208,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                             LOG.info("object {} copied as {}, and new ETag is {}", sourceObjectName, destObjectName, etag);
                             return resp.body().flatMap(body -> MessageUtil.<CopyObjectResult>decodeXmlAs(body, CopyObjectResult.class));
                         } else {
-                            return OSSUtil.extractAndReturnOSSError(resp, "copyObject error");
+                            return OssUtil.extractAndReturnOSSError(resp, "copyObject error");
                         }
                     } else {
                         return Observable.error(new RuntimeException("invalid response:" + resp.message().toString()));
@@ -229,7 +229,7 @@ public class BlobRepoOverOSS implements BlobRepo {
                     // https://help.aliyun.com/document_detail/32005.html?spm=a2c4g.11186623.6.1090.DeJEv5
                     final String contentType = resp.message().headers().get(HttpHeaderNames.CONTENT_TYPE);
                     if (null != contentType && contentType.startsWith("application/xml")) {
-                        return OSSUtil.extractAndReturnOSSError(resp, "deleteObject error");
+                        return OssUtil.extractAndReturnOSSError(resp, "deleteObject error");
                     } else {
                         LOG.info("object {} deleted", objectName);
                         return Observable.just(objectName);

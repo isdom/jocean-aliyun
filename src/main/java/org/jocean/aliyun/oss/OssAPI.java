@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.FullMessage;
 import org.jocean.http.MessageBody;
+import org.jocean.rpc.annotation.OnResponse;
 import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.aliyun.oss.model.Bucket;
@@ -152,6 +153,7 @@ public interface OssAPI {
 
         @GET
         @Path("http://{bucket}.{endpoint}/{object}")
+        @OnResponse("org.jocean.aliyun.oss.OssUtil.CHECK_OSSERROR")
         Observable<FullMessage<HttpResponse>> call();
     }
 

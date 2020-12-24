@@ -18,8 +18,7 @@ public class OssUtil {
                 .flatMap(error -> Observable.error(new RuntimeException(null != msg ? msg + "/" + error.toString() : error.toString())));
     }
 
-    public static Transformer<FullMessage<HttpResponse>, FullMessage<HttpResponse>> checkOssError() {
-        return resps -> resps.flatMap(fullresp -> {
+    public static Transformer<FullMessage<HttpResponse>, FullMessage<HttpResponse>> CHECK_OSSERROR = resps -> resps.flatMap(fullresp -> {
             if (fullresp.message().status().equals(HttpResponseStatus.OK)) {
                 return Observable.just(fullresp);
             } else {
@@ -27,5 +26,8 @@ public class OssUtil {
                         .flatMap(osserr -> Observable.<FullMessage<HttpResponse>>error(new OssException(osserr, "checkOssError")));
             }
         });
+
+    public static Transformer<FullMessage<HttpResponse>, FullMessage<HttpResponse>> checkOssError() {
+        return CHECK_OSSERROR;
     }
 }

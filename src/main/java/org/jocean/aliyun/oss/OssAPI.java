@@ -21,14 +21,17 @@ import org.jocean.http.FullMessage;
 import org.jocean.http.MessageBody;
 import org.jocean.rpc.annotation.OnHttpResponse;
 import org.jocean.rpc.annotation.RpcBuilder;
+import org.jocean.rpc.annotation.ToResponse;
 
 import com.aliyun.oss.model.Bucket;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
+import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable;
+import rx.Observable.Transformer;
 
 public interface OssAPI {
     interface Endpointable<BUILDER> {
@@ -101,6 +104,12 @@ public interface OssAPI {
         BUILDER tagging(final String tagging);
     }
 
+    interface PutObjectResult {
+//        public String objectName();
+        public String etag();
+        public String xossRequestId();
+    }
+
     // https://help.aliyun.com/document_detail/31978.html?spm=a2c4g.11186623.6.1596.4fb211a06jVZO2
     @RpcBuilder
     interface PutObjectBuilder extends Objectable<PutObjectBuilder>, StoreOperation<PutObjectBuilder> {
@@ -125,9 +134,37 @@ public interface OssAPI {
 
         PutObjectBuilder body(final Observable<MessageBody> body);
 
+        public static Transformer<FullMessage<HttpResponse>, PutObjectResult> TORESULT = httpresps -> httpresps.map(
+                httpresp -> {
+                    final String etag = httpresp.message().headers().get(HttpHeaderNames.ETAG);
+                    final String requestId = httpresp.message().headers().get("x-oss-request-id");
+                    if (null != etag) {
+                        final String unquotes_etag = etag.replaceAll("\"", "");
+                        return new PutObjectResult() {
+//                            @Override
+//                            public String objectName() {
+//                                return objname;
+//                            }
+
+                            @Override
+                            public String etag() {
+                                return unquotes_etag;
+                            }
+
+                            @Override
+                            public String xossRequestId() {
+                                return requestId;
+                            }
+                        };
+                    } else {
+                        return null;
+                    }});
+
         @PUT
         @Path("http://{bucket}.{endpoint}/{object}")
-        Observable<FullMessage<HttpResponse>> call();
+        @OnHttpResponse("org.jocean.aliyun.oss.OssUtil.CHECK_OSSERROR")
+        @ToResponse("org.jocean.aliyun.oss.OssAPI.PutObjectBuilder.TORESULT")
+        Observable<PutObjectResult> call();
     }
 
     PutObjectBuilder putObject();

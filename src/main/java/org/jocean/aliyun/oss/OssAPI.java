@@ -3,6 +3,7 @@ package org.jocean.aliyun.oss;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,6 +20,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.FullMessage;
 import org.jocean.http.MessageBody;
+import org.jocean.rpc.ParamAware;
 import org.jocean.rpc.annotation.OnHttpResponse;
 import org.jocean.rpc.annotation.RpcBuilder;
 import org.jocean.rpc.annotation.ToResponse;
@@ -105,36 +107,58 @@ public interface OssAPI {
     }
 
     interface PutObjectResult {
-//        public String objectName();
+        public String objectName();
         public String etag();
         public String xossRequestId();
     }
 
-    public static Transformer<FullMessage<HttpResponse>, PutObjectResult> TORESULT = httpresps -> httpresps.map(
-            httpresp -> {
-                final String etag = httpresp.message().headers().get(HttpHeaderNames.ETAG);
-                final String requestId = httpresp.message().headers().get("x-oss-request-id");
-                if (null != etag) {
-                    final String unquotes_etag = etag.replaceAll("\"", "");
-                    return new PutObjectResult() {
-//                        @Override
-//                        public String objectName() {
-//                            return objname;
-//                        }
+    interface ToPutObjectResult extends Transformer<FullMessage<HttpResponse>, PutObjectResult>, ParamAware {
+    }
 
-                        @Override
-                        public String etag() {
-                            return unquotes_etag;
-                        }
+    public static Transformer<FullMessage<HttpResponse>, PutObjectResult> toPutObjectResult() {
+        final AtomicReference<String> objnameRef = new AtomicReference<>();
+        return new ToPutObjectResult() {
+            @Override
+            public Observable<PutObjectResult> call(final Observable<FullMessage<HttpResponse>> httpresps) {
+                return httpresps.map(
+                        httpresp -> {
+                            final String etag = httpresp.message().headers().get(HttpHeaderNames.ETAG);
+                            final String requestId = httpresp.message().headers().get("x-oss-request-id");
+                            if (null != etag) {
+                                final String unquotes_etag = etag.replaceAll("\"", "");
+                                return new PutObjectResult() {
+                                    @Override
+                                    public String objectName() {
+                                        return objnameRef.get();
+                                    }
 
-                        @Override
-                        public String xossRequestId() {
-                            return requestId;
-                        }
-                    };
-                } else {
-                    return null;
-                }});
+                                    @Override
+                                    public String etag() {
+                                        return unquotes_etag;
+                                    }
+
+                                    @Override
+                                    public String xossRequestId() {
+                                        return requestId;
+                                    }
+
+                                    @Override
+                                    public String toString() {
+                                        return "objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId;
+                                    }
+                                };
+                            } else {
+                                return null;
+                            }});
+            }
+
+            @Override
+            public void setParam(final Class<?> paramType, final String paramName, final Object value) {
+                if (paramName.equals("object")) {
+                    objnameRef.set(value.toString());
+                }
+            }};
+    }
 
     // https://help.aliyun.com/document_detail/31978.html?spm=a2c4g.11186623.6.1596.4fb211a06jVZO2
     @RpcBuilder
@@ -163,7 +187,7 @@ public interface OssAPI {
         @PUT
         @Path("http://{bucket}.{endpoint}/{object}")
         @OnHttpResponse("org.jocean.aliyun.oss.OssUtil.CHECK_OSSERROR")
-        @ToResponse("org.jocean.aliyun.oss.OssAPI.TORESULT")
+        @ToResponse("org.jocean.aliyun.oss.OssAPI.toPutObjectResult()")
         Observable<PutObjectResult> call();
     }
 

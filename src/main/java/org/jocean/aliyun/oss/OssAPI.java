@@ -22,6 +22,7 @@ import org.jocean.http.FullMessage;
 import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.rpc.ParamAware;
+import org.jocean.rpc.annotation.OnBuild;
 import org.jocean.rpc.annotation.OnHttpResponse;
 import org.jocean.rpc.annotation.OnInteract;
 import org.jocean.rpc.annotation.RpcBuilder;
@@ -37,6 +38,7 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponse;
 import rx.Observable;
 import rx.Observable.Transformer;
+import rx.functions.Action2;
 
 public interface OssAPI {
     interface Endpointable<BUILDER> {
@@ -44,9 +46,14 @@ public interface OssAPI {
         BUILDER endpoint(final String endpoint);
     }
 
+    public static Action2<Bucketable<?>, OssBucket> SET_BUCKET = (bucketable, ossBucket) -> ossBucket.apply(bucketable);
+
     interface Bucketable<BUILDER> extends Endpointable<BUILDER> {
         @PathParam("bucket")
         BUILDER bucket(final String bucket);
+
+        @OnBuild("org.jocean.aliyun.oss.OssAPI.SET_BUCKET")
+        BUILDER bucket(final OssBucket ossBucket);
     }
 
     interface Objectable<BUILDER> extends Bucketable<BUILDER> {

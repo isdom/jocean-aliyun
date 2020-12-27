@@ -19,10 +19,13 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jocean.http.FullMessage;
+import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.rpc.ParamAware;
 import org.jocean.rpc.annotation.OnHttpResponse;
+import org.jocean.rpc.annotation.OnInteract;
 import org.jocean.rpc.annotation.RpcBuilder;
+import org.jocean.rpc.annotation.RpcResource;
 import org.jocean.rpc.annotation.ToResponse;
 
 import com.aliyun.oss.model.Bucket;
@@ -212,9 +215,13 @@ public interface OssAPI {
         @HeaderParam("Range")
         GetObjectBuilder range(final String range);
 
+        @RpcResource("signer")
+        GetObjectBuilder signer(final Transformer<Interact, Interact> signer);
+
         @GET
         @Path("http://{bucket}.{endpoint}/{object}")
         @OnHttpResponse("org.jocean.aliyun.oss.OssUtil.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 

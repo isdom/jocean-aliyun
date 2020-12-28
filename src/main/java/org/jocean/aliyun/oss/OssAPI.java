@@ -18,15 +18,15 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jocean.aliyun.sign.AliyunSignable;
 import org.jocean.http.FullMessage;
-import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
+import org.jocean.http.MessageUtil;
 import org.jocean.rpc.ParamAware;
 import org.jocean.rpc.annotation.OnBuild;
 import org.jocean.rpc.annotation.OnHttpResponse;
 import org.jocean.rpc.annotation.OnInteract;
 import org.jocean.rpc.annotation.RpcBuilder;
-import org.jocean.rpc.annotation.RpcResource;
 import org.jocean.rpc.annotation.ToResponse;
 
 import com.aliyun.oss.model.Bucket;
@@ -36,11 +36,25 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponse;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import rx.Observable;
 import rx.Observable.Transformer;
 import rx.functions.Action2;
 
 public interface OssAPI {
+    public static Transformer<FullMessage<HttpResponse>, FullMessage<HttpResponse>> CHECK_OSSERROR = resps -> resps.flatMap(fullresp -> {
+        if (fullresp.message().status().equals(HttpResponseStatus.OK)) {
+            return Observable.just(fullresp);
+        } else {
+            return fullresp.body().<OssError>flatMap(body -> MessageUtil.decodeXmlAs(body, OssError.class))
+                    .flatMap(osserr -> Observable.<FullMessage<HttpResponse>>error(new OssException(osserr, "checkOssError")));
+        }
+    });
+
+    interface OssBuilder<BUILDER> extends AliyunSignable<BUILDER> {
+
+    }
+
     interface Endpointable<BUILDER> {
         @PathParam("endpoint")
         BUILDER endpoint(final String endpoint);
@@ -116,27 +130,27 @@ public interface OssAPI {
         BUILDER tagging(final String tagging);
     }
 
-    interface PutObjectResult {
+    interface PutObjectResponse {
         public String objectName();
         public String etag();
         public String xossRequestId();
     }
 
-    interface ToPutObjectResult extends Transformer<FullMessage<HttpResponse>, PutObjectResult>, ParamAware {
+    interface ToPutObjectResponse extends Transformer<FullMessage<HttpResponse>, PutObjectResponse>, ParamAware {
     }
 
-    public static Transformer<FullMessage<HttpResponse>, PutObjectResult> toPutObjectResult() {
+    public static Transformer<FullMessage<HttpResponse>, PutObjectResponse> toPutObjectResponse() {
         final AtomicReference<String> objnameRef = new AtomicReference<>();
-        return new ToPutObjectResult() {
+        return new ToPutObjectResponse() {
             @Override
-            public Observable<PutObjectResult> call(final Observable<FullMessage<HttpResponse>> httpresps) {
+            public Observable<PutObjectResponse> call(final Observable<FullMessage<HttpResponse>> httpresps) {
                 return httpresps.map(
                         httpresp -> {
                             final String etag = httpresp.message().headers().get(HttpHeaderNames.ETAG);
                             final String requestId = httpresp.message().headers().get("x-oss-request-id");
                             if (null != etag) {
                                 final String unquotes_etag = etag.replaceAll("\"", "");
-                                return new PutObjectResult() {
+                                return new PutObjectResponse() {
                                     @Override
                                     public String objectName() {
                                         return objnameRef.get();
@@ -172,7 +186,7 @@ public interface OssAPI {
 
     // https://help.aliyun.com/document_detail/31978.html?spm=a2c4g.11186623.6.1596.4fb211a06jVZO2
     @RpcBuilder
-    interface PutObjectBuilder extends Objectable<PutObjectBuilder>, StoreOperation<PutObjectBuilder> {
+    interface PutObjectBuilder extends Objectable<PutObjectBuilder>, StoreOperation<PutObjectBuilder>, OssBuilder<PutObjectBuilder> {
 
         // 用于检查消息内容是否与发送时一致。Content-MD5是一串由MD5算法生成的值。上传了Content-MD5请求头后，OSS会计算消息体的Content-MD5并检查一致性。
         //  有关Content-MD5的计算方法，详情请参见Content-MD5的计算方法。
@@ -196,15 +210,16 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{object}")
-        @OnHttpResponse("org.jocean.aliyun.oss.OssUtil.CHECK_OSSERROR")
-        @ToResponse("org.jocean.aliyun.oss.OssAPI.toPutObjectResult()")
-        Observable<PutObjectResult> call();
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @ToResponse("org.jocean.aliyun.oss.OssAPI.toPutObjectResponse()")
+        @OnInteract("signer")
+        Observable<PutObjectResponse> call();
     }
 
     PutObjectBuilder putObject();
 
     @RpcBuilder
-    interface GetObjectBuilder extends Objectable<GetObjectBuilder> {
+    interface GetObjectBuilder extends Objectable<GetObjectBuilder>, OssBuilder<PutObjectBuilder> {
 
         //说明 OSS不支持多Range参数，即不支持指定多个范围。ByteRange指请求资源的范围，单位为Byte（字节），ByteRange有效区间在0至object size - 1的范围内。
         // 具体示例如下：
@@ -222,12 +237,9 @@ public interface OssAPI {
         @HeaderParam("Range")
         GetObjectBuilder range(final String range);
 
-        @RpcResource("signer")
-        GetObjectBuilder signer(final Transformer<Interact, Interact> signer);
-
         @GET
         @Path("http://{bucket}.{endpoint}/{object}")
-        @OnHttpResponse("org.jocean.aliyun.oss.OssUtil.CHECK_OSSERROR")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
         @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }

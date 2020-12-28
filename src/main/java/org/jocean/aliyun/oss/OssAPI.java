@@ -219,7 +219,7 @@ public interface OssAPI {
     PutObjectBuilder putObject();
 
     @RpcBuilder
-    interface GetObjectBuilder extends Objectable<GetObjectBuilder>, OssBuilder<PutObjectBuilder> {
+    interface GetObjectBuilder extends Objectable<GetObjectBuilder>, OssBuilder<GetObjectBuilder> {
 
         //说明 OSS不支持多Range参数，即不支持指定多个范围。ByteRange指请求资源的范围，单位为Byte（字节），ByteRange有效区间在0至object size - 1的范围内。
         // 具体示例如下：

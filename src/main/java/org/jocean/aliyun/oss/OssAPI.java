@@ -715,7 +715,7 @@ public interface OssAPI {
 
     //  https://help.aliyun.com/document_detail/31965.html?spm=a2c4g.11186623.6.1570.68afb81eXwEqgq
     @RpcBuilder
-    interface ListObjectsBuilder extends Bucketable<ListObjectsBuilder> {
+    interface ListObjectsBuilder extends Bucketable<ListObjectsBuilder>, OssBuilder<ListObjectsBuilder> {
 
         @QueryParam("prefix")
         ListObjectsBuilder prefix(final String prefix);
@@ -735,6 +735,8 @@ public interface OssAPI {
         @GET
         @Path("http://{bucket}.{endpoint}/")
         @Consumes(MediaType.APPLICATION_XML)
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<ObjectListing> call();
     }
 
@@ -742,10 +744,12 @@ public interface OssAPI {
 
     // https://help.aliyun.com/document_detail/31985.html?spm=a2c4g.11186623.6.1603.15ec810cYy37lP
     @RpcBuilder
-    interface GetObjectMetaBuilder extends Objectable<GetObjectMetaBuilder> {
+    interface GetObjectMetaBuilder extends Objectable<GetObjectMetaBuilder>, OssBuilder<GetObjectMetaBuilder> {
 
         @HEAD
         @Path("http://{bucket}.{endpoint}/{object}?objectMeta")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 
@@ -760,7 +764,7 @@ public interface OssAPI {
     x-oss-copy-source: /SourceBucketName/SourceObjectName
     */
     @RpcBuilder
-    interface CopyObjectBuilder extends Bucketable<CopyObjectBuilder> {
+    interface CopyObjectBuilder extends Bucketable<CopyObjectBuilder>, OssBuilder<CopyObjectBuilder> {
 
         @PathParam("destObject")
         CopyObjectBuilder destObject(final String destObject);
@@ -771,23 +775,27 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{destObject}")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 
     CopyObjectBuilder copyObject();
 
     @RpcBuilder
-    interface DeleteObjectBuilder extends Objectable<DeleteObjectBuilder> {
+    interface DeleteObjectBuilder extends Objectable<DeleteObjectBuilder>, OssBuilder<DeleteObjectBuilder> {
 
         @DELETE
         @Path("http://{bucket}.{endpoint}/{object}")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 
     DeleteObjectBuilder deleteObject();
 
     @RpcBuilder
-    interface PutSymlinkBuilder extends Bucketable<PutSymlinkBuilder> {
+    interface PutSymlinkBuilder extends Bucketable<PutSymlinkBuilder>, OssBuilder<PutSymlinkBuilder> {
 
         @PathParam("symlinkObject")
         PutSymlinkBuilder symlinkObject(final String symlinkObject);
@@ -797,6 +805,8 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{symlinkObject}?symlink")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 
@@ -804,13 +814,15 @@ public interface OssAPI {
 
     // https://help.aliyun.com/document_detail/45146.html?spm=a2c4g.11186623.6.1609.a8eeb81ed5SIWi
     @RpcBuilder
-    interface GetSymlinkBuilder extends Bucketable<GetSymlinkBuilder> {
+    interface GetSymlinkBuilder extends Bucketable<GetSymlinkBuilder>, OssBuilder<GetSymlinkBuilder> {
 
         @PathParam("symlinkObject")
         GetSymlinkBuilder symlinkObject(final String symlinkObject);
 
         @GET
         @Path("http://{bucket}.{endpoint}/{symlinkObject}?symlink")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 
@@ -867,11 +879,13 @@ public interface OssAPI {
     // 关于MultipartUpload的操作
     @RpcBuilder
     interface InitiateMultipartUploadBuilder extends
-        Objectable<InitiateMultipartUploadBuilder>, StoreOperation<InitiateMultipartUploadBuilder> {
+        Objectable<InitiateMultipartUploadBuilder>, StoreOperation<InitiateMultipartUploadBuilder>, OssBuilder<InitiateMultipartUploadBuilder> {
 
         @POST
         @Path("http://{bucket}.{endpoint}/{object}?uploads")
         @Consumes(MediaType.APPLICATION_XML)
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<InitiateMultipartUploadResult> call();
     }
 
@@ -879,7 +893,7 @@ public interface OssAPI {
 
     // https://help.aliyun.com/document_detail/31993.html?spm=a2c4g.11186623.6.1625.405a79deMFs3vX
     @RpcBuilder
-    interface UploadPartBuilder extends Objectable<UploadPartBuilder> {
+    interface UploadPartBuilder extends Objectable<UploadPartBuilder>, OssBuilder<UploadPartBuilder> {
 
         //调用该接口上传Part数据前，必须先调用InitiateMultipartUpload接口来获取一个OSS服务器颁发的Upload ID。Upload ID用于唯一标识上传的part属于哪个Object。
         // 每一个上传的Part都有一个标识它的号码（part number，范围是1-10000），单个Part大小范围100KB-5GB。
@@ -900,6 +914,8 @@ public interface OssAPI {
 
         @PUT
         @Path("http://{bucket}.{endpoint}/{object}")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 
@@ -1029,7 +1045,7 @@ public interface OssAPI {
 
     // https://help.aliyun.com/document_detail/31995.html?spm=a2c4g.11186623.6.1627.83272d74mdlAp3
     @RpcBuilder
-    interface CompleteMultipartUploadBuilder extends Objectable<CompleteMultipartUploadBuilder> {
+    interface CompleteMultipartUploadBuilder extends Objectable<CompleteMultipartUploadBuilder>, OssBuilder<CompleteMultipartUploadBuilder> {
 
         // CompleteMultipartUpload时会确认除最后一块以外所有块的大小是否都大于100KB，并检查用户提交的Part列表中的每一个Part号码和Etag。
         // 所以在上传Part时，客户端除了需要记录Part号码外，还需要记录每次上传Part成功后服务器返回的ETag值。
@@ -1049,6 +1065,8 @@ public interface OssAPI {
         @POST
         @Path("http://{bucket}.{endpoint}/{object}")
         @Consumes(MediaType.APPLICATION_XML)
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<CompleteMultipartUploadResult> call();
     }
 
@@ -1067,7 +1085,7 @@ public interface OssAPI {
 
     // https://help.aliyun.com/document_detail/31996.html?spm=a2c4g.11186623.6.1628.60233dc1EYbByM
     @RpcBuilder
-    interface AbortMultipartUploadBuilder extends Objectable<AbortMultipartUploadBuilder> {
+    interface AbortMultipartUploadBuilder extends Objectable<AbortMultipartUploadBuilder>, OssBuilder<AbortMultipartUploadBuilder> {
 
         // 当一个MultipartUpload事件被中止后，您无法再使用这个Upload ID做任何操作，已经上传的Part数据也会被删除。
         // 中止一个MultipartUpload事件时，如果其所属的某些Part仍然在上传，那么这次中止操作将无法删除这些Part。
@@ -1078,6 +1096,8 @@ public interface OssAPI {
 
         @DELETE
         @Path("http://{bucket}.{endpoint}/{object}")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }
 

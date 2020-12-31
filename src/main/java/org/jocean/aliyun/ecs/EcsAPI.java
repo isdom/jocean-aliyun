@@ -4,7 +4,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import org.jocean.aliyun.sign.AliyunSignable;
 import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.OnInteract;
 import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -16,6 +18,9 @@ import rx.Observable;
 @Path("https://ecs.aliyuncs.com/")
 @ConstParams({"Version", "2014-05-26"})
 public interface EcsAPI {
+
+    interface EcsBuilder<BUILDER> extends AliyunSignable<BUILDER> {
+    }
 
     interface PageableBuilder<T> {
         @QueryParam("PageNumber")
@@ -470,7 +475,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstancesBuilder {
+    interface DescribeInstancesBuilder extends EcsBuilder<DescribeInstancesBuilder> {
         //  String   是   cn-hangzhou
         //  实例所属的地域ID。您可以调用DescribeRegions查看最新的阿里云地域列表。
         @QueryParam("RegionId")
@@ -484,6 +489,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstances"})
+        @OnInteract("signer")
         Observable<DescribeInstancesResponse> call();
     }
 
@@ -564,7 +570,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeSpotPriceHistoryBuilder {
+    interface DescribeSpotPriceHistoryBuilder extends EcsBuilder<DescribeSpotPriceHistoryBuilder> {
         //  String   是   cn-hangzhou
         //  实例所属的地域ID。您可以调用DescribeRegions查看最新的阿里云地域列表。
         @QueryParam("RegionId")
@@ -584,6 +590,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeSpotPriceHistory"})
+        @OnInteract("signer")
         Observable<DescribeSpotPriceHistoryResponse> call();
     }
 
@@ -599,7 +606,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface CreateInstanceBuilder {
+    interface CreateInstanceBuilder  extends EcsBuilder<CreateInstanceBuilder> {
         @QueryParam("ClientToken")
         CreateInstanceBuilder clientToken(final String clientToken);
 
@@ -743,6 +750,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "CreateInstance"})
+        @OnInteract("signer")
         Observable<CreateInstanceResponse> call();
     }
 

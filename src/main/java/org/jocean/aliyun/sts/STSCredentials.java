@@ -27,4 +27,6 @@ public interface STSCredentials {
     public /*Date*/String getLastUpdated();
 
     public Transformer<Interact, Interact> ossSigner();
+
+    public Transformer<Interact, Interact> aliSigner();
 }

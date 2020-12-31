@@ -52,7 +52,6 @@ public interface OssAPI {
     });
 
     interface OssBuilder<BUILDER> extends AliyunSignable<BUILDER> {
-
     }
 
     interface Endpointable<BUILDER> {

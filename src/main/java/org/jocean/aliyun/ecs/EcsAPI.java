@@ -760,7 +760,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface StartInstanceBuilder {
+    interface StartInstanceBuilder extends EcsBuilder<StartInstanceBuilder> {
         @QueryParam("InstanceId")
         StartInstanceBuilder instanceId(final String instanceId);
 
@@ -772,6 +772,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StartInstance"})
+        @OnInteract("signer")
         Observable<StartInstanceResponse> call();
     }
 
@@ -802,7 +803,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface StopInstanceBuilder {
+    interface StopInstanceBuilder extends EcsBuilder<StopInstanceBuilder> {
         @QueryParam("InstanceId")
         StopInstanceBuilder instanceId(final String instanceId);
 
@@ -817,6 +818,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "StopInstance"})
+        @OnInteract("signer")
         Observable<StopInstanceResponse> call();
     }
 
@@ -826,7 +828,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DeleteInstanceBuilder {
+    interface DeleteInstanceBuilder extends EcsBuilder<DeleteInstanceBuilder> {
         @QueryParam("InstanceId")
         DeleteInstanceBuilder instanceId(final String instanceId);
 
@@ -838,6 +840,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DeleteInstance"})
+        @OnInteract("signer")
         Observable<DeleteInstanceResponse> call();
     }
 
@@ -1055,7 +1058,7 @@ public interface EcsAPI {
 
     // https://help.aliyun.com/document_detail/25505.html?spm=a2c4g.11186623.6.1204.7c3f649fZpm8hA
     @RpcBuilder
-    interface DescribeInstanceStatusBuilder extends PageableBuilder<DescribeInstanceStatusBuilder>  {
+    interface DescribeInstanceStatusBuilder extends PageableBuilder<DescribeInstanceStatusBuilder>, EcsBuilder<DescribeInstanceStatusBuilder>  {
 
         @QueryParam("RegionId")
         DescribeInstanceStatusBuilder regionId(final String regionId);
@@ -1068,6 +1071,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceStatus"})
+        @OnInteract("signer")
         Observable<DescribeInstanceStatusResponse> call();
     }
 
@@ -1513,7 +1517,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstancesFullStatusBuilder {
+    interface DescribeInstancesFullStatusBuilder extends EcsBuilder<DescribeInstancesFullStatusBuilder> {
         @QueryParam("InstanceIds")
         DescribeInstancesFullStatusBuilder instanceIds(final String[] instanceIds);
 
@@ -1523,6 +1527,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstancesFullStatusBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstancesFullStatus"})
+        @OnInteract("signer")
         Observable<DescribeInstancesFullStatusResponse> call();
     }
 

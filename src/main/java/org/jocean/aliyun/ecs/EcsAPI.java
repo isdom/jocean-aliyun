@@ -782,7 +782,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface RebootInstanceBuilder {
+    interface RebootInstanceBuilder extends EcsBuilder<RebootInstanceBuilder> {
         @QueryParam("InstanceId")
         RebootInstanceBuilder instanceId(final String instanceId);
 
@@ -794,6 +794,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RebootInstance"})
+        @OnInteract("signer")
         Observable<RebootInstanceResponse> call();
     }
 
@@ -907,7 +908,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface AttachInstanceRamRoleBuilder {
+    interface AttachInstanceRamRoleBuilder extends EcsBuilder<AttachInstanceRamRoleBuilder> {
         //  必选   [“i-bp14ss25xca5ex1u****”, “i-bp154z5o1qjalfse****”, “i-bp10ws62o04ubhvi****”…]
         //  实例ID。取值可以由多个实例ID组成一个JSON数组，最多支持100个ID，ID之间用半角逗号（,）隔开。
         @QueryParam("InstanceIds")
@@ -923,6 +924,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "AttachInstanceRamRole"})
+        @OnInteract("signer")
         Observable<AttachInstanceRamRoleResponse> call();
     }
 
@@ -1009,7 +1011,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DetachInstanceRamRoleBuilder {
+    interface DetachInstanceRamRoleBuilder extends EcsBuilder<DetachInstanceRamRoleBuilder> {
         @QueryParam("InstanceIds")
         DetachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
 
@@ -1021,6 +1023,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DetachInstanceRamRole"})
+        @OnInteract("signer")
         Observable<DetachInstanceRamRoleResponse> call();
     }
 
@@ -1082,7 +1085,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface RenewInstanceBuilder {
+    interface RenewInstanceBuilder extends EcsBuilder<RenewInstanceBuilder> {
         // 必选    i-bp67acfmxazb4ph***            需要续费的实例ID。
         @QueryParam("InstanceId")
         RenewInstanceBuilder instanceId(final String instanceId);
@@ -1106,6 +1109,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "RenewInstance"})
+        @OnInteract("signer")
         Observable<RenewInstanceResponse> call();
     }
 
@@ -1116,13 +1120,14 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ReactivateInstancesBuilder {
+    interface ReactivateInstancesBuilder extends EcsBuilder<ReactivateInstancesBuilder> {
         //  必选   需要重开机的实例 ID。
         @QueryParam("InstanceId")
         ReactivateInstancesBuilder instanceId(final String instanceId);
 
         @GET
         @ConstParams({"Action", "ReactivateInstances"})
+        @OnInteract("signer")
         Observable<ReactivateInstancesResponse> call();
     }
 
@@ -1133,7 +1138,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface RedeployInstanceBuilder {
+    interface RedeployInstanceBuilder extends EcsBuilder<RedeployInstanceBuilder> {
         @QueryParam("InstanceIds")
         RedeployInstanceBuilder instanceIds(final String[] instanceIds);
 
@@ -1143,6 +1148,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         RedeployInstanceBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "RedeployInstance"})
+        @OnInteract("signer")
         Observable<RedeployInstanceResponse> call();
     }
 
@@ -1157,7 +1165,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstanceVncUrlBuilder {
+    interface DescribeInstanceVncUrlBuilder extends EcsBuilder<DescribeInstanceVncUrlBuilder> {
         @QueryParam("InstanceId")
         DescribeInstanceVncUrlBuilder instanceId(final String instanceId);
 
@@ -1166,6 +1174,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceVncUrl"})
+        @OnInteract("signer")
         Observable<DescribeInstanceVncUrlResponse> call();
     }
 
@@ -1192,7 +1201,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeUserDataBuilder {
+    interface DescribeUserDataBuilder extends EcsBuilder<DescribeUserDataBuilder> {
         //  必选   i-instanceid1           要查询的实例 ID。
         @QueryParam("InstanceId")
         DescribeUserDataBuilder instanceId(final String instanceId);
@@ -1203,6 +1212,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeUserData"})
+        @OnInteract("signer")
         Observable<DescribeUserDataResponse> call();
     }
 
@@ -1257,7 +1267,8 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstanceAutoRenewAttributeBuilder extends PageableBuilder<DescribeInstanceAutoRenewAttributeBuilder> {
+    interface DescribeInstanceAutoRenewAttributeBuilder extends PageableBuilder<DescribeInstanceAutoRenewAttributeBuilder>,
+        EcsBuilder<DescribeInstanceAutoRenewAttributeBuilder> {
         //  必选   cn-hangzhou  实例所属的地域ID。
         @QueryParam("RegionId")
         DescribeInstanceAutoRenewAttributeBuilder regionId(final String regionId);
@@ -1275,6 +1286,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceAutoRenewAttribute"})
+        @OnInteract("signer")
         Observable<DescribeInstanceAutoRenewAttributeResponse> call();
     }
 
@@ -1303,7 +1315,8 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstanceRamRoleBuilder extends PageableBuilder<DescribeInstanceRamRoleBuilder> {
+    interface DescribeInstanceRamRoleBuilder extends PageableBuilder<DescribeInstanceRamRoleBuilder>,
+        EcsBuilder<DescribeInstanceRamRoleBuilder> {
         //  可选   ["i-bp67acfmxazb4ph***", "i-bp67acfmxazb4pi***", "bp67acfmxazb4pj***"…]  指定查询的实例ID的集合。最多支持一次查询100台实例。InstanceIds与RamRoleName参数必须至少填写一个。
         @QueryParam("InstanceIds")
         DescribeInstanceRamRoleBuilder instanceIds(final String instanceIds);
@@ -1318,6 +1331,7 @@ public interface EcsAPI {
 
         @GET
         @ConstParams({"Action", "DescribeInstanceRamRole"})
+        @OnInteract("signer")
         Observable<DescribeInstanceRamRoleResponse> call();
     }
 
@@ -1327,7 +1341,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstanceTypeFamiliesBuilder {
+    interface DescribeInstanceTypeFamiliesBuilder extends EcsBuilder<DescribeInstanceTypeFamiliesBuilder> {
         @QueryParam("InstanceIds")
         DescribeInstanceTypeFamiliesBuilder instanceIds(final String[] instanceIds);
 
@@ -1337,6 +1351,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceTypeFamiliesBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstanceTypeFamilies"})
+        @OnInteract("signer")
         Observable<DescribeInstanceTypeFamiliesResponse> call();
     }
 
@@ -1346,7 +1363,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstanceTypesBuilder {
+    interface DescribeInstanceTypesBuilder extends EcsBuilder<DescribeInstanceTypesBuilder> {
         @QueryParam("InstanceIds")
         DescribeInstanceTypesBuilder instanceIds(final String[] instanceIds);
 
@@ -1356,6 +1373,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceTypesBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstanceTypes"})
+        @OnInteract("signer")
         Observable<DescribeInstanceTypesResponse> call();
     }
 

@@ -1385,7 +1385,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyInstanceVpcAttributeBuilder {
+    interface ModifyInstanceVpcAttributeBuilder extends EcsBuilder<ModifyInstanceVpcAttributeBuilder> {
         @QueryParam("InstanceIds")
         ModifyInstanceVpcAttributeBuilder instanceIds(final String[] instanceIds);
 
@@ -1395,6 +1395,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceVpcAttributeBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyInstanceVpcAttribute"})
+        @OnInteract("signer")
         Observable<ModifyInstanceVpcAttributeResponse> call();
     }
 
@@ -1404,7 +1407,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyInstanceAttributeBuilder {
+    interface ModifyInstanceAttributeBuilder extends EcsBuilder<ModifyInstanceAttributeBuilder> {
         @QueryParam("InstanceIds")
         ModifyInstanceAttributeBuilder instanceIds(final String[] instanceIds);
 
@@ -1414,6 +1417,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAttributeBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyInstanceAttribute"})
+        @OnInteract("signer")
         Observable<ModifyInstanceAttributeResponse> call();
     }
 
@@ -1423,7 +1429,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyInstanceVncPasswdBuilder {
+    interface ModifyInstanceVncPasswdBuilder extends EcsBuilder<ModifyInstanceVncPasswdBuilder> {
         @QueryParam("InstanceIds")
         ModifyInstanceVncPasswdBuilder instanceIds(final String[] instanceIds);
 
@@ -1433,6 +1439,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceVncPasswdBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyInstanceVncPasswd"})
+        @OnInteract("signer")
         Observable<ModifyInstanceVncPasswdResponse> call();
     }
 

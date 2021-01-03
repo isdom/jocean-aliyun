@@ -1451,7 +1451,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyInstanceAutoReleaseTimeBuilder {
+    interface ModifyInstanceAutoReleaseTimeBuilder extends EcsBuilder<ModifyInstanceAutoReleaseTimeBuilder> {
         @QueryParam("InstanceIds")
         ModifyInstanceAutoReleaseTimeBuilder instanceIds(final String[] instanceIds);
 
@@ -1461,6 +1461,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAutoReleaseTimeBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyInstanceAutoReleaseTime"})
+        @OnInteract("signer")
         Observable<ModifyInstanceAutoReleaseTimeResponse> call();
     }
 
@@ -1470,7 +1473,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyInstanceAutoRenewAttributeBuilder {
+    interface ModifyInstanceAutoRenewAttributeBuilder extends EcsBuilder<ModifyInstanceAutoRenewAttributeBuilder> {
         @QueryParam("InstanceIds")
         ModifyInstanceAutoRenewAttributeBuilder instanceIds(final String[] instanceIds);
 
@@ -1480,6 +1483,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceAutoRenewAttributeBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyInstanceAutoRenewAttribute"})
+        @OnInteract("signer")
         Observable<ModifyInstanceAutoRenewAttributeResponse> call();
     }
 
@@ -1489,7 +1495,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyInstanceChargeTypeBuilder {
+    interface ModifyInstanceChargeTypeBuilder extends EcsBuilder<ModifyInstanceChargeTypeBuilder> {
         @QueryParam("InstanceIds")
         ModifyInstanceChargeTypeBuilder instanceIds(final String[] instanceIds);
 
@@ -1499,6 +1505,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceChargeTypeBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyInstanceChargeType"})
+        @OnInteract("signer")
         Observable<ModifyInstanceChargeTypeResponse> call();
     }
 
@@ -1508,7 +1517,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyInstanceSpecBuilder {
+    interface ModifyInstanceSpecBuilder extends EcsBuilder<ModifyInstanceSpecBuilder> {
         @QueryParam("InstanceIds")
         ModifyInstanceSpecBuilder instanceIds(final String[] instanceIds);
 
@@ -1518,6 +1527,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyInstanceSpecBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyInstanceSpec"})
+        @OnInteract("signer")
         Observable<ModifyInstanceSpecResponse> call();
     }
 
@@ -1527,7 +1539,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ModifyPrepayInstanceSpecBuilder {
+    interface ModifyPrepayInstanceSpecBuilder extends EcsBuilder<ModifyPrepayInstanceSpecBuilder> {
         @QueryParam("InstanceIds")
         ModifyPrepayInstanceSpecBuilder instanceIds(final String[] instanceIds);
 
@@ -1537,6 +1549,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ModifyPrepayInstanceSpecBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ModifyPrepayInstanceSpec"})
+        @OnInteract("signer")
         Observable<ModifyPrepayInstanceSpecResponse> call();
     }
 
@@ -1569,7 +1584,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstanceHistoryEventsBuilder {
+    interface DescribeInstanceHistoryEventsBuilder extends EcsBuilder<DescribeInstanceHistoryEventsBuilder> {
         @QueryParam("InstanceIds")
         DescribeInstanceHistoryEventsBuilder instanceIds(final String[] instanceIds);
 
@@ -1579,6 +1594,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceHistoryEventsBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstanceHistoryEvents"})
+        @OnInteract("signer")
         Observable<DescribeInstanceHistoryEventsResponse> call();
     }
 
@@ -1589,7 +1607,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeDisksFullStatusBuilder {
+    interface DescribeDisksFullStatusBuilder extends EcsBuilder<DescribeDisksFullStatusBuilder> {
         @QueryParam("InstanceIds")
         DescribeDisksFullStatusBuilder instanceIds(final String[] instanceIds);
 
@@ -1599,6 +1617,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeDisksFullStatusBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeDisksFullStatus"})
+        @OnInteract("signer")
         Observable<DescribeDisksFullStatusResponse> call();
     }
 
@@ -1609,7 +1630,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface CancelSimulatedSystemEventsBuilder {
+    interface CancelSimulatedSystemEventsBuilder extends EcsBuilder<CancelSimulatedSystemEventsBuilder> {
         @QueryParam("InstanceIds")
         CancelSimulatedSystemEventsBuilder instanceIds(final String[] instanceIds);
 
@@ -1619,6 +1640,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CancelSimulatedSystemEventsBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "CancelSimulatedSystemEvents"})
+        @OnInteract("signer")
         Observable<CancelSimulatedSystemEventsResponse> call();
     }
 
@@ -1629,7 +1653,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface CreateSimulatedSystemEventsBuilder {
+    interface CreateSimulatedSystemEventsBuilder extends EcsBuilder<CreateSimulatedSystemEventsBuilder> {
         @QueryParam("InstanceIds")
         CreateSimulatedSystemEventsBuilder instanceIds(final String[] instanceIds);
 
@@ -1639,6 +1663,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateSimulatedSystemEventsBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "CreateSimulatedSystemEvents"})
+        @OnInteract("signer")
         Observable<CreateSimulatedSystemEventsResponse> call();
     }
 
@@ -1650,7 +1677,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeEniMonitorDataBuilder {
+    interface DescribeEniMonitorDataBuilder extends EcsBuilder<DescribeEniMonitorDataBuilder> {
         @QueryParam("InstanceIds")
         DescribeEniMonitorDataBuilder instanceIds(final String[] instanceIds);
 
@@ -1660,6 +1687,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeEniMonitorDataBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeEniMonitorData"})
+        @OnInteract("signer")
         Observable<DescribeEniMonitorDataResponse> call();
     }
 
@@ -1670,7 +1700,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeDiskMonitorDataBuilder {
+    interface DescribeDiskMonitorDataBuilder extends EcsBuilder<DescribeDiskMonitorDataBuilder> {
         @QueryParam("InstanceIds")
         DescribeDiskMonitorDataBuilder instanceIds(final String[] instanceIds);
 
@@ -1680,6 +1710,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeDiskMonitorDataBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeDiskMonitorData"})
+        @OnInteract("signer")
         Observable<DescribeDiskMonitorDataResponse> call();
     }
 
@@ -1690,7 +1723,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeInstanceMonitorDataBuilder {
+    interface DescribeInstanceMonitorDataBuilder extends EcsBuilder<DescribeInstanceMonitorDataBuilder> {
         @QueryParam("InstanceIds")
         DescribeInstanceMonitorDataBuilder instanceIds(final String[] instanceIds);
 
@@ -1700,6 +1733,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeInstanceMonitorDataBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeInstanceMonitorData"})
+        @OnInteract("signer")
         Observable<DescribeInstanceMonitorDataResponse> call();
     }
 
@@ -1710,7 +1746,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface GetInstanceScreenshotBuilder {
+    interface GetInstanceScreenshotBuilder extends EcsBuilder<GetInstanceScreenshotBuilder> {
         @QueryParam("InstanceIds")
         GetInstanceScreenshotBuilder instanceIds(final String[] instanceIds);
 
@@ -1720,6 +1756,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         GetInstanceScreenshotBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "GetInstanceScreenshot"})
+        @OnInteract("signer")
         Observable<GetInstanceScreenshotResponse> call();
     }
 
@@ -1730,7 +1769,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface GetInstanceConsoleOutputBuilder {
+    interface GetInstanceConsoleOutputBuilder extends EcsBuilder<GetInstanceConsoleOutputBuilder> {
         @QueryParam("InstanceIds")
         GetInstanceConsoleOutputBuilder instanceIds(final String[] instanceIds);
 
@@ -1740,6 +1779,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         GetInstanceConsoleOutputBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "GetInstanceConsoleOutput"})
+        @OnInteract("signer")
         Observable<GetInstanceConsoleOutputResponse> call();
     }
 
@@ -1750,7 +1792,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeSnapshotMonitorDataBuilder {
+    interface DescribeSnapshotMonitorDataBuilder extends EcsBuilder<DescribeSnapshotMonitorDataBuilder> {
         @QueryParam("InstanceIds")
         DescribeSnapshotMonitorDataBuilder instanceIds(final String[] instanceIds);
 
@@ -1760,6 +1802,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeSnapshotMonitorDataBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeSnapshotMonitorData"})
+        @OnInteract("signer")
         Observable<DescribeSnapshotMonitorDataResponse> call();
     }
 
@@ -1770,7 +1815,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeRegionsBuilder {
+    interface DescribeRegionsBuilder extends EcsBuilder<DescribeRegionsBuilder> {
         @QueryParam("InstanceIds")
         DescribeRegionsBuilder instanceIds(final String[] instanceIds);
 
@@ -1780,6 +1825,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeRegionsBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeRegions"})
+        @OnInteract("signer")
         Observable<DescribeRegionsResponse> call();
     }
 
@@ -1790,7 +1838,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeZonesBuilder {
+    interface DescribeZonesBuilder extends EcsBuilder<DescribeZonesBuilder> {
         @QueryParam("InstanceIds")
         DescribeZonesBuilder instanceIds(final String[] instanceIds);
 
@@ -1800,6 +1848,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeZonesBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeZones"})
+        @OnInteract("signer")
         Observable<DescribeZonesResponse> call();
     }
 
@@ -1810,7 +1861,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeResourcesModificationBuilder {
+    interface DescribeResourcesModificationBuilder extends EcsBuilder<DescribeResourcesModificationBuilder> {
         @QueryParam("InstanceIds")
         DescribeResourcesModificationBuilder instanceIds(final String[] instanceIds);
 
@@ -1820,6 +1871,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeResourcesModificationBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeResourcesModification"})
+        @OnInteract("signer")
         Observable<DescribeResourcesModificationResponse> call();
     }
 
@@ -1830,7 +1884,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeAvailableResourceBuilder {
+    interface DescribeAvailableResourceBuilder extends EcsBuilder<DescribeAvailableResourceBuilder> {
         @QueryParam("InstanceIds")
         DescribeAvailableResourceBuilder instanceIds(final String[] instanceIds);
 
@@ -1840,6 +1894,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeAvailableResourceBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeAvailableResource"})
+        @OnInteract("signer")
         Observable<DescribeAvailableResourceResponse> call();
     }
 
@@ -1851,7 +1908,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface CreateKeyPairBuilder {
+    interface CreateKeyPairBuilder extends EcsBuilder<CreateKeyPairBuilder> {
         @QueryParam("InstanceIds")
         CreateKeyPairBuilder instanceIds(final String[] instanceIds);
 
@@ -1861,6 +1918,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         CreateKeyPairBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "CreateKeyPair"})
+        @OnInteract("signer")
         Observable<CreateKeyPairResponse> call();
     }
 
@@ -1871,7 +1931,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface ImportKeyPairBuilder {
+    interface ImportKeyPairBuilder extends EcsBuilder<ImportKeyPairBuilder> {
         @QueryParam("InstanceIds")
         ImportKeyPairBuilder instanceIds(final String[] instanceIds);
 
@@ -1881,6 +1941,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         ImportKeyPairBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "ImportKeyPair"})
+        @OnInteract("signer")
         Observable<ImportKeyPairResponse> call();
     }
 
@@ -1891,7 +1954,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface AttachKeyPairBuilder {
+    interface AttachKeyPairBuilder extends EcsBuilder<AttachKeyPairBuilder> {
         @QueryParam("InstanceIds")
         AttachKeyPairBuilder instanceIds(final String[] instanceIds);
 
@@ -1901,6 +1964,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AttachKeyPairBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "AttachKeyPair"})
+        @OnInteract("signer")
         Observable<AttachKeyPairResponse> call();
     }
 
@@ -1911,7 +1977,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DetachKeyPairBuilder {
+    interface DetachKeyPairBuilder extends EcsBuilder<DetachKeyPairBuilder> {
         @QueryParam("InstanceIds")
         DetachKeyPairBuilder instanceIds(final String[] instanceIds);
 
@@ -1921,6 +1987,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DetachKeyPairBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DetachKeyPair"})
+        @OnInteract("signer")
         Observable<DetachKeyPairResponse> call();
     }
 
@@ -1931,7 +2000,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DeleteKeyPairsBuilder {
+    interface DeleteKeyPairsBuilder extends EcsBuilder<DeleteKeyPairsBuilder> {
         @QueryParam("InstanceIds")
         DeleteKeyPairsBuilder instanceIds(final String[] instanceIds);
 
@@ -1941,6 +2010,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DeleteKeyPairsBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DeleteKeyPairs"})
+        @OnInteract("signer")
         Observable<DeleteKeyPairsResponse> call();
     }
 
@@ -1951,7 +2023,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface DescribeKeyPairsBuilder {
+    interface DescribeKeyPairsBuilder extends EcsBuilder<DescribeKeyPairsBuilder> {
         @QueryParam("InstanceIds")
         DescribeKeyPairsBuilder instanceIds(final String[] instanceIds);
 
@@ -1961,6 +2033,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         DescribeKeyPairsBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "DescribeKeyPairs"})
+        @OnInteract("signer")
         Observable<DescribeKeyPairsResponse> call();
     }
 
@@ -1972,7 +2047,7 @@ public interface EcsAPI {
     }
 
     @RpcBuilder
-    interface AllocatePublicIpAddressBuilder {
+    interface AllocatePublicIpAddressBuilder extends EcsBuilder<AllocatePublicIpAddressBuilder> {
         @QueryParam("InstanceIds")
         AllocatePublicIpAddressBuilder instanceIds(final String[] instanceIds);
 
@@ -1982,6 +2057,9 @@ public interface EcsAPI {
         @QueryParam("RegionId")
         AllocatePublicIpAddressBuilder regionId(final String regionId);
 
+        @GET
+        @ConstParams({"Action", "AllocatePublicIpAddress"})
+        @OnInteract("signer")
         Observable<AllocatePublicIpAddressResponse> call();
     }
 

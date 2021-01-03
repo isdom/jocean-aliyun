@@ -4,12 +4,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import org.jocean.http.Interact;
 import org.jocean.http.MessageBody;
 import org.jocean.rpc.annotation.RpcBuilder;
+import org.jocean.rpc.annotation.RpcResource;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
 import rx.Observable;
+import rx.Observable.Transformer;
 
 public interface NlsAPI {
 
@@ -41,6 +44,12 @@ public interface NlsAPI {
 
     @RpcBuilder
     interface StreamAsrV1Builder {
+        @RpcResource("nlstoken")
+        StreamAsrV1Builder nlstoken(final Transformer<Interact, Interact> nlstoken);
+
+        @RpcResource("appkey")
+        StreamAsrV1Builder appkey(final Transformer<Interact, Interact> appkey);
+
         @QueryParam("format")
         StreamAsrV1Builder format(final String format);
 

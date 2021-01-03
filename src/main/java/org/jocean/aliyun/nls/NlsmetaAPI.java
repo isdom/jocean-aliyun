@@ -5,7 +5,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import org.jocean.aliyun.sign.AliyunSignable;
 import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.OnInteract;
 import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -62,11 +64,12 @@ public interface NlsmetaAPI {
     }
 
     @RpcBuilder
-    interface CreateTokenBuilder {
+    interface CreateTokenBuilder extends AliyunSignable<CreateTokenBuilder> {
         @GET
         @Path("http://nls-meta.cn-shanghai.aliyuncs.com/")
         @ConstParams({"Action", "CreateToken", "Version", "2019-02-28", "RegionId", "cn-shanghai"})
         @Consumes(MediaType.APPLICATION_JSON)
+        @OnInteract("signer")
         Observable<CreateTokenResponse> call();
     }
 

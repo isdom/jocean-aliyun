@@ -4,7 +4,9 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 
+import org.jocean.aliyun.sign.AliyunSignable;
 import org.jocean.rpc.annotation.ConstParams;
+import org.jocean.rpc.annotation.OnInteract;
 import org.jocean.rpc.annotation.RpcBuilder;
 
 import com.alibaba.fastjson.annotation.JSONField;
@@ -431,7 +433,7 @@ public interface IvisionAPI {
     }
 
     @RpcBuilder
-    interface ImagePredictBuilder {
+    interface ImagePredictBuilder extends AliyunSignable<ImagePredictBuilder> {
         @QueryParam("ModelId")
         ImagePredictBuilder modelId(final String modelId);
 
@@ -440,6 +442,7 @@ public interface IvisionAPI {
 
         @GET
         @ConstParams({"Action", "ImagePredict"})
+        @OnInteract("signer")
         Observable<ImagePredictResponse> call();
     }
 

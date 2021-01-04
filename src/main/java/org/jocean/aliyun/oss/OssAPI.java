@@ -781,12 +781,29 @@ public interface OssAPI {
 
     CopyObjectBuilder copyObject();
 
+    public static Transformer<FullMessage<HttpResponse>, FullMessage<HttpResponse>> CHECK_DELERROR = resps -> resps.flatMap(fullresp -> {
+        if (fullresp.message().status().equals(HttpResponseStatus.NO_CONTENT)) {
+            return Observable.just(fullresp);
+        } else {
+            return fullresp.body().<OssError>flatMap(body -> MessageUtil.decodeXmlAs(body, OssError.class))
+                    .flatMap(osserr -> Observable.<FullMessage<HttpResponse>>error(new OssException(osserr, "checkOssError")));
+        }
+    });
+
+    //  https://help.aliyun.com/document_detail/31982.html?spm=a2c4g.11186623.6.1674.2cc23cf8zHhWuz
+    /**
+    调用DeleteObject接口时，有如下注意事项：
+
+    您需要对要删除的Object有写权限。
+    无论要删除的Object是否存在，删除成功后均会返回204状态码。
+    如果Object类型为软链接，使用DeleteObject仅会删除该软链接。
+    */
     @RpcBuilder
     interface DeleteObjectBuilder extends Objectable<DeleteObjectBuilder>, OssBuilder<DeleteObjectBuilder> {
 
         @DELETE
         @Path("http://{bucket}.{endpoint}/{object}")
-        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_OSSERROR")
+        @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_DELERROR")
         @OnInteract("signer")
         Observable<FullMessage<HttpResponse>> call();
     }

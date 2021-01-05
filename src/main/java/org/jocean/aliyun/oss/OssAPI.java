@@ -129,10 +129,14 @@ public interface OssAPI {
         BUILDER tagging(final String tagging);
     }
 
-    interface PutObjectResponse {
-        public String objectName();
+    interface OssResponse {
+        public int statusCode();
         public String etag();
         public String xossRequestId();
+    }
+
+    interface PutObjectResponse extends OssResponse {
+        public String objectName();
     }
 
     interface ToPutObjectResponse extends Transformer<FullMessage<HttpResponse>, PutObjectResponse>, ParamAware {
@@ -150,6 +154,11 @@ public interface OssAPI {
                             if (null != etag) {
                                 final String unquotes_etag = etag.replaceAll("\"", "");
                                 return new PutObjectResponse() {
+                                    @Override
+                                    public int statusCode() {
+                                        return httpresp.message().status().code();
+                                    }
+
                                     @Override
                                     public String objectName() {
                                         return objnameRef.get();
@@ -790,6 +799,63 @@ public interface OssAPI {
         }
     });
 
+    interface DeleteObjectResponse extends OssResponse {
+        public String objectName();
+    }
+
+    interface ToDeleteObjectResponse extends Transformer<FullMessage<HttpResponse>, DeleteObjectResponse>, ParamAware {
+    }
+
+    public static Transformer<FullMessage<HttpResponse>, DeleteObjectResponse> toDeleteObjectResponse() {
+        final AtomicReference<String> objnameRef = new AtomicReference<>();
+        return new ToDeleteObjectResponse() {
+            @Override
+            public Observable<DeleteObjectResponse> call(final Observable<FullMessage<HttpResponse>> httpresps) {
+                return httpresps.map(
+                        httpresp -> {
+                            final String etag = httpresp.message().headers().get(HttpHeaderNames.ETAG);
+                            final String requestId = httpresp.message().headers().get("x-oss-request-id");
+                            if (null != etag) {
+                                final String unquotes_etag = etag.replaceAll("\"", "");
+                                return new DeleteObjectResponse() {
+                                    @Override
+                                    public int statusCode() {
+                                        return httpresp.message().status().code();
+                                    }
+
+                                    @Override
+                                    public String objectName() {
+                                        return objnameRef.get();
+                                    }
+
+                                    @Override
+                                    public String etag() {
+                                        return unquotes_etag;
+                                    }
+
+                                    @Override
+                                    public String xossRequestId() {
+                                        return requestId;
+                                    }
+
+                                    @Override
+                                    public String toString() {
+                                        return "objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId;
+                                    }
+                                };
+                            } else {
+                                return null;
+                            }});
+            }
+
+            @Override
+            public void setParam(final Class<?> paramType, final String paramName, final Object value) {
+                if (paramName.equals("object")) {
+                    objnameRef.set(value.toString());
+                }
+            }};
+    }
+
     //  https://help.aliyun.com/document_detail/31982.html?spm=a2c4g.11186623.6.1674.2cc23cf8zHhWuz
     /**
     调用DeleteObject接口时，有如下注意事项：
@@ -805,7 +871,8 @@ public interface OssAPI {
         @Path("http://{bucket}.{endpoint}/{object}")
         @OnHttpResponse("org.jocean.aliyun.oss.OssAPI.CHECK_DELERROR")
         @OnInteract("signer")
-        Observable<FullMessage<HttpResponse>> call();
+        @ToResponse("org.jocean.aliyun.oss.OssAPI.toDeleteObjectResponse()")
+        Observable<DeleteObjectResponse> call();
     }
 
     DeleteObjectBuilder deleteObject();

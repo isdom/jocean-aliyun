@@ -151,37 +151,34 @@ public interface OssAPI {
                         httpresp -> {
                             final String etag = httpresp.message().headers().get(HttpHeaderNames.ETAG);
                             final String requestId = httpresp.message().headers().get("x-oss-request-id");
-                            if (null != etag) {
-                                final String unquotes_etag = etag.replaceAll("\"", "");
-                                return new PutObjectResponse() {
-                                    @Override
-                                    public int statusCode() {
-                                        return httpresp.message().status().code();
-                                    }
+                            final String unquotes_etag = null != etag ? etag.replaceAll("\"", "") : null;
+                            return new PutObjectResponse() {
+                                @Override
+                                public int statusCode() {
+                                    return httpresp.message().status().code();
+                                }
 
-                                    @Override
-                                    public String objectName() {
-                                        return objnameRef.get();
-                                    }
+                                @Override
+                                public String objectName() {
+                                    return objnameRef.get();
+                                }
 
-                                    @Override
-                                    public String etag() {
-                                        return unquotes_etag;
-                                    }
+                                @Override
+                                public String etag() {
+                                    return unquotes_etag;
+                                }
 
-                                    @Override
-                                    public String xossRequestId() {
-                                        return requestId;
-                                    }
+                                @Override
+                                public String xossRequestId() {
+                                    return requestId;
+                                }
 
-                                    @Override
-                                    public String toString() {
-                                        return "PutObjectResponse[objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId + "]";
-                                    }
-                                };
-                            } else {
-                                return null;
-                            }});
+                                @Override
+                                public String toString() {
+                                    return "PutObjectResponse[objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId + "]";
+                                }
+                            };
+                        });
             }
 
             @Override
@@ -815,37 +812,34 @@ public interface OssAPI {
                         httpresp -> {
                             final String etag = httpresp.message().headers().get(HttpHeaderNames.ETAG);
                             final String requestId = httpresp.message().headers().get("x-oss-request-id");
-                            if (null != etag) {
-                                final String unquotes_etag = etag.replaceAll("\"", "");
-                                return new DeleteObjectResponse() {
-                                    @Override
-                                    public int statusCode() {
-                                        return httpresp.message().status().code();
-                                    }
+                            final String unquotes_etag = null != etag ? etag.replaceAll("\"", "") : null;
+                            return new DeleteObjectResponse() {
+                                @Override
+                                public int statusCode() {
+                                    return httpresp.message().status().code();
+                                }
 
-                                    @Override
-                                    public String objectName() {
-                                        return objnameRef.get();
-                                    }
+                                @Override
+                                public String objectName() {
+                                    return objnameRef.get();
+                                }
 
-                                    @Override
-                                    public String etag() {
-                                        return unquotes_etag;
-                                    }
+                                @Override
+                                public String etag() {
+                                    return unquotes_etag;
+                                }
 
-                                    @Override
-                                    public String xossRequestId() {
-                                        return requestId;
-                                    }
+                                @Override
+                                public String xossRequestId() {
+                                    return requestId;
+                                }
 
-                                    @Override
-                                    public String toString() {
-                                        return "DeleteObjectResponse[objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId + "]";
-                                    }
-                                };
-                            } else {
-                                return null;
-                            }});
+                                @Override
+                                public String toString() {
+                                    return "DeleteObjectResponse[objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId + "]";
+                                }
+                            };
+                        });
             }
 
             @Override

@@ -176,7 +176,7 @@ public interface OssAPI {
 
                                     @Override
                                     public String toString() {
-                                        return "objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId;
+                                        return "PutObjectResponse[objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId + "]";
                                     }
                                 };
                             } else {
@@ -840,7 +840,7 @@ public interface OssAPI {
 
                                     @Override
                                     public String toString() {
-                                        return "objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId;
+                                        return "DeleteObjectResponse[objectName:" + objnameRef.get() + "/etag:" + unquotes_etag + "/x-oss-request-id:" + requestId + "]";
                                     }
                                 };
                             } else {

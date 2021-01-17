@@ -607,14 +607,40 @@ public interface EcsAPI {
 
     @RpcBuilder
     interface CreateInstanceBuilder  extends EcsBuilder<CreateInstanceBuilder> {
+        /**
+        是否必选：否
+        示例值：123e4567-e89b-12d3-a456-426655440000
+        保证请求幂等性。从您的客户端生成一个参数值，确保不同请求间该参数值唯一。ClientToken只支持ASCII字符，且不能超过64个字符。更多详情，请参见如何保证幂等性。
+         */
         @QueryParam("ClientToken")
         CreateInstanceBuilder clientToken(final String clientToken);
 
+        /**
+        是否必选：否
+        示例值：false
+        是否只预检此次请求。取值范围：
+        true：发送检查请求，不会创建实例。检查项包括是否填写了必需参数、请求格式、业务限制和ECS库存。如果检查不通过，则返回对应错误。如果检查通过，则返回错误码DryRunOperation。
+        false（默认）：发送正常请求，通过检查后直接创建实例。
+        */
         @QueryParam("DryRun")
         CreateInstanceBuilder dryRun(final boolean dryRun);
 
+        /**
+        是否必选：否
+        示例值：ubuntu_18_04_64_20G_alibase_20190624.vhd
+        镜像文件ID，启动实例时选择的镜像资源。如需使用云市场镜像，您可以在云市场镜像商详情页查看ImageId。当您不通过指定ImageFamily选用镜像族系最新可用自定义镜像时，此参数必选。
+        */
         @QueryParam("ImageId")
         CreateInstanceBuilder imageId(final String imageId);
+
+        /**
+        镜像族系名称，通过设置该参数来获取当前镜像族系内最新可用自定义镜像来创建实例。
+        设置了ImageId，则不能设置此参数。
+        未设置ImageId，则可以设置该参数。
+        eg: hangzhou-daily-update
+        */
+        @QueryParam("ImageFamily")
+        CreateInstanceBuilder imageFamily(final String imageFamily);
 
         @QueryParam("InstanceType")
         CreateInstanceBuilder instanceType(final String instanceType);
@@ -625,128 +651,482 @@ public interface EcsAPI {
         @QueryParam("SecurityGroupId")
         CreateInstanceBuilder securityGroupId(final String securityGroupId);
 
+        /**
+        实例的名称。长度为2~128个英文或中文字符。必须以大小字母或中文开头，不能以http://和https://开头。
+        可以包含数字、半角冒号（:）、下划线（_）、英文句号（.）或者连字符（-）。如果没有指定该参数，默认值为实例的InstanceId。
+        */
         @QueryParam("InstanceName")
         CreateInstanceBuilder instanceName(final String instanceName);
 
+        /**
+         *
+        是否要自动续费。当参数InstanceChargeType取值PrePaid时才生效。取值范围：
+        true：自动续费。
+        false（默认）：不自动续费。
+         */
         @QueryParam("AutoRenew")
         CreateInstanceBuilder autoRenew(final boolean autoRenew);
 
+        /**
+         *
+        每次自动续费的时长，当参数AutoRenew取值True时为必填。
+        PeriodUnit为Week时，AutoRenewPeriod取值{"1", "2", "3"}。
+        PeriodUnit为Month时，AutoRenewPeriod取值{"1", "2", "3", "6", "12"}。
+         */
         @QueryParam("AutoRenewPeriod")
         CreateInstanceBuilder autoRenewPeriod(final int autoRenewPeriod);
 
+        /**
+         *
+        网络计费类型。取值范围：
+        PayByBandwidth：按固定带宽计费。
+        PayByTraffic（默认）：按使用流量计费。
+        说明 按使用流量计费模式下的出入带宽峰值都是带宽上限，不作为业务承诺指标。当出现资源争抢时，带宽峰值可能会受到限制。如果您的业务需要有带宽的保障，请使用按固定带宽计费模式。
+         */
         @QueryParam("InternetChargeType")
         CreateInstanceBuilder internetChargeType(final String internetChargeType);
 
+        /**
+         *
+        公网入带宽最大值，单位为Mbit/s。取值范围：
+        当所购出网带宽小于等于10 Mbit/s时：1~10。默认值：10
+        当所购出网带宽大于10 Mbit/s时：1~InternetMaxBandwidthOut的取值，默认为InternetMaxBandwidthOut的取值。
+         */
         @QueryParam("InternetMaxBandwidthIn")
         CreateInstanceBuilder internetMaxBandwidthIn(final int internetMaxBandwidthIn);
 
+        /**
+         *
+        公网出带宽最大值，单位为Mbit/s。取值范围：0~100
+        默认值：0
+         */
         @QueryParam("InternetMaxBandwidthOut")
         CreateInstanceBuilder internetMaxBandwidthOut(final int internetMaxBandwidthOut);
 
+        /**
+         *
+        是否必选：否
+        云服务器的主机名。
+        英文句号（.）和短横线（-）不能作为首尾字符，更不能连续使用。
+        Windows实例：字符长度为2~15，不支持英文句号（.），不能全是数字。允许大小写英文字母、数字和短横线（-）。
+        其他类型实例（Linux等）：字符长度为2~64，支持多个英文句号（.），英文句号之间为一段，每段允许大小写英文字母、数字和短横线（-）。
+         */
         @QueryParam("HostName")
         CreateInstanceBuilder hostName(final String hostName);
 
+        /**
+         *
+        是否必选：否
+        实例的密码。长度为8至30个字符，必须同时包含大小写英文字母、数字和特殊符号中的三类字符。特殊符号可以是：
+
+        ()`~!@#$%^&*-_+=|{}[]:;'<>,.?/
+        其中，Windows实例不能以斜线号（/）为密码首字符。
+        说明 如果传入Password参数，建议您使用HTTPS协议发送请求，避免密码泄露。
+         */
         @QueryParam("Password")
         CreateInstanceBuilder password(final String password);
 
+        /**
+         *
+        是否必选：否
+        是否使用镜像预设的密码。使用该参数时，Password参数必须为空，同时您需要确保使用的镜像已经设置了密码。
+         */
         @QueryParam("PasswordInherit")
         CreateInstanceBuilder passwordInherit(final boolean passwordInherit);
 
+        /**
+         *
+        是否必选：否
+        部署集ID。
+         */
         @QueryParam("DeploymentSetId")
         CreateInstanceBuilder deploymentSetId(final String deploymentSetId);
 
+        /**
+         *
+        是否必选：否
+        示例值：cn-hangzhou-g
+        实例所属的可用区ID。更多详情，请参见DescribeZones获取可用区列表。
+        默认值：空，表示随机选择。
+         */
         @QueryParam("ZoneId")
         CreateInstanceBuilder zoneId(final String zoneId);
 
+        /**
+         *
+        是否必选：否
+        实例所在的集群ID。
+        说明 该参数即将被弃用，为提高兼容性，请尽量使用其他参数。
+         */
         @QueryParam("ClusterId")
         CreateInstanceBuilder clusterId(final String clusterId);
 
+        /**
+         *
+        是否必选：否
+        示例值：10
+        虚拟局域网ID。
+         */
         @QueryParam("VlanId")
         CreateInstanceBuilder vlanId(final String vlanId);
 
+        /**
+         *
+        是否必选：否
+        示例值：192.168.**.**
+        实例的内网IP。
+         */
         @QueryParam("InnerIpAddress")
         CreateInstanceBuilder innerIpAddress(final String innerIpAddress);
 
+        /**
+         *
+        是否必选：否
+        示例值：40
+        系统盘大小，单位为GiB。取值范围：20~500
+        该参数的取值必须大于或者等于max{20, ImageSize}。
+        默认值：max{40, ImageSize}
+         */
         @QueryParam("SystemDisk.Size")
         CreateInstanceBuilder systemDiskSize(final int systemDiskSize);
 
+        /**
+         *
+        是否必选：否
+        示例值：cloud_ssd
+        系统盘的云盘种类。取值范围：
+
+        cloud_essd：ESSD云盘，您可以通过参数SystemDisk.PerformanceLevel设置云盘的性能等级。
+        cloud_efficiency：高效云盘。
+        cloud_ssd：SSD云盘。
+        cloud：普通云盘。
+        已停售的实例规格且非I/O优化实例默认值为cloud，否则默认值为cloud_efficiency。
+         */
         @QueryParam("SystemDisk.Category")
         CreateInstanceBuilder systemDiskCategory(final String systemDiskCategory);
 
+        /**
+         *
+        是否必选：否
+        示例值：SystemDiskName
+        系统盘名称。长度为2~128个英文或中文字符。必须以大小字母或中文开头，不能以http://和https://开头。可以包含数字、半角冒号（:）、下划线（_）或者连字符（-）。
+        默认值：空
+         */
         @QueryParam("SystemDisk.DiskName")
         CreateInstanceBuilder systemDiskDiskName(final String systemDiskDiskName);
 
+        /**
+         *
+        是否必选：否
+        示例值：TestDescription
+        系统盘描述。长度为2~256个英文或中文字符，不能以http://和https://开头。
+        默认值：空
+         */
         @QueryParam("SystemDisk.Description")
         CreateInstanceBuilder systemDiskDescription(final String systemDiskDescription);
 
-        @QueryParam("Description")
-        CreateInstanceBuilder description(final String description);
-
-        @QueryParam("VSwitchId")
-        CreateInstanceBuilder vSwitchId(final String vSwitchId);
-
-        @QueryParam("PrivateIpAddress")
-        CreateInstanceBuilder privateIpAddress(final String privateIpAddress);
-
-        @QueryParam("IoOptimized")
-        CreateInstanceBuilder ioOptimized(final String ioOptimized);
-
-        @QueryParam("UseAdditionalService")
-        CreateInstanceBuilder useAdditionalService(final boolean useAdditionalService);
-
-        @QueryParam("InstanceChargeType")
-        CreateInstanceBuilder instanceChargeType(final String instanceChargeType);
-
-        @QueryParam("Period")
-        CreateInstanceBuilder period(final int period);
-
-        @QueryParam("PeriodUnit")
-        CreateInstanceBuilder periodUnit(final String periodUnit);
-
-        @QueryParam("UserData")
-        CreateInstanceBuilder userData(final String userData);
-
-        @QueryParam("SpotStrategy")
-        CreateInstanceBuilder spotStrategy(final String spotStrategy);
-
-        @QueryParam("SpotPriceLimit")
-        CreateInstanceBuilder spotPriceLimit(final float spotPriceLimit);
-
-        @QueryParam("KeyPairName")
-        CreateInstanceBuilder keyPairName(final String keyPairName);
-
-        @QueryParam("SpotInterruptionBehavior")
-        CreateInstanceBuilder spotInterruptionBehavior(final String spotInterruptionBehavior);
-
-        @QueryParam("RamRoleName")
-        CreateInstanceBuilder ramRoleName(final String ramRoleName);
-
-        @QueryParam("SecurityEnhancementStrategy")
-        CreateInstanceBuilder securityEnhancementStrategy(final String securityEnhancementStrategy);
-
-        @QueryParam("ResourceGroupId")
-        CreateInstanceBuilder resourceGroupId(final String resourceGroupId);
-
-        @QueryParam("HpcClusterId")
-        CreateInstanceBuilder hpcClusterId(final String hpcClusterId);
-
-        @QueryParam("DedicatedHostId")
-        CreateInstanceBuilder dedicatedHostId(final String dedicatedHostId);
-
-        @QueryParam("CreditSpecification")
-        CreateInstanceBuilder creditSpecification(final String creditSpecification);
-
-        @QueryParam("DeletionProtection")
-        CreateInstanceBuilder deletionProtection(final boolean deletionProtection);
-
+        /**
+         *
+        是否必选：否
+        示例值：PL1
+        创建ESSD云盘作为系统盘使用时，设置云盘的性能等级。取值范围：
+        PL0（默认）：单盘最高随机读写IOPS 1万。
+        PL1：单盘最高随机读写IOPS 5万。
+        PL2：单盘最高随机读写IOPS 10万。
+        PL3：单盘最高随机读写IOPS 100万。
+        有关如何选择ESSD性能等级，请参见ESSD云盘。
+         */
         @QueryParam("SystemDisk.PerformanceLevel")
         CreateInstanceBuilder systemDiskPerformanceLevel(final String systemDiskPerformanceLevel);
 
+        /**
+         *
+        是否必选：否
+        示例值：InstanceTest
+        实例的描述。长度为2~256个英文或中文字符，不能以http://和https://开头。
+        默认值：空
+        */
+        @QueryParam("Description")
+        CreateInstanceBuilder description(final String description);
+
+        /**
+         *
+        是否必选：否
+        示例值：vsw-bp1s5fnvk4gn2tws0****
+        如果是创建VPC类型的实例，需要指定交换机ID。
+        */
+        @QueryParam("VSwitchId")
+        CreateInstanceBuilder vSwitchId(final String vSwitchId);
+
+        /**
+        是否必选：否
+        示例值：172.16.236.*
+        实例私网IP地址。该IP地址必须为交换机（VSwitchId）网段的空闲地址。
+        */
+        @QueryParam("PrivateIpAddress")
+        CreateInstanceBuilder privateIpAddress(final String privateIpAddress);
+
+        /**
+        是否必选：否
+        示例值：optimized
+        是否为I/O优化实例。取值范围：
+        none：非I/O优化
+        optimized：I/O优化
+        已停售的实例规格实例默认值是none。
+        其他实例规格默认值是optimized。
+        */
+        @QueryParam("IoOptimized")
+        CreateInstanceBuilder ioOptimized(final String ioOptimized);
+
+        /**
+        是否必选：否
+        示例值：true
+        是否使用阿里云提供的虚拟机系统配置（Windows：NTP、KMS；Linux：NTP、YUM）。
+        */
+        @QueryParam("UseAdditionalService")
+        CreateInstanceBuilder useAdditionalService(final boolean useAdditionalService);
+
+        /**
+        是否必选：否
+        示例值：PrePaid
+        实例的付费方式。取值范围：
+        PrePaid：包年包月。选择该类付费方式时，您必须确认自己的账号支持余额支付/信用支付，否则将返回 InvalidPayMethod的错误提示。
+        PostPaid（默认）：按量付费。
+        */
+        @QueryParam("InstanceChargeType")
+        CreateInstanceBuilder instanceChargeType(final String instanceChargeType);
+
+        /**
+        是否必选：否
+        示例值：1
+        购买资源的时长，单位由PeriodUnit指定。当参数InstanceChargeType取值为PrePaid时才生效且为必选值。一旦指定了DedicatedHostId，则取值范围不能超过专有宿主机的订阅时长。取值范围：
+
+        PeriodUnit=Week时，Period取值：{“1”, “2”, “3”, “4”}。
+        PeriodUnit=Month时，Period取值：{“1”, “2”, “3”, “4”, “5”, “6”, “7”, “8”, “9”, “12”, “24”, “36”, ”48”, ”60”}。
+        */
+        @QueryParam("Period")
+        CreateInstanceBuilder period(final int period);
+
+        /**
+        是否必选：否
+        示例值：Month
+        购买资源的时长。
+        取值范围：Week和Month（默认）
+        */
+        @QueryParam("PeriodUnit")
+        CreateInstanceBuilder periodUnit(final String periodUnit);
+
+        /**
+        是否必选：否
+        示例值：ZWNobyBoZWxsbyBlY3Mh
+        实例自定义数据，需要以Base64方式编码，原始数据最多为16KB。
+        */
+        @QueryParam("UserData")
+        CreateInstanceBuilder userData(final String userData);
+
+        /**
+        是否必选：否
+        示例值：NoSpot
+        实例的抢占策略。当参数InstanceChargeType取值为PostPaid时生效。取值范围：
+        NoSpot（默认）：正常按量付费实例。
+        SpotWithPriceLimit：设置上限价格的抢占式实例。
+        SpotAsPriceGo：系统自动出价，跟随当前市场实际价格。
+        */
+        @QueryParam("SpotStrategy")
+        CreateInstanceBuilder spotStrategy(final String spotStrategy);
+
+        /**
+        是否必选：否
+        示例值：0.98
+        设置实例的每小时最高价格。支持最大3位小数，参数SpotStrategy取值为SpotWithPriceLimit时生效。
+        */
+        @QueryParam("SpotPriceLimit")
+        CreateInstanceBuilder spotPriceLimit(final float spotPriceLimit);
+
+        /**
+        是否必选：否
+        示例值：1
+        抢占式实例的保留时长，单位为小时。取值范围：0~6
+        保留时长2~6正在邀测中，如需开通请提交工单。
+        取值为0，则为无保护期模式。
+        默认值：1
+        */
+        @QueryParam("SpotDuration")
+        CreateInstanceBuilder spotDuration(final int spotDuration);
+
+        /**
+        是否必选：否
+        示例值：Terminate
+        抢占实例中断模式。目前仅支持Terminate（默认）直接释放实例。
+        */
+        @QueryParam("SpotInterruptionBehavior")
+        CreateInstanceBuilder spotInterruptionBehavior(final String spotInterruptionBehavior);
+
+        /**
+        是否必选：否
+        示例值：KeyPairTestName
+        密钥对名称。
+        Windows实例，忽略该参数。默认为空。即使填写了该参数，仍旧只执行Password的内容。
+        Linux实例的密码登录方式会被初始化成禁止。为提高实例安全性，强烈建议您使用密钥对的连接方式。
+        */
+        @QueryParam("KeyPairName")
+        CreateInstanceBuilder keyPairName(final String keyPairName);
+
+        /**
+        是否必选：否
+        示例值：RAMTestName
+        实例RAM角色名称。您可以使用RAM API ListRoles查询您已创建的实例RAM角色。
+        */
+        @QueryParam("RamRoleName")
+        CreateInstanceBuilder ramRoleName(final String ramRoleName);
+
+        /**
+        是否必选：否
+        示例值：Active
+        是否开启安全加固。取值范围：
+        Active：启用安全加固，只对系统镜像生效。
+        Deactive：不启用安全加固，对所有镜像类型生效。
+        */
+        @QueryParam("SecurityEnhancementStrategy")
+        CreateInstanceBuilder securityEnhancementStrategy(final String securityEnhancementStrategy);
+
+        /**
+        是否必选：否
+        示例值：rg-bp67acfmxazb4p****
+        实例所在的企业资源组ID。
+        */
+        @QueryParam("ResourceGroupId")
+        CreateInstanceBuilder resourceGroupId(final String resourceGroupId);
+
+        /**
+        是否必选：否
+        示例值：hpc-bp67acfmxazb4p****
+        实例所属的HPC集群ID。
+        */
+        @QueryParam("HpcClusterId")
+        CreateInstanceBuilder hpcClusterId(final String hpcClusterId);
+
+        /**
+        是否必选：否
+        示例值：dh-bp67acfmxazb4p****
+        是否在专有宿主机上创建ECS实例。
+        您可以通过DescribeDedicatedHosts查询专有宿主机ID列表。
+        由于专有宿主机不支持创建抢占式实例，指定DedicatedHostId参数后，会自动忽略请求中的SpotStrategy和SpotPriceLimit设置。
+        */
+        @QueryParam("DedicatedHostId")
+        CreateInstanceBuilder dedicatedHostId(final String dedicatedHostId);
+
+        /**
+        是否必选：否
+        示例值：Standard
+        修改突发性能实例的运行模式。取值范围：
+        Standard：标准模式，实例性能请参见什么是突发性能实例下的性能约束模式章节。
+        Unlimited：无性能约束模式，实例性能请参见什么是突发性能实例下的无性能约束模式章节。
+        默认值：无
+        */
+        @QueryParam("CreditSpecification")
+        CreateInstanceBuilder creditSpecification(final String creditSpecification);
+
+        /**
+        是否必选：否
+        示例值：false
+        实例释放保护属性，指定是否支持通过控制台或API（DeleteInstance）释放实例。
+        true：开启实例释放保护。
+        false（默认）：关闭实例释放保护。
+        说明 该属性仅适用于按量付费实例，且只能限制手动释放操作，对系统释放操作不生效。
+        */
+        @QueryParam("DeletionProtection")
+        CreateInstanceBuilder deletionProtection(final boolean deletionProtection);
+
+        /**
+        是否必选：否
+        示例值：default
+        专有宿主机实例是否与专有宿主机关联。取值范围：
+        default：实例不与专有宿主机关联。已开启停机不收费功能的实例，停机后再次启动时，若原专有宿主机可用资源不足，则实例被放置在自动部署资源池的其它专有宿主机上。
+        host：实例与专有宿主机关联。已开启停机不收费功能的实例，停机后再次启动时，仍放置在原专有宿主机上。若原专有宿主机可用资源不足，则实例重启失败。
+        默认值：default
+        */
         @QueryParam("Affinity")
         CreateInstanceBuilder affinity(final String affinity);
 
+        /**
+        是否必选：否
+        示例值：default
+        是否在专有宿主机上创建实例。取值范围：
+        default：在非专有宿主机上创建实例。
+        host：在专有宿主机上创建实例。若您不指定DedicatedHostId，则由阿里云自动选择专有宿主机部署实例。
+        默认值：default
+        */
         @QueryParam("Tenancy")
         CreateInstanceBuilder tenancy(final String tenancy);
+
+        /**
+        是否必选：否
+        示例值：ss-bp1j4i2jdf3owlhe****
+        存储集ID。
+        */
+        @QueryParam("StorageSetId")
+        CreateInstanceBuilder storageSetId(final String storageSetId);
+
+        /**
+        是否必选：否
+        示例值：2
+        存储集中的最大分区数量。取值范围：大于等于2
+        */
+        @QueryParam("StorageSetPartitionNumber")
+        CreateInstanceBuilder storageSetPartitionNumber(final int storageSetPartitionNumber);
+
+        /**
+        是否必选：否
+        示例值：enabled
+        是否启用实例元数据的访问通道。取值范围：
+        enabled：启用
+        disabled：禁用
+        默认值：enabled
+        说明 有关实例元数据的信息，请参见实例元数据概述。
+        */
+        @QueryParam("HttpEndpoint")
+        CreateInstanceBuilder httpEndpoint(final String httpEndpoint);
+
+        /**
+        是否必选：否
+        示例值：optional
+        访问实例元数据时是否强制使用加固模式（IMDSv2）。取值范围：
+        optional：不强制使用。
+        required：强制使用。设置该取值后，普通模式无法访问实例元数据。
+        默认值：optional
+
+        说明 有关访问实例元数据的模式，请参见实例元数据访问模式。
+        */
+        @QueryParam("HttpTokens")
+        CreateInstanceBuilder httpTokens(final String httpTokens);
+
+        /**
+        是否必选：否
+        示例值：Open
+        实例启动的私有池容量选项。弹性保障服务或容量预定服务在生效后会生成私有池容量，供实例启动时选择。取值范围：
+
+        Open：开放模式。将自动匹配开放类型的私有池容量。如果没有符合条件的私有池容量，则使用公共池资源启动。该模式下无需设置PrivatePoolOptions.Id参数。
+        Target：指定模式。使用指定的私有池容量启动实例，如果该私有池容量不可用，则实例会启动失败。该模式下必须指定私有池ID，即PrivatePoolOptions.Id参数为必填项。
+        None：不使用模式。实例启动将不使用私有池容量。
+        默认值：空
+        以下任一场景，实例启动的私有池容量选项只能取值None或不传值。
+        创建抢占式实例。
+        创建经典网络类型的ECS实例。
+        在专有宿主机DDH上创建ECS实例。
+        说明 该参数邀测中，详情请提交工单咨询。
+        */
+        @QueryParam("PrivatePoolOptions.MatchCriteria")
+        CreateInstanceBuilder privatePoolOptionsMatchCriteria(final String privatePoolOptionsMatchCriteria);
+
+        /**
+        是否必选：否
+        示例值：eap-bp67acfmxazb4****
+        私有池ID。即弹性保障服务ID或容量预定服务ID。
+        说明 该参数邀测中，详情请提交工单咨询。
+        */
+        @QueryParam("PrivatePoolOptions.Id")
+        CreateInstanceBuilder privatePoolOptionsId(final String privatePoolOptionsId);
 
         @GET
         @ConstParams({"Action", "CreateInstance"})

@@ -1289,8 +1289,11 @@ public interface EcsAPI {
 
     @RpcBuilder
     interface AttachInstanceRamRoleBuilder extends EcsBuilder<AttachInstanceRamRoleBuilder> {
-        //  必选   [“i-bp14ss25xca5ex1u****”, “i-bp154z5o1qjalfse****”, “i-bp10ws62o04ubhvi****”…]
-        //  实例ID。取值可以由多个实例ID组成一个JSON数组，最多支持100个ID，ID之间用半角逗号（,）隔开。
+        /**
+        是否必选：是
+        示例值：[“i-bp14ss25xca5ex1u****”, “i-bp154z5o1qjalfse****”, “i-bp10ws62o04ubhvi****”…]
+        实例ID。取值可以由多个实例ID组成一个JSON数组，最多支持100个ID，ID之间用半角逗号（,）隔开。
+         */
         @QueryParam("InstanceIds")
         AttachInstanceRamRoleBuilder instanceIds(final String[] instanceIds);
 
@@ -1301,6 +1304,15 @@ public interface EcsAPI {
         //  必选   cn-hangzhou    地域ID。
         @QueryParam("RegionId")
         AttachInstanceRamRoleBuilder regionId(final String regionId);
+
+        /**
+        是否必选：否
+        示例值：{"Statement": [{"Action": ["*"],"Effect": "Allow","Resource": ["*"]}],"Version":"1"}
+        权限策略。长度为1~1024个字符。为一台或多台ECS实例授予实例RAM角色时，可以指定一个额外的权限策略，以进一步限制RAM角色的权限。
+        更多信息，请参见权限策略概览。
+         */
+        @QueryParam("Policy")
+        AttachInstanceRamRoleBuilder policy(final String policy);
 
         @GET
         @ConstParams({"Action", "AttachInstanceRamRole"})

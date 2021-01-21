@@ -484,8 +484,23 @@ public interface EcsAPI {
         @QueryParam("VpcId")
         DescribeInstancesBuilder vpcId(final String vpcId);
 
-        @QueryParam("InstanceName")
-        DescribeInstancesBuilder instanceName(final String instanceName);
+        @QueryParam("VSwitchId")
+        DescribeInstancesBuilder vSwitchId(final String vSwitchId);
+
+        @QueryParam("ZoneId")
+        DescribeInstancesBuilder zoneId(final String zoneId);
+
+        @QueryParam("InstanceNetworkType")
+        DescribeInstancesBuilder instanceNetworkType(final String instanceNetworkType);
+
+        /**
+         *
+        是否必选：否
+        示例值：["i-bp67acfmxazb4p****", "i-bp67acfmxazb4p****", … "i-bp67acfmxazb4p****"]
+        实例ID。取值可以由多个实例ID组成一个JSON数组，最多支持100个ID，ID之间用半角逗号（,）隔开。
+         */
+        @QueryParam("InstanceIds")
+        DescribeInstancesBuilder instanceIds(final String instanceIds);
 
         @GET
         @ConstParams({"Action", "DescribeInstances"})
@@ -493,6 +508,7 @@ public interface EcsAPI {
         Observable<DescribeInstancesResponse> call();
     }
 
+    // https://help.aliyun.com/document_detail/25506.html?spm=a2c4g.11186623.6.1310.4ab27d848m8E7i
     DescribeInstancesBuilder describeInstances();
 
     // DescribeSpotPriceHistory: https://help.aliyun.com/document_detail/60400.html?spm=a2c4g.11186623.6.1099.74662eafdAxS1p

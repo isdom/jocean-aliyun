@@ -502,6 +502,14 @@ public interface EcsAPI {
         @QueryParam("InstanceIds")
         DescribeInstancesBuilder instanceIds(final String instanceIds);
 
+        /**
+        是否必选：否
+        示例值：Test
+        实例名称，支持使用通配符*进行模糊搜索。
+         */
+        @QueryParam("InstanceName")
+        DescribeInstancesBuilder instanceName(final String instanceName);
+
         @GET
         @ConstParams({"Action", "DescribeInstances"})
         @OnInteract("signer")

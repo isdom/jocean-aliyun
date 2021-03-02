@@ -16,6 +16,10 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
 import rx.Observable.Transformer;
 
+/**
+ * @deprecated use {@link org.jocean.aliyun.oss.OssAPI} instead.
+ */
+@Deprecated
 public interface BlobRepo {
     interface PutObjectResult {
         public String objectName();

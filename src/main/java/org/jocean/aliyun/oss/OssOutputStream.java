@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.jocean.aliyun.oss.OssAPI.PutObjectBuilder;
+import org.jocean.aliyun.oss.OssAPI.PutObjectResponse;
 import org.jocean.http.ByteBufSlice;
 import org.jocean.http.MessageBody;
 import org.jocean.http.util.RxNettys;
@@ -43,6 +45,8 @@ public class OssOutputStream extends OutputStream {
     private final ReplaySubject<ByteBufSlice> _pipe;
     private final byte[] _buf;
     private int _current_offset = 0;
+    private final CountDownLatch _terminated = new CountDownLatch(1);
+    private final AtomicReference<PutObjectResponse> _respRef = new AtomicReference<>(null);
 
     public OssOutputStream(final int bufsize, final PutObjectBuilder putpbject, final String contentType, final int contentLength) {
         this._buf = new byte[bufsize];
@@ -70,7 +74,14 @@ public class OssOutputStream extends OutputStream {
                 return _pipe;
             }}))
         .call()
-        .subscribe();
+        .doAfterTerminate( () -> _terminated.countDown())
+        .subscribe( resp -> _respRef.set(resp) );
+    }
+
+    public String objectName() {
+        final PutObjectResponse resp = _respRef.get();
+
+        return null != resp ? resp.objectName() : null;
     }
 
     @Override
@@ -137,6 +148,12 @@ public class OssOutputStream extends OutputStream {
     public void close() throws IOException {
         flush();
         _pipe.onCompleted();
+        try {
+            // wait for completed or error
+            _terminated.await();
+        } catch (final InterruptedException e) {
+            LOG.warn("exception when close(), detail: {}", ExceptionUtils.exception2detail(e));
+        }
         super.close();
     }
 }

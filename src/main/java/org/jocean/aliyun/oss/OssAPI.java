@@ -54,14 +54,15 @@ public interface OssAPI {
     interface OssBuilder<BUILDER> extends AliyunSignable<BUILDER> {
     }
 
-    interface Endpointable<BUILDER> {
+    interface Endpointable<BUILDER extends Endpointable<?>> {
         @PathParam("endpoint")
         BUILDER endpoint(final String endpoint);
     }
 
-    public static Action2<Bucketable<?>, OssBucket> SET_BUCKET = (bucketable, ossBucket) -> ossBucket.apply(bucketable);
+    public static Action2<Bucketable<?>, OssBucket> SET_BUCKET = (bucketable, ossBucket) ->
+        bucketable.endpoint(ossBucket.endpoint()).bucket(ossBucket.bucket());
 
-    interface Bucketable<BUILDER> extends Endpointable<BUILDER> {
+    interface Bucketable<BUILDER extends Bucketable<?>> extends Endpointable<BUILDER> {
         @PathParam("bucket")
         BUILDER bucket(final String bucket);
 
@@ -69,7 +70,7 @@ public interface OssAPI {
         BUILDER bucket(final OssBucket ossBucket);
     }
 
-    interface Objectable<BUILDER> extends Bucketable<BUILDER> {
+    interface Objectable<BUILDER extends Objectable<?>> extends Bucketable<BUILDER> {
         @PathParam("object")
         BUILDER object(final String object);
     }

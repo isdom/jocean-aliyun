@@ -1,7 +1,5 @@
 package org.jocean.aliyun.oss.internal;
 
-import org.jocean.aliyun.oss.OssAPI.Bucketable;
-import org.jocean.aliyun.oss.OssAPI.Endpointable;
 import org.jocean.aliyun.oss.OssBucket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,16 +9,13 @@ class DefaultOssBucket implements OssBucket {
     private static final Logger LOG = LoggerFactory.getLogger(DefaultOssBucket.class);
 
     @Override
-    public <BUILDER> BUILDER apply(final Endpointable<BUILDER> endpointable) {
-        LOG.debug("apply endpoint({}) to {}", _ossEndpoint, endpointable);
-        return endpointable.endpoint(_ossEndpoint);
+    public String endpoint() {
+        return _ossEndpoint;
     }
 
     @Override
-    public <BUILDER> BUILDER apply(final Bucketable<BUILDER> bucketable) {
-        LOG.debug("apply endpoint({}) & bucket({}) to {}", _ossEndpoint, _ossBucket, bucketable);
-        bucketable.endpoint(_ossEndpoint);
-        return bucketable.bucket(_ossBucket);
+    public String bucket() {
+        return _ossBucket;
     }
 
     @Override

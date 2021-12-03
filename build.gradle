@@ -43,5 +43,5 @@ dependencies {
     
     compile "org.springframework:spring-context-support:${springVersion}"
     
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13.2'
 }

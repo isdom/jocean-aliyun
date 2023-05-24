@@ -27,7 +27,7 @@ dependencies {
     compile 'com.aliyun:aliyun-java-sdk-core:4.4.5'
     
     /*aliyun ecs*/
-    compile 'com.aliyun:aliyun-java-sdk-ecs:4.19.2'
+    compile 'com.aliyun:aliyun-java-sdk-ecs:4.24.62'
     
     /*aliyun ivision*/
     compile 'com.aliyun:aliyun-java-sdk-ivision:1.2.0'

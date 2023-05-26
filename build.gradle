@@ -36,7 +36,7 @@ dependencies {
     compile 'com.aliyun.openservices:ons-client:1.7.8.Final'
     
     /* for aliyun-sdk-oss */
-    compile 'com.aliyun.oss:aliyun-sdk-oss:3.16.3'
+    compile 'com.aliyun.oss:aliyun-sdk-oss:3.8.1'
     
     /*aliyun mns*/
     compile 'com.aliyun.mns:aliyun-sdk-mns:1.1.8.8'
